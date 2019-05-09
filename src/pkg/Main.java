@@ -1,4 +1,4 @@
-package pkg.general;
+package pkg;
 
 public class Main {
     
