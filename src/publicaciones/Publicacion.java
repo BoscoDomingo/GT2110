@@ -10,12 +10,12 @@ public abstract class Publicacion {
     private String texto;
     private int numeroLikes;
     private int numeroDislikes;
-    private Valoracion valoracion;
-    private ArrayList<Comentario> tiene;
-    private ArrayList<Timeline> perteneceA;
+    private ArrayList<Valoracion> valoraciones;
+    private ArrayList<Comentario> comentarios;
+    private ArrayList<Timeline> perteneceATimelines;
     
     public Publicacion(String fecha, String hora, String texto, int numeroLikes, int numeroDislikes,
-                       Valoracion valoracion, ArrayList<Comentario> tiene, ArrayList<Timeline> perteneceA) {
+                       Valoracion valoracion, ArrayList<Comentario> tiene, ArrayList<Timeline> perteneceATimelines) {
         this.fecha = fecha;
         this.hora = hora;
         this.texto = texto;
@@ -23,7 +23,7 @@ public abstract class Publicacion {
         this.numeroDislikes = numeroDislikes;
         this.valoracion = valoracion;
         this.tiene = tiene;
-        this.perteneceA = perteneceA;
+        this.perteneceATimelines = perteneceATimelines;
     }
     
     public String getFecha() {
