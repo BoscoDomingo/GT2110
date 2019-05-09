@@ -14,8 +14,8 @@ public class App {
         switch (selector) {
             case 1:
                 String email = scan.nextLine();
-                String password = scan.nextLine()
-                userController.registrar(email, password);
+                String password = scan.nextLine();
+                userController.crearCuenta(email, password);
                 break;
             case 2:
                 userController.iniciarSesion();

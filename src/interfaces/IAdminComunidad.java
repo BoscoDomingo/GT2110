@@ -1,4 +1,4 @@
 package interfaces;
 
-public class IAdminComunidad {
+public interface IAdminComunidad {
 }

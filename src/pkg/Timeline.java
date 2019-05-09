@@ -2,6 +2,7 @@ package pkg;
 
 import community.Comunidad;
 import interfaces.ITimeline;
+import publicaciones.Publicacion;
 
 import java.util.ArrayList;
 
