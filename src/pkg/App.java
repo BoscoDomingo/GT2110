@@ -18,7 +18,9 @@ public class App {
                 userController.crearCuenta(email, password);
                 break;
             case 2:
-                userController.iniciarSesion();
+                email = scan.nextLine();
+                password = scan.nextLine();
+                userController.iniciarSesion(email, password);
                 
             default:
                 System.out.println("Por favor, introduzca un número válido");
