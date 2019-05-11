@@ -8,4 +8,5 @@ public class Comunidad {
     private String nombre;
     private Timeline timeline;
     private ArrayList<Miembro> miembros;
+    private ArrayList<AdministradorComunidad> admins;
 }
