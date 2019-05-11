@@ -52,7 +52,7 @@ public class DatabaseController {
 	public ArrayList<String> tratarLista(String listaSinTratar) {
 		ArrayList<String> responseLista = new ArrayList<>();
 		while (listaSinTratar.length() > 0) {
-			int index = listaSinTratar.indexOf(";");
+			int index = listaSinTratar.indexOf(",");
 			responseLista.add(listaSinTratar.substring(0, index - 1));
 			if (index + 1 < listaSinTratar.length()) {
 				listaSinTratar = listaSinTratar.substring(index + 1, listaSinTratar.length() - 1);
