@@ -1,4 +1,4 @@
 .idea/*
 .idea/
-/*
-!/src
+/out
+GT2110.iml

@@ -11,8 +11,6 @@ public class Comentario {
         this.fecha = fecha;
         this.texto = texto;
         this.hora = hora;
-        this.numeroDislikes = numeroDislikes;
-        this.numeroLikes = numeroLikes;
         this.perteneceA = perteneceA;
     }
 }
