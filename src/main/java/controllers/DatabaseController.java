@@ -1,7 +1,5 @@
 package controllers;
 
-import pkg.CuentaUsuario;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
