@@ -75,4 +75,10 @@ public class Publicacion {
     public int getNumeroLikes() {
         return numeroLikes;
     }
+
+    public boolean borrar(){
+        boolean success = false;
+        //recorrer timelines a las que pertenece e ir quitandose de ellas
+        return success;
+    }
 }

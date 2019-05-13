@@ -13,11 +13,13 @@ public class App {
         int selector = scan.nextInt();
         switch (selector) {
             case 1:
+                scan.nextLine();
                 String email = scan.nextLine();
                 String password = scan.nextLine();
                 userController.crearCuenta(email, password);
                 break;
             case 2:
+                scan.nextLine();
                 email = scan.nextLine();
                 password = scan.nextLine();
                 userController.iniciarSesion(email, password);
