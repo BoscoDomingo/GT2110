@@ -21,6 +21,7 @@ public class App {
                 email = scan.nextLine();
                 password = scan.nextLine();
                 userController.iniciarSesion(email, password);
+                break;
                 
             default:
                 System.out.println("Por favor, introduzca un número válido");

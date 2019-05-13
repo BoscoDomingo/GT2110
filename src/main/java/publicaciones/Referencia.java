@@ -1,16 +1,18 @@
 package publicaciones;
 
+import pkg.CuentaUsuario;
 import pkg.Timeline;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Referencia extends Publicacion {
     private Publicacion referenciada;
-    
-    public Referencia(String fecha, String hora, String texto, int numeroLikes, int numeroDislikes,
+
+    public Referencia(String id, CuentaUsuario poster, String texto,
                       ArrayList<Valoracion> valoraciones, ArrayList<Comentario> comentarios,
                       ArrayList<Timeline> perteneceATimelines, Publicacion referenciada) {
-        super(fecha, hora, texto, numeroLikes, numeroDislikes, valoraciones, comentarios, perteneceATimelines);
+        super(id, poster, texto, valoraciones, comentarios, perteneceATimelines);
         this.referenciada = referenciada;
     }
 }
