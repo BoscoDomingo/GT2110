@@ -14,7 +14,7 @@ public class UserController{
     private TimeController tiempo;
 
     public UserController(){
-        database = new DatabaseController();
+        database = new DatabaseController("src/main/resources/USERS.txt");
         intentosDeInicioSesion = new HashMap<>();
         cuentasBloqueadas = new HashMap<>();
     }

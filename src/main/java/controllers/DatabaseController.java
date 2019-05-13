@@ -12,9 +12,9 @@ public class DatabaseController {
 
 	private ArrayList<ArrayList<String>> responseBD;
 
-	public DatabaseController() {
+	public DatabaseController(String direccion) {
 		responseBD = new ArrayList<>();
-			responseBD = extraerInfoBD("src/main/resources/USERS.txt");
+		responseBD = extraerInfoBD(direccion);
 	}
 
 	public ArrayList<ArrayList<String>> extraerInfoBD(String direccion) {
