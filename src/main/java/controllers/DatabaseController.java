@@ -1,5 +1,7 @@
 package controllers;
 
+import pkg.CuentaUsuario;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class DatabaseController {
 
 	public DatabaseController() {
 		responseBD = new ArrayList<>();
+			responseBD = extraerInfoBD("src/main/resources/USERS.txt");
 	}
 
 	public ArrayList<ArrayList<String>> extraerInfoBD(String direccion) {
@@ -39,10 +42,12 @@ public class DatabaseController {
 			ArrayList<String> datoTratado = new ArrayList<>();
 			while (datoCrudo.length() > 0) {
 				int index = datoCrudo.indexOf(";");
-				datoTratado.add(datoCrudo.substring(0, index - 1));
-				if (index + 1 < datoCrudo.length()) {
-					datoCrudo = datoCrudo.substring(index + 1, datoCrudo.length() - 1);
-				} else datoCrudo = "";
+				if(index>0) {
+					datoTratado.add(datoCrudo.substring(0, index));
+					if (index + 1 < datoCrudo.length()) {
+						datoCrudo = datoCrudo.substring(index + 1, datoCrudo.length());
+					} else datoCrudo = "";
+				}
 			}
 			responseBD.add(datoTratado);
 		}
@@ -53,11 +58,39 @@ public class DatabaseController {
 		ArrayList<String> responseLista = new ArrayList<>();
 		while (listaSinTratar.length() > 0) {
 			int index = listaSinTratar.indexOf(",");
-			responseLista.add(listaSinTratar.substring(0, index - 1));
+			responseLista.add(listaSinTratar.substring(0, index));
 			if (index + 1 < listaSinTratar.length()) {
-				listaSinTratar = listaSinTratar.substring(index + 1, listaSinTratar.length() - 1);
+				listaSinTratar = listaSinTratar.substring(index + 1, listaSinTratar.length());
 			} else listaSinTratar = "";
 		}
 		return responseLista;
+	}
+
+
+	//Este metodo comprueba, en caso de existir el mail en nuestra bd, la contraseña asociada al mismo.
+	//En el caso de que no exista, devuelve la palabra "error". Tenedlo en cuenta a la hora de programar.
+
+	public String consultaPassword(String email){
+		String response = "";
+		Boolean encontrado = false;
+		for (ArrayList<String> usuario: responseBD){
+			if(usuario.get(1).equals(email)){
+				response = usuario.get(2);
+				encontrado = true;
+				break;
+			}
+		}
+		if(!encontrado)
+			response = "error";
+
+		return response;
+	}
+
+	public ArrayList<ArrayList<String>> getResponseBD() {
+		return responseBD;
+	}
+
+	public void setResponseBD(ArrayList<ArrayList<String>> responseBD) {
+		this.responseBD = responseBD;
 	}
 }
