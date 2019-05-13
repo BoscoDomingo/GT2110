@@ -6,18 +6,17 @@ import java.util.Scanner;
 
 public class UserController {
 
+    private CuentaUsuario usuario;
     private DatabaseController database;
 
-    public UserController(){
-        database = new DatabaseController();
-    }
-
-    public boolean crearCuenta(String email, String password){
+    public boolean crearCuenta(String email, String password) {
         boolean exito = false;
         return exito;
     }
 
-    public void cerrarSesion(){};
+    public UserController() {
+        database = new DatabaseController();
+    }
 
     public boolean iniciarSesion(String email){
         Scanner scan = new Scanner(System.in);
@@ -37,16 +36,34 @@ public class UserController {
         }
         return success;
     };
+    public void cerrarSesion() {
+    }
 
-    void restaurarContraseña(){};
+    void restaurarContraseña() {
+    }
 
-    void introducirNuevaContraseña(String newPassword){
-    };
+    void introducirNuevaContraseña(String newPassword) {
+    }
 
+    private String introducirCorreo() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Por favor, introduzca el correo");
+        return scan.nextLine();
+    }
 
+    private String introducirContraseña() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Por favor, introduzca la contraseña");
+        return scan.nextLine();
+    }
 
-
-
-
+    public boolean iniciarSesion(String email, String password) {
+        boolean success = false;
+        String respuesta = database.consultaPassword(email);
+        if (password.equals(respuesta)) {//las contraseñas son de mínimo 8 caracteres
+            success = true;
+        }
+        return success;
+    }
 }
 
