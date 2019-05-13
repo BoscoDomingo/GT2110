@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Publicacion {
     private final String id;
-    private final CuentaUsuario poster;
+    private final CuentaUsuario poster; //string id usuario???
     private final Date fecha;
     private final String texto;
     private int numeroLikes;
