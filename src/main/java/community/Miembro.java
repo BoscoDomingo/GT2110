@@ -2,6 +2,8 @@ package community;
 
 import interfaces.IMiembro;
 import pkg.CuentaUsuario;
+import pkg.Perfil;
+import publicaciones.Publicacion;
 import publicaciones.Valoracion;
 
 import java.util.ArrayList;
@@ -9,11 +11,12 @@ import java.util.ArrayList;
 public class Miembro extends CuentaUsuario implements IMiembro {
     private ArrayList<Comunidad> comunidades;
 
-    public Miembro(String id, String alias, String correoUPM, ArrayList<Valoracion> valoraciones,
-                   ArrayList<CuentaUsuario> seguidores, ArrayList<CuentaUsuario> sigueA,
-                   ArrayList<Comunidad> comunidades) {
-        super(id, alias, correoUPM, valoraciones, seguidores, sigueA);
-        this.comunidades = comunidades;
+    public Miembro(String id, String alias, String correoUPM, Perfil perfil,
+                   ArrayList<CuentaUsuario> sigueA, ArrayList<CuentaUsuario> seguidores,
+                   ArrayList<Comunidad> comunidades, ArrayList<Publicacion> publicaciones,
+                   ArrayList<Valoracion> valoraciones, ArrayList<Comunidad> comunidades1) {
+        super(id, alias, correoUPM, perfil, sigueA, seguidores, comunidades, publicaciones, valoraciones);
+        this.comunidades = comunidades1;
     }
 
     public void dejarComuniad(){};

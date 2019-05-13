@@ -2,17 +2,19 @@ package community;
 
 import interfaces.IAdminComunidad;
 import pkg.CuentaUsuario;
+import pkg.Perfil;
+import publicaciones.Publicacion;
 import publicaciones.Valoracion;
 
 import java.util.ArrayList;
 
 public class AdministradorComunidad extends community.Miembro implements IAdminComunidad {
-    public AdministradorComunidad(String id, String alias, String correoUPM,
-                                  ArrayList<Valoracion> valoraciones,
-                                  ArrayList<CuentaUsuario> seguidores,
-                                  ArrayList<CuentaUsuario> sigueA,
-                                  ArrayList<Comunidad> comunidades) {
-        super(id, alias, correoUPM, valoraciones, seguidores, sigueA, comunidades);
+    public AdministradorComunidad(String id, String alias, String correoUPM, Perfil perfil,
+                                  ArrayList<CuentaUsuario> sigueA, ArrayList<CuentaUsuario> seguidores,
+                                  ArrayList<Comunidad> comunidades,
+                                  ArrayList<Publicacion> publicaciones,
+                                  ArrayList<Valoracion> valoraciones, ArrayList<Comunidad> comunidades1) {
+        super(id, alias, correoUPM, perfil, sigueA, seguidores, comunidades, publicaciones, valoraciones, comunidades1);
     }
 
     public void modificarPermisos() {
