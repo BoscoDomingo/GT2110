@@ -29,8 +29,8 @@ public class UserController{
     public boolean iniciarSesion(String email){
         Scanner scan = new Scanner(System.in);
         boolean success = false;
-        String respuesta = database.consultaPassword(email);
-            if (respuesta.equals("error")) {
+        String respuesta = database.consultasParaUsuario(email, 2);
+        if (respuesta.equals("error")) {
                 System.out.println("Email no encontrado en la BD. ¿Estás seguro de que ese es tu correo?");
             } else if (!isAccountBlocked(email)) {
                 System.out.println("Introduce tu contraseña");
@@ -85,10 +85,50 @@ public class UserController{
         }
     }
 
-    void restaurarContraseña(){};
+    public void restaurarPass(String email){
+        Scanner in = new Scanner(System.in);
+        String primeraPass;
+        String segundaPass;
+        System.out.println("-- Has accedido al menu de restauracion de contraseña. --");
+        System.out.println("-- Recuerda que para que se cambie la contraseña con exito, tendrás que elegir una con un tamaño mayor que 8. -- ");
+        System.out.println("-- Además ambos campos deben coincidir -- ");
+        System.out.println("-- Si una de las dos condiciones de arriba no se cumple deberás volver a intentarlo --");
+        do{
+            System.out.println("Introduce tu nueva contraseña: ");
+            primeraPass = in.nextLine();
+            System.out.println("Introduce la contraseña de nuevo: ");
+            segundaPass = in.nextLine();
+            if(!primeraPass.equals(segundaPass)){
+                System.out.println("Las contraseñas no coinciden.");
+            }
+            if(primeraPass.length() < 8){
+                System.out.println("La longitud de contraseña es errónea.");
+            }
+        }while (!primeraPass.equals(segundaPass) || primeraPass.length() < 8);
 
-    void introducirNuevaContraseña(String newPassword){
+        database.cambiosEnBDUsuario(email, 2, primeraPass);
+        System.out.println("Cambio realizado con exito.");
+
     };
+
+    public void introducirNuevaContraseña(String newPassword){
+    };
+
+    public void olvidadoPass(String email){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Ahora vamos a intentar restaurar tu contraseña, pero antes tendrás que introducir la palabra de seguridad asociada a tu email para continuar.");
+        String palabraSeguridad = in.nextLine();
+        if(!database.consultasParaUsuario(email, 11).equals("error")){
+            if(database.consultasParaUsuario(email, 11).equals(palabraSeguridad)){
+                restaurarPass(email);
+            }else{
+                System.out.println("La palabra de seguridad no coincide con la introducida. Vuelve a intentarlo");
+            }
+        }else{
+            System.out.println("No encontramos ese mail en nuestra BD");
+        }
+
+    }
 
 
 

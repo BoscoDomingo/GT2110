@@ -67,15 +67,15 @@ public class DatabaseController {
 	}
 
 
-	//Este metodo comprueba, en caso de existir el mail en nuestra bd, la contraseña asociada al mismo.
+	//Este metodo comprueba, en caso de existir el mail en nuestra bd, cualquier elemento asociado al mismo.
 	//En el caso de que no exista, devuelve la palabra "error". Tenedlo en cuenta a la hora de programar.
 
-	public String consultaPassword(String email){
+	public String consultasParaUsuario(String email, int posicion){
 		String response = "";
 		Boolean encontrado = false;
 		for (ArrayList<String> usuario: responseBD){
 			if(usuario.get(1).equals(email)){
-				response = usuario.get(2);
+				response = usuario.get(posicion);
 				encontrado = true;
 				break;
 			}
@@ -85,6 +85,16 @@ public class DatabaseController {
 
 		return response;
 	}
+
+	public void cambiosEnBDUsuario(String email, int posicion, String contenido){ //Cualquier cambio en la BD del usuario, utilizad este metodo.
+		Boolean encontrado = false;
+		for (ArrayList<String> usuario: responseBD){
+			if(usuario.get(1).equals(email)){
+				usuario.set(posicion, contenido);
+			}
+		}
+	}
+
 
 	public ArrayList<ArrayList<String>> getResponseBD() {
 		return responseBD;
