@@ -116,9 +116,9 @@ public class UserController{
 
     public void olvidadoPass(String email){
         Scanner in = new Scanner(System.in);
-        System.out.println("Ahora vamos a intentar restaurar tu contraseña, pero antes tendrás que introducir la palabra de seguridad asociada a tu email para continuar.");
-        String palabraSeguridad = in.nextLine();
         if(!database.consultasParaUsuario(email, 11).equals("error")){
+            System.out.println("Ahora vamos a intentar restaurar tu contraseña, pero antes tendrás que introducir la palabra de seguridad asociada a tu email para continuar.");
+            String palabraSeguridad = in.nextLine();
             if(database.consultasParaUsuario(email, 11).equals(palabraSeguridad)){
                 restaurarPass(email);
             }else{
