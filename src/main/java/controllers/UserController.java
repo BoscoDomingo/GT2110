@@ -29,7 +29,7 @@ public class UserController{
     public boolean iniciarSesion(String email){
         Scanner scan = new Scanner(System.in);
         boolean success = false;
-        String respuesta = database.consultasParaUsuario(email, 2);
+        String respuesta = database.consultasParaBD(email, 2);
         if (respuesta.equals("error")) {
                 System.out.println("Email no encontrado en la BD. ¿Estás seguro de que ese es tu correo?");
             } else if (!isAccountBlocked(email)) {
@@ -44,7 +44,7 @@ public class UserController{
             } else if (isAccountBlocked(email)){
                 System.out.println("La cuenta está bloqueada porque has pasado el numero de intentos de inicio de sesión. " +
                         "\nVuelve a intentarlo pasados 60 minutos desde el ultimo intento");
-                System.out.println("Te quedan " + (3600 - cuentasBloqueadas.get(email).getSegundos())/60 + " minutos");
+                System.out.println("Te quedan " + (3600 - cuentasBloqueadas.get(email).getSegundos())/60 + " minutos" + " y " + (60 - cuentasBloqueadas.get(email).getSegundos()) + " segundos");
             }
         return success;
     };
@@ -106,8 +106,8 @@ public class UserController{
             }
         }while (!primeraPass.equals(segundaPass) || primeraPass.length() < 8);
 
-        database.cambiosEnBDUsuario(email, 2, primeraPass);
-        System.out.println("Cambio realizado con exito.");
+        database.cambiosEnBD(email, 2, primeraPass);
+        System.out.println("Cambio realizado con éxito.");
 
     };
 
@@ -116,10 +116,10 @@ public class UserController{
 
     public void olvidadoPass(String email){
         Scanner in = new Scanner(System.in);
-        if(!database.consultasParaUsuario(email, 11).equals("error")){
+        if(!database.consultasParaBD(email, 11).equals("error")){
             System.out.println("Ahora vamos a intentar restaurar tu contraseña, pero antes tendrás que introducir la palabra de seguridad asociada a tu email para continuar.");
             String palabraSeguridad = in.nextLine();
-            if(database.consultasParaUsuario(email, 11).equals(palabraSeguridad)){
+            if(database.consultasParaBD(email, 11).equals(palabraSeguridad)){
                 restaurarPass(email);
             }else{
                 System.out.println("La palabra de seguridad no coincide con la introducida. Vuelve a intentarlo");
@@ -128,6 +128,25 @@ public class UserController{
             System.out.println("No encontramos ese mail en nuestra BD");
         }
 
+    }
+
+    public void cambiarAlias(CuentaUsuario usuario){
+        boolean completado = false;
+        Scanner in = new Scanner(System.in);
+        while(!completado) {
+            System.out.println("-- Has accedido al menu de cambio de alias. --");
+            System.out.println("-- Recuerda que para que se cambie tu alias con éxito, tendrás que elegir uno que no exista previamente. -- ");
+            System.out.println("-- Si la condición de arriba no se cumple deberás volver a intentarlo --");
+            System.out.println("Introduce el nuevo alias que quieres para tu cuenta: ");
+            String nuevoAlias = in.nextLine();
+            if (database.existeValorEnLaBD(nuevoAlias, 5)) {
+                System.out.println("- Ese alias ya está cogido, intentalo de nuevo con otro distinto. -");
+            }
+            else{
+                completado = true;
+                System.out.println("Operacion completada con éxito");
+            }
+        }
     }
 
 

@@ -67,14 +67,14 @@ public class DatabaseController {
 	}
 
 
-	//Este metodo comprueba, en caso de existir el mail en nuestra bd, cualquier elemento asociado al mismo.
+	//Este metodo comprueba, en caso de existir el identificador en nuestra bd, cualquier elemento asociado al mismo.
 	//En el caso de que no exista, devuelve la palabra "error". Tenedlo en cuenta a la hora de programar.
 
-	public String consultasParaUsuario(String email, int posicion){
+	public String consultasParaBD(String identificador, int posicion){
 		String response = "";
 		Boolean encontrado = false;
 		for (ArrayList<String> usuario: responseBD){
-			if(usuario.get(1).equals(email)){
+			if(usuario.get(1).equals(identificador)){
 				response = usuario.get(posicion);
 				encontrado = true;
 				break;
@@ -86,13 +86,24 @@ public class DatabaseController {
 		return response;
 	}
 
-	public void cambiosEnBDUsuario(String email, int posicion, String contenido){ //Cualquier cambio en la BD del usuario, utilizad este metodo.
+	public void cambiosEnBD(String identificador, int posicion, String contenido){ //Cualquier cambio en la BD, utilizad este metodo. (Identificador es lo que te hace llegar a la columna a la que cambiar los datos)
 		Boolean encontrado = false;
 		for (ArrayList<String> usuario: responseBD){
-			if(usuario.get(1).equals(email)){
+			if(usuario.get(1).equals(identificador)){
 				usuario.set(posicion, contenido);
 			}
 		}
+	}
+
+	public boolean existeValorEnLaBD(String contenido, int posicion){
+		boolean existe = false;
+		for(ArrayList<String> usuario: responseBD){
+			if(usuario.get(posicion).equals(contenido)){
+				existe = true;
+				break;
+			}
+		}
+		return existe;
 	}
 
 
