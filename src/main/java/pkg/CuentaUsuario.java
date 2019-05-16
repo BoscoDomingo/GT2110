@@ -34,6 +34,19 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.valoraciones = valoraciones;
     }
 
+    public void publicar(){};
+
+    public void selectPublicacion(String idPublicacion){
+        Publicacion selected = DatabaseController.getPublicacionByID(idPublicacion);
+        if(selected.getPoster().getId().equals(this.id)){//prefiero comparar IDs a comparar objetos por temas de
+            // referencias a memoria y tal
+            selected.ownerMenu();
+        }else{
+            selected.menu();
+        }
+    }
+
+    //GETTERS & SETTERS
     public String getId() {
         return id;
     }
@@ -88,7 +101,12 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
 
     public void follow(ArrayList<CuentaUsuario> newFollowed) {
+        ArrayList<CuentaUsuario> thisUser = new ArrayList<>();
+        thisUser.add(this);
         this.sigueA.addAll(newFollowed);
+        for(CuentaUsuario followed: newFollowed){
+            followed.addSeguidores(thisUser);
+        }
     }
 
     public ArrayList<Publicacion> getPublicaciones() {
@@ -97,17 +115,5 @@ public class CuentaUsuario implements ICuentaUsuario {
 
     public void setPublicaciones(ArrayList<Publicacion> publicaciones) {
         this.publicaciones = publicaciones;
-    }
-
-    public void publicar(){};
-
-    public void selectPublicacion(String idPublicacion){
-        Publicacion selected = DatabaseController.getPublicacionByID(idPublicacion);
-        if(selected.getPoster().getId().equals(this.id)){//prefiero comparar IDs a comparar objetos por temas de
-            // referencias a memoria y tal
-            selected.ownerMenu();
-        }else{
-            selected.menu();
-        }
     }
 }
