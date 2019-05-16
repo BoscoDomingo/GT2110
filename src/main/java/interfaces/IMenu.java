@@ -7,6 +7,7 @@ public interface IMenu {
     //EJEMPLO DE UN MENÚ
    /*
     boolean accionValida = false, goBack = false;
+    System.out.println("Opciones:\n0- ... \n9-Volver atrás");
     Scanner scan = new Scanner(System.in);
     while (!accionValida) {
         int selector = scan.nextInt();
@@ -19,18 +20,16 @@ public interface IMenu {
 
                 //...
             case 8:
-                accionValida = true;
                 //LLAMADA A CUALQUIER OTRO MENU QUE SE PUEDA MOSTRAR SI LO NECEISTAIS, INCLUIDAS MÁS ACCIONES SI 8 NO
                 //SON SUFICIENTES
-                if(otraCosa.menu() = true) accionValida = false; //Significa que vuelve del otro menu a este
+                accionValida = !otraCosa.menu(); //Significa que vuelve del otro menu a este. ESTA BIEN ASI
                 break;
             case 9:
                 accionValida = true;
                 goBack = true;
                 break;
             default:
-                System.out.println("Por favor, introduzca un número válido (del 0 al ");//VUESTRO NUMERO.SI HAY 3
-                //OPCIONES, PONÉIS EL 2
+                System.out.println("Por favor, introduzca un número válido");
         }
     }
     return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
