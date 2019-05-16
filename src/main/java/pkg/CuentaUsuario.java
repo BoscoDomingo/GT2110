@@ -1,6 +1,7 @@
 package pkg;
 
 import community.Comunidad;
+import controllers.DatabaseController;
 import interfaces.ICuentaUsuario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;
@@ -97,9 +98,16 @@ public class CuentaUsuario implements ICuentaUsuario {
     public void setPublicaciones(ArrayList<Publicacion> publicaciones) {
         this.publicaciones = publicaciones;
     }
+
     public void publicar(){};
 
-    public void borrarPublicacion(){
-        //pregunta el ID de la publicacion a delete y llama a publicacion.delete()
+    public void selectPublicacion(String idPublicacion){
+        Publicacion selected = DatabaseController.getPublicacionByID(idPublicacion);
+        if(selected.getPoster().getId().equals(this.id)){//prefiero comparar IDs a comparar objetos por temas de
+            // referencias a memoria y tal
+            selected.ownerMenu();
+        }else{
+            selected.menu();
+        }
     }
 }

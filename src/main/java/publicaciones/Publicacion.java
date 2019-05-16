@@ -1,5 +1,7 @@
 package publicaciones;
 
+import controllers.DatabaseController;
+import interfaces.IMenu;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
 
@@ -8,8 +10,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
-public class Publicacion implements Comparable<Publicacion>{
+public class Publicacion implements Comparable<Publicacion>, IMenu {
     private final String id;
     private final CuentaUsuario poster;
     private final Date fecha;
@@ -76,19 +79,73 @@ public class Publicacion implements Comparable<Publicacion>{
         return success;
     }
 
+    public boolean ownerMenu() {
+        boolean accionValida = false, goBack = false;
+        CuentaUsuario currentUser = DatabaseController.getCurrentUser();
+        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
+        Scanner scan = new Scanner(System.in);
+        while (!accionValida) {
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 0:
+                    accionValida = true;
+                    this.delete();
+                    break;
+                case 1:
+                    accionValida = true;
+                    currentUser.comment(this);
+                    break;
+                case 2:
+                    accionValida = true;
+                    currentUser.valorar(this);
+                    break;
+                case 9:
+                    accionValida = true;
+                    goBack = true;
+                    break;
+                default:
+                    System.out.println("Por favor, introduzca un número válido");
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+    @Override
+    public boolean menu() {
+        boolean accionValida = false, goBack = false;
+        CuentaUsuario currentUser = DatabaseController.getCurrentUser();
+        System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
+        Scanner scan = new Scanner(System.in);
+        while (!accionValida) {
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 0:
+                    accionValida = true;
+                    currentUser.valorar(this);
+                    break;
+                case 1:
+                    accionValida = true;
+                    currentUser.comment(this);
+                    break;
+                case 2:
+                    accionValida = true;
+                    currentUser.publicar("referencia", this); //TODO: cambiar esto en su momento
+                    break;
+                case 9:
+                    accionValida = true;
+                    goBack = true;
+                    break;
+                default:
+                    System.out.println("Por favor, introduzca un número válido");
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
     public CuentaUsuario getPoster() {
         return poster;
     }
 
     public Date getFecha() {
         return fecha;
-    }
-
-    public String getTexto() {
-        return texto;
-    }
-
-    public int getNumeroLikes() {
-        return numeroLikes;
     }
 }

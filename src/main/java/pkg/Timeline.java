@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Timeline implements ITimeline, IMenu {
-    private ArrayList<Publicacion> publicaciones = new ArrayList<>();
+    private ArrayList<Publicacion> publicaciones;
     private int numeroDePaginas;
 
     public Timeline(ArrayList<Publicacion> publicaciones) {
@@ -20,7 +20,7 @@ public class Timeline implements ITimeline, IMenu {
 
     public void showPage(int pageNumber) { //las páginas van de 1 en adelante
         if (pageNumber <= numeroDePaginas) {
-            int publicacionesMostradas = 0, currentIndex = (pageNumber - 1) * 50; //se muestran 50 publ. por pagina
+            int publicacionesMostradas = 0, currentIndex = (pageNumber - 1) * 50; //si es pagina 1, va del 0 al 49
             while (currentIndex < publicaciones.size() && publicacionesMostradas < 50) {
                 publicaciones.get(currentIndex).show();
                 publicacionesMostradas++;
@@ -71,8 +71,7 @@ public class Timeline implements ITimeline, IMenu {
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un número válido (del 0 al ");//VUESTRO NUMERO.SI HAY 3
-                    //OPCIONES, PONÉIS EL 2
+                    System.out.println("Por favor, introduzca un número válido");
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
