@@ -5,6 +5,7 @@ import interfaces.ITimeline;
 import publicaciones.Publicacion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Timeline implements ITimeline, IMenu {
@@ -15,11 +16,6 @@ public class Timeline implements ITimeline, IMenu {
         this.publicaciones = publicaciones;
         this.numeroDePaginas = (int) (publicaciones.size() / 50.01 + 1); //Porque si no los multiplos de 50 salen con
         // una página más de lo debido: 50/50 + 1 = 2, cuando debería ser 1
-    }
-
-    public void eliminarPublicacion(Publicacion publicacion) {
-        this.publicaciones.remove(publicacion);
-        calculateNumeroDePaginas();
     }
 
     public void showPage(int pageNumber) { //las páginas van de 1 en adelante
@@ -38,6 +34,26 @@ public class Timeline implements ITimeline, IMenu {
         }
     }
 
+    public void sort(){
+        Collections.sort(this.publicaciones);
+    }
+
+    private void calculateNumeroDePaginas() {
+        this.numeroDePaginas = (int) (this.publicaciones.size() / 50.01 + 1);
+    }
+
+    public void addPublicaciones(ArrayList<Publicacion> publicacionesAdd){
+        this.publicaciones.addAll(publicacionesAdd);
+        calculateNumeroDePaginas();
+        sort();
+    }
+
+    public void removePublicaciones(ArrayList<Publicacion> publicacionesRemove){
+        this.publicaciones.removeAll(publicacionesRemove);
+        calculateNumeroDePaginas();
+        sort();
+    }
+
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
@@ -46,7 +62,6 @@ public class Timeline implements ITimeline, IMenu {
         while (!accionValida) {
             int selector = scan.nextInt();
             switch (selector) {
-                //METED CASES SÓLO DEL 0 AL 8
                 case 0:
                     accionValida = true;
                     //vuestro código aqui
@@ -61,9 +76,5 @@ public class Timeline implements ITimeline, IMenu {
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
-    }
-
-    private void calculateNumeroDePaginas() {
-        this.numeroDePaginas = (int) (this.publicaciones.size() / 50.01 + 1);
     }
 }

@@ -3,12 +3,13 @@ package publicaciones;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Publicacion {
+public class Publicacion implements Comparable<Publicacion>{
     private final String id;
     private final CuentaUsuario poster;
     private final Date fecha;
@@ -43,6 +44,11 @@ public class Publicacion {
         System.out.println("_____________________________________");
     }
 
+    @Override
+    public int compareTo(Publicacion p) {
+        return this.fecha.compareTo(p.getFecha());
+    }
+
     /*public void deleteComentario(String idComentario) {
         for (Comentario comentario : comentarios) {
             if (comentario.getID() == idComentario) {
@@ -60,6 +66,16 @@ public class Publicacion {
         }
     }*/
 
+    public boolean delete(){
+        boolean success = false;
+        ArrayList<Publicacion> thisPublicacion = new ArrayList<>();
+        thisPublicacion.add(this);
+        for(Timeline timeline : this.perteneceATimelines){
+            timeline.removePublicaciones(thisPublicacion);
+        }
+        return success;
+    }
+
     public CuentaUsuario getPoster() {
         return poster;
     }
@@ -74,11 +90,5 @@ public class Publicacion {
 
     public int getNumeroLikes() {
         return numeroLikes;
-    }
-
-    public boolean borrar(){
-        boolean success = false;
-        //recorrer timelines a las que pertenece e ir quitandose de ellas
-        return success;
     }
 }

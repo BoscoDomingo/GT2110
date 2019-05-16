@@ -100,6 +100,6 @@ public class CuentaUsuario implements ICuentaUsuario {
     public void publicar(){};
 
     public void borrarPublicacion(){
-        //pregunta el ID de la publicacion a borrar y llama a publicacion.borrar()
+        //pregunta el ID de la publicacion a delete y llama a publicacion.delete()
     }
 }
