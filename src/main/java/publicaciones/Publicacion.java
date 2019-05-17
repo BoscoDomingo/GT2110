@@ -47,6 +47,11 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         System.out.println("_____________________________________");
     }
 
+    public void showAsNew(){
+        System.out.println("\n***NUEVO***");
+        this.show();
+    }
+
     @Override
     public int compareTo(Publicacion p) {
         return this.fecha.compareTo(p.getFecha());
@@ -140,6 +145,8 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
+
+    //GETTERS & SETTERS
 
     public CuentaUsuario getPoster() {
         return poster;
