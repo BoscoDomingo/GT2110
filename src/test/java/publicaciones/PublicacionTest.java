@@ -16,7 +16,7 @@ public class PublicacionTest {
                 "y flipas colega", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Comentario comentario = new Comentario("c0001", new Date(), "ME MOLO MAZO TRONCO", publicacion, cuenta2);
 
-        publicacion.addComment(comentario);
+        publicacion.addCommentario(comentario);
         publicacion.show();
         publicacion.showAsNew();
     }

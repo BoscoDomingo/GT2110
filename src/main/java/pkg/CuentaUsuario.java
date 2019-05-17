@@ -112,7 +112,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
-    public void selectPublicacion(String idPublicacion) {
+    /*public void selectPublicacion(String idPublicacion) {
         Publicacion selected = DatabaseController.getPublicacionByID(idPublicacion);
         if (selected.getPoster().getId().equals(this.id)) {//prefiero comparar IDs a comparar objetos por temas de
             // referencias a memoria y tal
@@ -120,7 +120,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         } else {
             selected.menu();
         }
-    }
+    }*/
 
     //GETTERS & SETTERS
     public String getId() {

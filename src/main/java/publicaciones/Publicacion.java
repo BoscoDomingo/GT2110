@@ -1,6 +1,5 @@
 package publicaciones;
 
-import controllers.DatabaseController;
 import interfaces.IMenu;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
@@ -106,7 +105,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }
 
-    public boolean ownerMenu() {
+   /* public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
@@ -135,12 +134,12 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
-    }
+    }*/
 
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
-        CuentaUsuario currentUser = DatabaseController.getCurrentUser();
+       /* CuentaUsuario currentUser = DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
@@ -165,7 +164,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
                 default:
                     System.out.println("Por favor, introduzca un número válido");
             }
-        }
+        }*/
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
