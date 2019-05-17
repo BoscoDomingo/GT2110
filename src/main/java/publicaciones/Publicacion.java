@@ -5,7 +5,6 @@ import interfaces.IMenu;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         System.out.println("_____________________________________");
     }
 
-    public void showAsNew(){
+    public void showAsNew() {
         System.out.println("\n***NUEVO***");
         this.show();
     }
@@ -74,14 +73,37 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }*/
 
-    public boolean delete(){
-        boolean success = false;
-        ArrayList<Publicacion> thisPublicacion = new ArrayList<>();
-        thisPublicacion.add(this);
-        for(Timeline timeline : this.perteneceATimelines){
-            timeline.removePublicaciones(thisPublicacion);
+    public void delete() {
+        try {
+            for (Timeline timeline : this.perteneceATimelines) {
+                timeline.removePublicacion(this);
+            }
+        } catch (Exception e) {
+            System.out.println("Ha habido un error al borrar la publicacion. Por favor, inténtelo de nuevo: " + e);
         }
-        return success;
+    }
+
+    public void comment() {
+        System.out.println("Por favor escriba su comentario debajo:");
+        Scanner scan = new Scanner(System.in);
+        String texto = scan.nextLine();
+        //this.comentarios.add(new Comentario());
+    }
+
+    public void addCommentario(Comentario comentario) {
+        try {
+            this.comentarios.add(comentario);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+    public void addCommentarios(ArrayList<Comentario> comentarios) {
+        try {
+            this.comentarios.addAll(comentarios);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
     }
 
     public boolean ownerMenu() {
@@ -114,6 +136,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
+
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
