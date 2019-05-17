@@ -36,6 +36,24 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.valoraciones = valoraciones;
     }
 
+    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
+    public void follow(String id){
+        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(id);
+        sigueA.add(nuevoSeguido);
+    }
+    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
+    public void follow(String alias){
+        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(alias);
+        sigueA.add(nuevoSeguido);
+    }
+    */
+
+    public void valorarPublicacion(Publicacion publicacion, int likeDislike){
+        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: databaseController.getUltimoIdValoracion*/ + 1, likeDislike,this, publicacion);
+        publicacion.addValoracion(nuevaValoracion);
+        this.valoraciones.add(nuevaValoracion);
+    }
+
     public void publicar() {
     }
 
@@ -121,15 +139,6 @@ public class CuentaUsuario implements ICuentaUsuario {
             selected.menu();
         }
     }*/
-
-    public void selectPublicacion(Publicacion selected) {
-        if (this.publicaciones.contains(selected)) {//prefiero comparar IDs a comparar objetos por temas de
-            // referencias a memoria y tal
-            selected.ownerMenu();
-        } else {
-            selected.menu();
-        }
-    }
 
     //GETTERS & SETTERS
     public String getId() {

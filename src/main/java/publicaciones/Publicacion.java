@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Publicacion implements Comparable<Publicacion>, IMenu {
     private final String id;
-    private final CuentaUsuario poster;
+    private final CuentaUsuario poster; //string id usuario???
     private final Date fecha;
     private final String texto;
     private int numeroLikes;
@@ -63,14 +63,15 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }*/
 
-    /*public void addValoracion(Valoracion valoracion) {
+    public void addValoracion(Valoracion valoracion) {
         this.valoraciones.add(valoracion);
         if (valoracion.getLikeDislike() == 0) {
             this.numeroDislikes++;
-        }else{
+        } else {
             this.numeroLikes++;
         }
-    }*/
+    }
+
 
     public void delete() {
         try {
