@@ -1,12 +1,5 @@
 package pkg;
 
-import org.junit.Test;
-import publicaciones.Publicacion;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-
 public class TimelineTest {
 
     /*@Test

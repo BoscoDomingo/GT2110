@@ -2,7 +2,6 @@ package controllers;
 
 import pkg.CuentaUsuario;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -89,7 +88,7 @@ public class UserController{
         Scanner in = new Scanner(System.in);
         String primeraPass;
         String segundaPass;
-        System.out.println("-- Has accedido al menu de restauracion de contraseña. --");
+        System.out.println("\n-- Has accedido al menu de restauracion de contraseña. --");
         System.out.println("-- Recuerda que para que se cambie la contraseña con exito, tendrás que elegir una con un tamaño mayor que 8. -- ");
         System.out.println("-- Además ambos campos deben coincidir -- ");
         System.out.println("-- Si una de las dos condiciones de arriba no se cumple deberás volver a intentarlo --");
@@ -134,7 +133,7 @@ public class UserController{
         boolean completado = false;
         Scanner in = new Scanner(System.in);
         while(!completado) {
-            System.out.println("-- Has accedido al menu de cambio de alias. --");
+            System.out.println("\n-- Has accedido al menu de cambio de alias. --");
             System.out.println("-- Recuerda que para que se cambie tu alias con éxito, tendrás que elegir uno que no exista previamente. -- ");
             System.out.println("-- Si la condición de arriba no se cumple deberás volver a intentarlo --");
             System.out.println("Introduce el nuevo alias que quieres para tu cuenta: ");

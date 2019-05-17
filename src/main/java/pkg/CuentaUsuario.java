@@ -1,7 +1,6 @@
 package pkg;
 
 import community.Comunidad;
-import controllers.DatabaseController;
 import interfaces.ICuentaUsuario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;

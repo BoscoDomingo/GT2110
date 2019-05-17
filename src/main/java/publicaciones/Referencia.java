@@ -4,7 +4,6 @@ import pkg.CuentaUsuario;
 import pkg.Timeline;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Referencia extends Publicacion {
     private Publicacion referenciada;

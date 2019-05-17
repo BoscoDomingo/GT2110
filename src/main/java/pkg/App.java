@@ -29,7 +29,8 @@ public class App {
                     boolean valido = false;
                     boolean abandonar = false;
                     while (!valido && !abandonar) {
-                        System.out.println(" --- Para abandonar el incio de sesion introduce 'exit' en el primer campo. --- ");
+                        System.out.println(" \n--- Para abandonar el incio de sesion introduce 'exit' en el primer " +
+                                                   "campo. --- ");
                         System.out.println(" --- Si has olvidado tu contraseña introduce 'change' en el primer campo. --- ");
                         System.out.println(" --- Si quieres iniciar sesion introduce tu mail en el primer campo. ---");
                         System.out.println("Primer campo: "); // Comienzo de posible inicio de sesion o "he olvidado mi contraseña"
