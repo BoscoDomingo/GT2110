@@ -29,13 +29,20 @@ public class App {
                     boolean valido = false;
                     boolean abandonar = false;
                     while (!valido && !abandonar) {
-                        System.out.println("Para abandonar el incio de sesion introduce 'exit' en el siguiente campo.");
-                        System.out.println("Introduce tu email: ");
+                        System.out.println(" --- Para abandonar el incio de sesion introduce 'exit' en el primer campo. --- ");
+                        System.out.println(" --- Si has olvidado tu contraseña introduce 'change' en el primer campo. --- ");
+                        System.out.println(" --- Si quieres iniciar sesion introduce tu mail en el primer campo. ---");
+                        System.out.println("Primer campo: "); // Comienzo de posible inicio de sesion o "he olvidado mi contraseña"
                         email = scan.nextLine();
-                        if (!email.equals("exit")) {
-                            valido = userController.iniciarSesion(email);
-                        } else
+                        if (email.equals("exit")) {
                             abandonar = true;
+
+                        } else if(email.equals("change")){
+                            System.out.println("Introduce tu email: ");
+                            email = scan.nextLine();
+                            userController.olvidadoPass(email);
+                        } else
+                            valido = userController.iniciarSesion(email);
                     }
                     if (valido) {//Entrar a la app
                     }
