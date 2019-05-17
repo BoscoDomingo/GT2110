@@ -122,6 +122,15 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }*/
 
+    public void selectPublicacion(Publicacion selected) {
+        if (this.publicaciones.contains(selected)) {//prefiero comparar IDs a comparar objetos por temas de
+            // referencias a memoria y tal
+            selected.ownerMenu();
+        } else {
+            selected.menu();
+        }
+    }
+
     //GETTERS & SETTERS
     public String getId() {
         return id;

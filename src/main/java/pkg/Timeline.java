@@ -18,25 +18,16 @@ public class Timeline implements ITimeline, IMenu {
         // una página más de lo debido: 50/50 + 1 = 2, cuando debería ser 1
     }
 
-    public void eliminarPublicacion(Publicacion publicacion) {
-        try {
-            this.publicaciones.remove(publicacion);
-            calculateNumeroDePaginas();
-            this.menu();
-        } catch (Exception e) {
-            System.out.println("Error al borrar publicacion. Por favor inténtelo de nuevo " + e);
-        }
-    }
-
     public void showPage(int pageNumber) { //las páginas van de 1 en adelante
         if (pageNumber <= numeroDePaginas) {
-            int publicacionesMostradas = 0, currentIndex = (pageNumber - 1) * 50; //si es pagina 1, va del 0 al 49
+            int publicacionesMostradas = 0,
+                    currentIndex = (pageNumber - 1) * 50; //pagina 1 va del 0 al 49, p2 del 50 al 99...
             while (currentIndex < publicaciones.size() && publicacionesMostradas < 50) {
                 publicaciones.get(currentIndex).show();
                 publicacionesMostradas++;
                 currentIndex++;
             }
-            if (currentIndex == 0) {
+            if (currentIndex == 0) { //creo que nunca se da este caso
                 System.out.println("No hay más publicaciones disponibles");
             }
         } else {
@@ -56,7 +47,6 @@ public class Timeline implements ITimeline, IMenu {
             System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
     }
-
 
     public void addPublicacion(Publicacion publicacion) {
         try {
@@ -80,7 +70,6 @@ public class Timeline implements ITimeline, IMenu {
 
     }
 
-
     public void removePublicacion(Publicacion publicacion) {
         try {
             this.publicaciones.remove(publicacion);
@@ -91,9 +80,9 @@ public class Timeline implements ITimeline, IMenu {
         }
     }
 
-    public void removePublicaciones(ArrayList<Publicacion> publicacionesRemove) {
+    public void removePublicaciones(ArrayList<Publicacion> publicaciones) {
         try {
-            this.publicaciones.removeAll(publicacionesRemove);
+            this.publicaciones.removeAll(publicaciones);
             calculateNumeroDePaginas();
             sort();
         } catch (Exception e) {
@@ -104,7 +93,8 @@ public class Timeline implements ITimeline, IMenu {
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
-        System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior");
+        System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Seleccionar una " +
+                                   "publicacion\n9 - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
@@ -117,6 +107,10 @@ public class Timeline implements ITimeline, IMenu {
                     accionValida = true;
                     showPage(1 - 1);
                     break;
+                case 2:
+                    accionValida = true;
+
+
                 case 9:
                     accionValida = true;
                     goBack = true;

@@ -51,7 +51,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
     }
 
     @Override
-    public int compareTo(Publicacion p) {
+    public int compareTo(Publicacion p) { //para ordenar cronológicamente
         return this.fecha.compareTo(p.getFecha());
     }
 
@@ -105,9 +105,10 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }
 
-   /* public boolean ownerMenu() {
+    public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
-        CuentaUsuario currentUser = DatabaseController.getCurrentUser();
+        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA", "PAA@PAA.com", null, null, null, null,
+                                                      null);//TODO: DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
@@ -134,7 +135,7 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
-    }*/
+    }
 
     @Override
     public boolean menu() {
