@@ -51,14 +51,15 @@ public class Publicacion {
         }
     }*/
 
-    /*public void addValoracion(Valoracion valoracion) {
+    public void addValoracion(Valoracion valoracion) {
         this.valoraciones.add(valoracion);
         if (valoracion.getLikeDislike() == 0) {
             this.numeroDislikes++;
-        }else{
+        } else {
             this.numeroLikes++;
         }
-    }*/
+    }
+
 
     public CuentaUsuario getPoster() {
         return poster;

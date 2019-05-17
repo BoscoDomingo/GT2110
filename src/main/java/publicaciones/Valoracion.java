@@ -14,4 +14,8 @@ public class Valoracion {
         this.valorador = valorador;
         this.publicacionValorada = publicacionValorada;
     }
+
+    public int getLikeDislike() {
+        return likeDislike;
+    }
 }

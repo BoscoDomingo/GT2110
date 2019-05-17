@@ -35,6 +35,24 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.valoraciones = valoraciones;
     }
 
+    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
+    public void follow(String id){
+        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(id);
+        sigueA.add(nuevoSeguido);
+    }
+    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
+    public void follow(String alias){
+        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(alias);
+        sigueA.add(nuevoSeguido);
+    }
+    */
+
+    public void valorarPublicacion(Publicacion publicacion, int likeDislike){
+        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: databaseController.getUltimoIdValoracion*/ + 1, likeDislike,this, publicacion);
+        publicacion.addValoracion(nuevaValoracion);
+        this.valoraciones.add(nuevaValoracion);
+    }
+
     public void publicar() {
     }
 
