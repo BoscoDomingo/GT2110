@@ -1,4 +1,7 @@
-.idea/*
-.idea/
+.idea/*/
+.idea/.name
+.idea/workspace.xml
+.idea/vcs.xml
+target/*
 target/
 *.iml
