@@ -24,10 +24,6 @@ public class UserController{
         return exito;
     }
 
-    public UserController() {
-        database = new DatabaseController();
-    }
-
     public boolean iniciarSesion(String email){
         Scanner scan = new Scanner(System.in);
         boolean success = false;

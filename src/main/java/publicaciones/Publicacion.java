@@ -121,11 +121,11 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
                     break;
                 case 1:
                     accionValida = true;
-                    currentUser.comment(this);
+                    //currentUser.comment(this);
                     break;
                 case 2:
                     accionValida = true;
-                    currentUser.valorar(this);
+                    //currentUser.valorar(this);
                     break;
                 case 9:
                     accionValida = true;
