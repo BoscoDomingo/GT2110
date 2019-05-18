@@ -1,1 +1,2 @@
-c0001;a0001;b0001;11/05/19;18:00;Ah tienes mis dieses weon
+c0001;11/05/2019 18:00:05;Ah tienes mis dieses weon;a0001;b0001;
+c0002;17/05/2019 09:00:42;Que chingada;a0003;b0001;

@@ -11,7 +11,9 @@ public class DatabaseController {
     private ArrayList<ArrayList<String>> responseBD;
 
     public DatabaseController(String direccion) {
+        System.out.println("entrando a constructor DatabaseController");
         responseBD = extraerInfoBD(direccion);
+        System.out.println("extraerinfo correcto: "+ responseBD);
     }
 
     public ArrayList<ArrayList<String>> extraerInfoBD(String direccion) {
@@ -89,9 +91,8 @@ public class DatabaseController {
         return response;
     }
 
-    public void cambiosEnBD(String identificador, int posicion,
-                            String contenido) { //Cualquier cambio en la BD, utilizad este metodo. (Identificador es lo que te hace llegar a la columna a la que cambiar los datos)
-        Boolean encontrado = false;
+    //Cualquier cambio en la BD, utilizad este metodo. (Identificador es lo que te hace llegar a la columna a la que cambiar los datos)
+    public void cambiosEnBD(String identificador, int posicion, String contenido) {
         for (ArrayList<String> usuario : responseBD) {
             if (usuario.get(1).equals(identificador)) {
                 usuario.set(posicion, contenido);

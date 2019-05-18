@@ -2,6 +2,7 @@ package pkg;
 
 import community.Comunidad;
 import interfaces.ICuentaUsuario;
+import publicaciones.Comentario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;
 
@@ -19,10 +20,12 @@ public class CuentaUsuario implements ICuentaUsuario {
     private ArrayList<Comunidad> comunidades;
     private ArrayList<Publicacion> publicaciones;
     private ArrayList<Valoracion> valoraciones;
+    private ArrayList<Comentario> comentarios;
 
     public CuentaUsuario(String id, String alias, String correoUPM, ArrayList<CuentaUsuario> sigueA,
                          ArrayList<CuentaUsuario> seguidores, ArrayList<Comunidad> comunidades,
-                         ArrayList<Publicacion> publicaciones, ArrayList<Valoracion> valoraciones) {
+                         ArrayList<Publicacion> publicaciones, ArrayList<Valoracion> valoraciones,
+                         ArrayList<Comentario> comentarios) {
         this.id = id;
         this.perfil = new Perfil();
         this.alias = alias;
@@ -33,6 +36,20 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comunidades = comunidades;
         this.publicaciones = publicaciones;
         this.valoraciones = valoraciones;
+        this.comentarios = comentarios;
+    }
+
+    public CuentaUsuario(String id, String alias, String correoUPM) {
+        this.id = id;
+        this.alias = alias;
+        this.correoUPM = correoUPM;
+        this.perfil = new Perfil();
+        this.sigueA = new ArrayList<>();
+        this.seguidores = new ArrayList<>();
+        this.comunidades = new ArrayList<>();
+        this.publicaciones = new ArrayList<>();
+        this.valoraciones = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
     }
 
     /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
@@ -47,8 +64,9 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
     */
 
-    public void valorarPublicacion(Publicacion publicacion, int likeDislike){
-        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: databaseController.getUltimoIdValoracion*/ + 1, likeDislike,this, publicacion);
+    public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
+        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: databaseController.getUltimoIdValoracion*/ + 1,
+                                                    likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
     }
@@ -181,7 +199,43 @@ public class CuentaUsuario implements ICuentaUsuario {
         return publicaciones;
     }
 
+    public Date getUltimaSesion() {
+        return ultimaSesion;
+    }
+
+    public ArrayList<Comunidad> getComunidades() {
+        return comunidades;
+    }
+
+    public ArrayList<Comentario> getComentarios() {
+        return comentarios;
+    }
+
     public void setPublicaciones(ArrayList<Publicacion> publicaciones) {
         this.publicaciones = publicaciones;
+    }
+
+    public void setSigueA(ArrayList<CuentaUsuario> sigueA) {
+        this.sigueA = sigueA;
+    }
+
+    public void setSeguidores(ArrayList<CuentaUsuario> seguidores) {
+        this.seguidores = seguidores;
+    }
+
+    public void setComunidades(ArrayList<Comunidad> comunidades) {
+        this.comunidades = comunidades;
+    }
+
+    public void setValoraciones(ArrayList<Valoracion> valoraciones) {
+        this.valoraciones = valoraciones;
+    }
+
+    public void setUltimaSesion(Date ultimaSesion) {
+        this.ultimaSesion = ultimaSesion;
+    }
+
+    public void setComentarios(ArrayList<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 }

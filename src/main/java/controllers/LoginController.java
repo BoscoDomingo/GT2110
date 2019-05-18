@@ -5,15 +5,17 @@ import pkg.CuentaUsuario;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class UserController{
+public class LoginController {
 
     private DatabaseController database;
     private HashMap<String, TimeController> cuentasBloqueadas;
     private HashMap<String, Integer> intentosDeInicioSesion;
     private TimeController tiempo;
 
-    public UserController(){
+    public LoginController(){
+        System.out.println("entrando a constructor LoginController");
         database = new DatabaseController("src/main/resources/USERS.txt");
+        System.out.println("Creada database");
         intentosDeInicioSesion = new HashMap<>();
         cuentasBloqueadas = new HashMap<>();
     }
@@ -128,28 +130,5 @@ public class UserController{
         }
 
     }
-
-    public void cambiarAlias(CuentaUsuario usuario){
-        boolean completado = false;
-        Scanner in = new Scanner(System.in);
-        while(!completado) {
-            System.out.println("\n-- Has accedido al menu de cambio de alias. --");
-            System.out.println("-- Recuerda que para que se cambie tu alias con éxito, tendrás que elegir uno que no exista previamente. -- ");
-            System.out.println("-- Si la condición de arriba no se cumple deberás volver a intentarlo --");
-            System.out.println("Introduce el nuevo alias que quieres para tu cuenta: ");
-            String nuevoAlias = in.nextLine();
-            if (database.existeValorEnLaBD(nuevoAlias, 5)) {
-                System.out.println("- Ese alias ya está cogido, intentalo de nuevo con otro distinto. -");
-            }
-            else{
-                completado = true;
-                System.out.println("Operacion completada con éxito");
-            }
-        }
-    }
-
-
-
-
 }
 

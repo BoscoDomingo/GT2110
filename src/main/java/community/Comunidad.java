@@ -19,4 +19,30 @@ public class Comunidad {
         this.miembros = miembros;
         this.admins = admins;
     }
+
+
+    //GETTERS & SETTERS
+    public String getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
+
+    public ArrayList<Miembro> getMiembros() {
+        return miembros;
+    }
+
+    public ArrayList<AdministradorComunidad> getAdmins() {
+        return admins;
+    }
+
+    public void setTimeline(Timeline timeline) {
+        this.timeline = timeline;
+    }
 }

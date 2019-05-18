@@ -11,12 +11,9 @@ import java.util.ArrayList;
 public class Miembro extends CuentaUsuario implements IMiembro {
     private ArrayList<Comunidad> comunidades;
 
-    public Miembro(String id, String alias, String correoUPM, ArrayList<CuentaUsuario> sigueA,
-                   ArrayList<CuentaUsuario> seguidores, ArrayList<Comunidad> comunidades,
-                   ArrayList<Publicacion> publicaciones, ArrayList<Valoracion> valoraciones,
-                   ArrayList<Comunidad> comunidades1) {
-        super(id, alias, correoUPM, sigueA, seguidores, comunidades, publicaciones, valoraciones);
-        this.comunidades = comunidades1;
+    public Miembro(String id, String alias, String correoUPM, ArrayList<Comunidad> comunidades) {
+        super(id, alias, correoUPM);
+        this.comunidades = comunidades;
     }
 
     public void dejarComuniad(){};
