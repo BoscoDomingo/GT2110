@@ -1,6 +1,7 @@
 package pkg;
 
 import interfaces.IMenu;
+import interfaces.ISistema;
 import interfaces.ITimeline;
 import publicaciones.Publicacion;
 
@@ -18,7 +19,8 @@ public class Timeline implements ITimeline, IMenu {
         // una página más de lo debido: 50/50 + 1 = 2, cuando debería ser 1
     }
 
-    public void showPage(int pageNumber) { //las páginas van de 1 en adelante
+    public boolean showPage(int pageNumber) { //las páginas van de 1 en adelante
+        boolean success = true;
         if (pageNumber <= numeroDePaginas) {
             int publicacionesMostradas = 0,
                     currentIndex = (pageNumber - 1) * 50; //pagina 1 va del 0 al 49, p2 del 50 al 99...
@@ -29,11 +31,13 @@ public class Timeline implements ITimeline, IMenu {
             }
             if (currentIndex == 0) { //creo que nunca se da este caso
                 System.out.println("No hay más publicaciones disponibles");
+                success = false;
             }
         } else {
             System.out.println("Lo siento, este Timeline no dispone de tantas páginas");
+            success = false;
         }
-        this.menu();
+        return success;
     }
 
     public void sort() {
@@ -91,7 +95,7 @@ public class Timeline implements ITimeline, IMenu {
     }
 
     @Override
-    public boolean menu() {
+    public boolean menu(ISistema sistema) {
         boolean accionValida = false, goBack = false;
         System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Seleccionar una " +
                                    "publicacion\n9 - Volver atrás");
@@ -100,17 +104,14 @@ public class Timeline implements ITimeline, IMenu {
             int selector = scan.nextInt();
             switch (selector) {
                 case 0:
-                    accionValida = true;
-                    showPage(0 + 1);
+                    accionValida = showPage(0 + 1);
                     break;
                 case 1:
-                    accionValida = true;
-                    showPage(1 - 1);
+                    accionValida = showPage(1 - 1);
                     break;
                 case 2:
                     accionValida = true;
-
-
+                    break;
                 case 9:
                     accionValida = true;
                     goBack = true;

@@ -1,2 +1,3 @@
-a0001;email@upm.es;12345678;Pepito;Garcia;@pepepopo;ID_seguido1,ID_seguido2,ID_seguido3;ID_follower1,ID_follower2;ID_comunidad1,ID_comunidad2;ID_publicacion1,ID_publicacion2;ID_valoracion1,ID_valoracion2;unicornio;
-a0002;email@alumnos.upm.es;12345678;House;Ermehó;@houce1;ID_seguido1,ID_seguido2;ID_follower1,ID_follower2,ID_follower3;ID_comunidad1;ID_publicacion1,ID_publicacion2;ID_valoracion1,ID_valoracion2;botella;
+a0001;email@upm.es;12345678;Pepito;Garcia;@pepepopo;a0002;a0002,a0003;e0001,e0002;b0001;d0001,d0004;unicornio;c0001;
+a0002;email@alumnos.upm.es;12345678;House;Ermehó;@houce1;a0001;a0001,a0003;e0001;b0002,b0003;d0002;botella;VACIO;
+a0003;a;a;CuentaTests;3;@cuenta3;a0001,a0002;VACIO;e0001;VACIO;d0003;botella;c0002;

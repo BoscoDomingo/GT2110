@@ -58,10 +58,11 @@ public class DatabaseController {
         ArrayList<String> responseLista = new ArrayList<>();
         while (listaSinTratar.length() > 0) {
             int index = listaSinTratar.indexOf(",");
-            responseLista.add(listaSinTratar.substring(0, index));
-            if (index + 1 < listaSinTratar.length()) {
+            if (index != -1) {
+                responseLista.add(listaSinTratar.substring(0, index));
                 listaSinTratar = listaSinTratar.substring(index + 1, listaSinTratar.length());
-            } else {
+            } else if (listaSinTratar.length() > 0) {
+                responseLista.add(listaSinTratar);
                 listaSinTratar = "";
             }
         }
@@ -89,9 +90,8 @@ public class DatabaseController {
         return response;
     }
 
-    public void cambiosEnBD(String identificador, int posicion,
-                            String contenido) { //Cualquier cambio en la BD, utilizad este metodo. (Identificador es lo que te hace llegar a la columna a la que cambiar los datos)
-        Boolean encontrado = false;
+    //Cualquier cambio en la BD, utilizad este metodo. (Identificador es lo que te hace llegar a la columna a la que cambiar los datos)
+    public void cambiosEnBD(String identificador, int posicion, String contenido) {
         for (ArrayList<String> usuario : responseBD) {
             if (usuario.get(1).equals(identificador)) {
                 usuario.set(posicion, contenido);

@@ -2,8 +2,10 @@ package interfaces;
 
 public interface IMenu {
 
-    public boolean menu(); //se llama a todos los menus en una pantalla (ejemplo: estamos en el perfil
+    public boolean menu(ISistema sistema); //se llama a todos los menus en una pantalla (ejemplo: estamos en el perfil
     // de un usuario, se llama a perfil.menu() que dentro tendrá una opción que llamará a timeline.menu()
+
+
     //EJEMPLO DE UN MENÚ
    /*
     boolean accionValida = false, goBack = false;

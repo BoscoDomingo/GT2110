@@ -2,6 +2,7 @@ package pkg;
 
 import interfaces.IMenu;
 import interfaces.IPerfil;
+import interfaces.ISistema;
 
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ public class Perfil implements IPerfil, IMenu {
     private Timeline timeline;
 
     @Override
-    public boolean menu() {
+    public boolean menu(ISistema sistema) {
         boolean accionValida = false, goBack = false;
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
@@ -26,7 +27,7 @@ public class Perfil implements IPerfil, IMenu {
                     accionValida = true;
                     //LLAMADA A CUALQUIER OTRO MENU QUE SE PUEDA MOSTRAR SI LO NECEISTAIS, INCLUIDAS MÁS ACCIONES SI 8 NO
                     //SON SUFICIENTES
-                   // if(otraCosa.menu() = true) accionValida = false; //Significa que vuelve del otro menu a este
+                    // if(otraCosa.menu() = true) accionValida = false; //Significa que vuelve del otro menu a este
                     break;
                 case 9:
                     accionValida = true;

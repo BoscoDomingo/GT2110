@@ -1,6 +1,7 @@
 package publicaciones;
 
 import interfaces.IMenu;
+import interfaces.ISistema;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
 
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Publicacion implements Comparable<Publicacion>, IMenu {
+public class Publicacion implements IMenu, Comparable<Publicacion> {
     private final String id;
-    private final CuentaUsuario poster; //string id usuario???
+    private final CuentaUsuario poster;
     private final Date fecha;
     private final String texto;
     private int numeroLikes;
@@ -20,6 +21,19 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
     private ArrayList<Valoracion> valoraciones;
     private ArrayList<Comentario> comentarios;
     private ArrayList<Timeline> perteneceATimelines;
+
+    public Publicacion(String id, CuentaUsuario usuario, Date fecha, String texto, int numeroLikes,
+                       int numeroDislikes) {
+        this.id = id;
+        this.poster = usuario;
+        this.fecha = fecha;
+        this.texto = texto;
+        this.numeroLikes = numeroLikes;
+        this.numeroDislikes = numeroDislikes;
+        this.valoraciones = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
+        this.perteneceATimelines = new ArrayList<>();
+    }
 
     public Publicacion(String id, CuentaUsuario poster, String texto, ArrayList<Valoracion> valoraciones,
                        ArrayList<Comentario> comentarios, ArrayList<Timeline> perteneceATimelines) {
@@ -72,7 +86,6 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }
 
-
     public void delete() {
         try {
             for (Timeline timeline : this.perteneceATimelines) {
@@ -83,63 +96,9 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         }
     }
 
-    public void comment() {
-        System.out.println("Por favor escriba su comentario debajo:");
-        Scanner scan = new Scanner(System.in);
-        String texto = scan.nextLine();
-        //this.comentarios.add(new Comentario());
-    }
-
-    public void addCommentario(Comentario comentario) {
-        try {
-            this.comentarios.add(comentario);
-        } catch (Exception e) {
-            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
-        }
-    }
-
-    public void addCommentarios(ArrayList<Comentario> comentarios) {
-        try {
-            this.comentarios.addAll(comentarios);
-        } catch (Exception e) {
-            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
-        }
-    }
-
-    public boolean ownerMenu() {
-        boolean accionValida = false, goBack = false;
-        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA", "PAA@PAA.com", null, null, null, null,
-                                                      null);//TODO: DatabaseController.getCurrentUser();
-        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
-        Scanner scan = new Scanner(System.in);
-        while (!accionValida) {
-            int selector = scan.nextInt();
-            switch (selector) {
-                case 0:
-                    accionValida = true;
-                    this.delete();
-                    break;
-                case 1:
-                    accionValida = true;
-                    //currentUser.comment(this);
-                    break;
-                case 2:
-                    accionValida = true;
-                    //currentUser.valorar(this);
-                    break;
-                case 9:
-                    accionValida = true;
-                    goBack = true;
-                    break;
-                default:
-                    System.out.println("Por favor, introduzca un número válido");
-            }
-        }
-        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
-    }
 
     @Override
-    public boolean menu() {
+    public boolean menu(ISistema sistema) {
         boolean accionValida = false, goBack = false;
        /* CuentaUsuario currentUser = DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
@@ -170,7 +129,76 @@ public class Publicacion implements Comparable<Publicacion>, IMenu {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+    public boolean ownerMenu(ISistema sistema) {
+        boolean accionValida = false, goBack = false;
+        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA",
+                                                      "PAA@PAA.com");//TODO: DatabaseController.getCurrentUser();
+        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
+        Scanner scan = new Scanner(System.in);
+        while (!accionValida) {
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 0:
+                    accionValida = true;
+                    this.delete();
+                    break;
+                case 1:
+                    accionValida = true;
+                    //currentUser.comment(this);
+                    break;
+                case 2:
+                    accionValida = true;
+                    //currentUser.valorar(this);
+                    break;
+                case 9:
+                    accionValida = true;
+                    goBack = true;
+                    break;
+                default:
+                    System.out.println("Por favor, introduzca un número válido");
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
+
+
+    public void comment() {
+        System.out.println("Por favor escriba su comentario debajo:");
+        Scanner scan = new Scanner(System.in);
+        String texto = scan.nextLine();
+        //this.comentarios.add(new Comentario());
+    }
+
     //GETTERS & SETTERS
+    public void addCommentario(Comentario comentario) {
+        try {
+            this.comentarios.add(comentario);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+    public void addCommentarios(ArrayList<Comentario> comentarios) {
+        try {
+            this.comentarios.addAll(comentarios);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+
+    public void setValoraciones(ArrayList<Valoracion> valoraciones) {
+        this.valoraciones = valoraciones;
+    }
+
+    public void setComentarios(ArrayList<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public void setPerteneceATimelines(ArrayList<Timeline> perteneceATimelines) {
+        this.perteneceATimelines = perteneceATimelines;
+    }
 
     public CuentaUsuario getPoster() {
         return poster;
