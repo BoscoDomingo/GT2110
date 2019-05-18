@@ -22,7 +22,9 @@ public class App {
                     break;
                 case 1:
                     scan.nextLine();
-                    email = scan.nextLine();
+                    System.out.println("Introduzca su correo para crear la cuenta.");
+                    String email = scan.nextLine();
+                    System.out.println("Introduzca la conteraseña de su cuenta.");
                     String password = scan.nextLine();
                     loginController.crearCuenta(email, password);
                     break;
