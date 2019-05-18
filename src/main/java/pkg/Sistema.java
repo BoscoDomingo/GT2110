@@ -1,18 +1,16 @@
 package pkg;
 
-import community.AdministradorComunidad;
 import community.Comunidad;
-import community.Miembro;
 import controllers.DatabaseController;
+import interfaces.ISistema;
 import publicaciones.*;
 
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Sistema {
+public class Sistema implements ISistema {
 
     private DatabaseController usersDBController;
     private DatabaseController publicacionesDBController;
@@ -54,6 +52,8 @@ public class Sistema {
 
         actualizarUsuarios(email);
         actualizarPublicaciones();
+        actualizarReferencias();
+        actualizarComunidades();
     }
 
     private HashMap<String, CuentaUsuario> inicializarUsers() { //requiere actualizar todas las colecciones
@@ -63,6 +63,7 @@ public class Sistema {
                 usersTratados.put(userFormatoArrayList.get(0),
                                   new CuentaUsuario(userFormatoArrayList.get(0), userFormatoArrayList.get(5),
                                                     userFormatoArrayList.get(1)));
+                this.lastUserID = userFormatoArrayList.get(0);
             }
         } catch (Exception e) {
             System.out.println("Error en inicialización de usuarios: " + e);
@@ -72,13 +73,13 @@ public class Sistema {
 
     private HashMap<String, Publicacion> inicializarPublicaciones() { //requiere actualizar todas las colecciones
         HashMap<String, Publicacion> publicacionesTratadas = new HashMap<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
         try {
             for (ArrayList<String> publicacionFormatoArrayList : publicacionesDBController.getResponseBD()) {
                 String id = publicacionFormatoArrayList.get(0);
                 String tipo = publicacionFormatoArrayList.get(1);
                 CuentaUsuario poster = (CuentaUsuario) this.allUsers.get(publicacionFormatoArrayList.get(2));
-                Date fecha = dateFormat.parse(publicacionFormatoArrayList.get(3), new ParsePosition(0));
+                Date fecha = dateFormat.parse(publicacionFormatoArrayList.get(3));
                 String texto = publicacionFormatoArrayList.get(4);
                 int numeroLikes = Integer.parseInt(publicacionFormatoArrayList.get(5));
                 int numeroDislikes = Integer.parseInt(publicacionFormatoArrayList.get(6));
@@ -100,7 +101,7 @@ public class Sistema {
                                                                  null));
                         break;
                 }
-
+                this.lastPublicacionID = publicacionFormatoArrayList.get(0);
             }
         } catch (Exception e) {
             System.out.println("Error en inicializacion de publicaciones: " + e);
@@ -110,19 +111,20 @@ public class Sistema {
 
     private HashMap<String, Comentario> inicializarComentarios() { //no requiere actualizar, se crean enteros
         HashMap<String, Comentario> comentariosTratados = new HashMap<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
         try {
             for (ArrayList<String> comentarioFormatoArrayList : comentariosDBController.getResponseBD()) {
                 comentariosTratados.put(comentarioFormatoArrayList.get(0),
                                         new Comentario(comentarioFormatoArrayList.get(0),
-                                                       dateFormat.parse(comentarioFormatoArrayList.get(1),
-                                                                        new ParsePosition(0)),
+                                                       dateFormat.parse(comentarioFormatoArrayList.get(1)),
                                                        comentarioFormatoArrayList.get(2),
                                                        this.allPublicaciones.get(comentarioFormatoArrayList.get(3)),
-                                                       this.allUsers.get(comentarioFormatoArrayList.get(5))));
+                                                       this.allUsers.get(comentarioFormatoArrayList.get(4))));
+                this.lastComentarioID = comentarioFormatoArrayList.get(0);
             }
         } catch (Exception e) {
-            System.out.println("Error en inicializacion de comentarios: " + e);
+            System.out.println("Error en inicializacion de comentarios: ");
+            e.printStackTrace();
         }
         return comentariosTratados;
     }
@@ -130,58 +132,51 @@ public class Sistema {
     private HashMap<String, Valoracion> inicializarValoraciones() { //no requiere actualizar, se crean enteras
         HashMap<String, Valoracion> valoracionesTratadas = new HashMap<>();
         try {
-            for (ArrayList<String> valoracionFormatoArrayList : comentariosDBController.getResponseBD()) {
+            for (ArrayList<String> valoracionFormatoArrayList : valoracionesDBController.getResponseBD()) {
                 valoracionesTratadas.put(valoracionFormatoArrayList.get(0),
                                          new Valoracion(valoracionFormatoArrayList.get(0),
                                                         Integer.parseInt(valoracionFormatoArrayList.get(1)),
-                                                        this.allUsers.get(valoracionFormatoArrayList.get(5)),
+                                                        this.allUsers.get(valoracionFormatoArrayList.get(2)),
                                                         this.allPublicaciones.get(valoracionFormatoArrayList.get(3))));
+                this.lastValoracionID = valoracionFormatoArrayList.get(0);
             }
-        }catch (Exception e){
-            System.out.println("Error en inicializacion de valoraciones: "+ e);
+        } catch (Exception e) {
+            System.out.println("Error en inicializacion de valoraciones: ");
+            e.printStackTrace();
         }
         return valoracionesTratadas;
     }
 
-    private HashMap<String, Comunidad> inicializarComunidades() { //no requiere actualizar, se crean enteras
+    private HashMap<String, Comunidad> inicializarComunidades() { //requiere añadir publicaciones a timeline
         HashMap<String, Comunidad> comunidadesTratadas = new HashMap<>();
         try {
             for (ArrayList<String> comunidadFormatoArrayList : comunidadesDBController.getResponseBD()) {
                 //Añadir miembros y admins
-                ArrayList<Miembro> miembros = new ArrayList<>();
-                ArrayList<AdministradorComunidad> admins = new ArrayList<>();
+                ArrayList<CuentaUsuario> miembros = new ArrayList<>();
+                ArrayList<CuentaUsuario> admins = new ArrayList<>();
 
                 ArrayList<String> miembrosString = comunidadesDBController.tratarLista(
                         comunidadFormatoArrayList.get(2));
                 ArrayList<String> adminsString = comunidadesDBController.tratarLista(comunidadFormatoArrayList.get(3));
 
                 for (String idMiembro : miembrosString) {
-                    miembros.add((Miembro) this.allUsers.get(idMiembro));
+                    if (!idMiembro.equals("VACIO")) {
+                        miembros.add(this.allUsers.get(idMiembro));
+                    }
                 }
 
                 for (String idAdmin : adminsString) {
-                    admins.add((AdministradorComunidad) this.allUsers.get(idAdmin));
+                    admins.add(this.allUsers.get(idAdmin));
                 }
-
-                //Añadir publicaciones
-                ArrayList<Publicacion> publicacionesTimeline = new ArrayList<>();
-                for (CuentaUsuario usuario : miembros) {
-                    publicacionesTimeline.addAll(usuario.getPublicaciones());
-                }
-                for (CuentaUsuario usuario : admins) {
-                    publicacionesTimeline.addAll(usuario.getPublicaciones());
-                }
-                Timeline timeline = new Timeline(publicacionesTimeline);
-                timeline.sort();
-
                 //Crear la comunidad
                 comunidadesTratadas.put(comunidadFormatoArrayList.get(0),
                                         new Comunidad(comunidadFormatoArrayList.get(0),
                                                       comunidadFormatoArrayList.get(1),
-                                                      timeline, miembros, admins));
+                                                      new Timeline(new ArrayList<>()), miembros, admins));
+                this.lastComunidadID = comunidadFormatoArrayList.get(0);
             }
-        }catch (Exception e){
-            System.out.println("Error en inicializacion de Comunidades: "+e);
+        } catch (Exception e) {
+            System.out.println("Error en inicializacion de Comunidades: " + e);
         }
         return comunidadesTratadas;
     }
@@ -196,7 +191,9 @@ public class Sistema {
                 ArrayList<String> listaSeguidos = usersDBController.tratarLista(userFormatoArrayList.get(6));
                 ArrayList<CuentaUsuario> seguidosAInsertar = new ArrayList<>();
                 for (String idUsuario : listaSeguidos) {
-                    seguidosAInsertar.add(this.allUsers.get(idUsuario));
+                    if (!idUsuario.equals("VACIO")) {
+                        seguidosAInsertar.add(this.allUsers.get(idUsuario));
+                    }
                 }
                 userToUpdate.setSigueA(seguidosAInsertar);
 
@@ -204,7 +201,9 @@ public class Sistema {
                 ArrayList<String> listaSeguidores = usersDBController.tratarLista(userFormatoArrayList.get(7));
                 ArrayList<CuentaUsuario> seguidoresAInsertar = new ArrayList<>();
                 for (String idUsuario : listaSeguidores) {
-                    seguidoresAInsertar.add(this.allUsers.get(idUsuario));
+                    if (!idUsuario.equals("VACIO")) {
+                        seguidoresAInsertar.add(this.allUsers.get(idUsuario));
+                    }
                 }
                 userToUpdate.setSeguidores(seguidoresAInsertar);
 
@@ -212,7 +211,9 @@ public class Sistema {
                 ArrayList<String> listaComunidades = usersDBController.tratarLista(userFormatoArrayList.get(8));
                 ArrayList<Comunidad> comunidadesAInsertar = new ArrayList<>();
                 for (String idComunidad : listaComunidades) {
-                    comunidadesAInsertar.add(this.allComunidades.get(idComunidad));
+                    if (!idComunidad.equals("VACIO")) {
+                        comunidadesAInsertar.add(this.allComunidades.get(idComunidad));
+                    }
                 }
                 userToUpdate.setComunidades(comunidadesAInsertar);
 
@@ -220,7 +221,9 @@ public class Sistema {
                 ArrayList<String> listaPublicaciones = usersDBController.tratarLista(userFormatoArrayList.get(9));
                 ArrayList<Publicacion> publicacionesAInsertar = new ArrayList<>();
                 for (String idPublicacion : listaPublicaciones) {
-                    publicacionesAInsertar.add(this.allPublicaciones.get(idPublicacion));
+                    if (!idPublicacion.equals("VACIO")) {
+                        publicacionesAInsertar.add(this.allPublicaciones.get(idPublicacion));
+                    }
                 }
                 userToUpdate.setPublicaciones(publicacionesAInsertar);
 
@@ -228,7 +231,9 @@ public class Sistema {
                 ArrayList<String> listaValoraciones = usersDBController.tratarLista(userFormatoArrayList.get(10));
                 ArrayList<Valoracion> valoracionesAInsertar = new ArrayList<>();
                 for (String idValoracion : listaValoraciones) {
-                    valoracionesAInsertar.add(this.allValoraciones.get(idValoracion));
+                    if (!idValoracion.equals("VACIO")) {
+                        valoracionesAInsertar.add(this.allValoraciones.get(idValoracion));
+                    }
                 }
                 userToUpdate.setValoraciones(valoracionesAInsertar);
 
@@ -236,7 +241,9 @@ public class Sistema {
                 ArrayList<String> listaComentarios = usersDBController.tratarLista(userFormatoArrayList.get(12));
                 ArrayList<Comentario> comentariosAInsertar = new ArrayList<>();
                 for (String idComentario : listaComentarios) {
-                    comentariosAInsertar.add(this.allComentarios.get(idComentario));
+                    if (!idComentario.equals("VACIO")) {
+                        comentariosAInsertar.add(this.allComentarios.get(idComentario));
+                    }
                 }
                 userToUpdate.setComentarios(comentariosAInsertar);
 
@@ -250,7 +257,8 @@ public class Sistema {
     }
 
     private void actualizarPublicaciones() {
-        for (ArrayList<String> publicacionFormatoArrayList : publicacionesDBController.getResponseBD()) { //Vamos usuario a usuario
+        for (ArrayList<String> publicacionFormatoArrayList : publicacionesDBController.getResponseBD()) { //Vamos
+            // publicacion a publicacion
             try {
                 Publicacion publicacionToUpdate = this.allPublicaciones.get(publicacionFormatoArrayList.get(0));
 
@@ -259,7 +267,9 @@ public class Sistema {
                         publicacionFormatoArrayList.get(7));
                 ArrayList<Valoracion> valoracionesAInsertar = new ArrayList<>();
                 for (String idValoracion : listaValoraciones) {
-                    valoracionesAInsertar.add(this.allValoraciones.get(idValoracion));
+                    if (!idValoracion.equals("VACIO")) {
+                        valoracionesAInsertar.add(this.allValoraciones.get(idValoracion));
+                    }
                 }
                 publicacionToUpdate.setValoraciones(valoracionesAInsertar);
 
@@ -268,13 +278,55 @@ public class Sistema {
                         publicacionFormatoArrayList.get(8));
                 ArrayList<Comentario> comentariosAInsertar = new ArrayList<>();
                 for (String idComentario : listaComentarios) {
-                    comentariosAInsertar.add(this.allComentarios.get(idComentario));
+                    if (!idComentario.equals("VACIO")) {
+                        comentariosAInsertar.add(this.allComentarios.get(idComentario));
+                    }
                 }
                 publicacionToUpdate.setComentarios(comentariosAInsertar);
-
             } catch (Exception e) {
                 System.out.println("Error al actualizar publicaciones: " + e);
             }
+        }
+    }
+
+    private void actualizarReferencias() {
+        try {
+            for (ArrayList<String> referenciaFormatoArrayList : this.publicacionesDBController.getResponseBD()) {
+                if (referenciaFormatoArrayList.get(1).equals("R")) {
+                    Referencia referencia = (Referencia) this.allPublicaciones.get(referenciaFormatoArrayList.get(0));
+                    referencia.setReferenciada(this.allPublicaciones.get(referenciaFormatoArrayList.get(9)));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error actualizando referencias");
+            e.printStackTrace();
+        }
+    }
+
+    private void actualizarComunidades() {
+        try {
+            for (Comunidad comunidad : this.allComunidades.values()) {
+                //Añadir publicaciones
+                ArrayList<Publicacion> publicacionesTimeline = new ArrayList<>();
+
+                for (CuentaUsuario usuario : comunidad.getMiembros()) {
+                    if (usuario.getPublicaciones().size() > 0) {
+                        publicacionesTimeline.addAll(usuario.getPublicaciones());
+                    }
+                }
+                for (CuentaUsuario usuario : comunidad.getAdmins()) {
+                    if (usuario.getPublicaciones().size() > 0) {
+                        publicacionesTimeline.addAll(usuario.getPublicaciones());
+                    }
+                }
+
+                Timeline timeline = new Timeline(publicacionesTimeline);
+                timeline.sort();
+                comunidad.setTimeline(timeline);
+            }
+        } catch (Exception e) {
+            System.out.println("Fallo al actualizar comunidades");
+            e.printStackTrace();
         }
     }
 

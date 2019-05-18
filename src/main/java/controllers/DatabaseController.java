@@ -11,9 +11,7 @@ public class DatabaseController {
     private ArrayList<ArrayList<String>> responseBD;
 
     public DatabaseController(String direccion) {
-        System.out.println("entrando a constructor DatabaseController");
         responseBD = extraerInfoBD(direccion);
-        System.out.println("extraerinfo correcto: "+ responseBD);
     }
 
     public ArrayList<ArrayList<String>> extraerInfoBD(String direccion) {
@@ -60,10 +58,11 @@ public class DatabaseController {
         ArrayList<String> responseLista = new ArrayList<>();
         while (listaSinTratar.length() > 0) {
             int index = listaSinTratar.indexOf(",");
-            responseLista.add(listaSinTratar.substring(0, index));
-            if (index + 1 < listaSinTratar.length()) {
+            if (index != -1) {
+                responseLista.add(listaSinTratar.substring(0, index));
                 listaSinTratar = listaSinTratar.substring(index + 1, listaSinTratar.length());
-            } else {
+            } else if (listaSinTratar.length() > 0) {
+                responseLista.add(listaSinTratar);
                 listaSinTratar = "";
             }
         }

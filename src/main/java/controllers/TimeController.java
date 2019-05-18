@@ -3,7 +3,7 @@ package controllers;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimeController{
+public class TimeController {
 
     private Timer timer;
     private String user;
@@ -16,25 +16,25 @@ public class TimeController{
         }
     }
 
-    public TimeController(String user){
+    public TimeController(String user) {
         timer = new Timer(user);
         this.user = user;
     }
 
-    public void contar(){
+    public void contar() {
         this.segundos = 0;
         timer.schedule(new Contador(), 0, 1000);
     }
 
-    public void detener(){
+    public void detener() {
         timer.cancel();
     }
 
-    public int getSegundos(){
+    public int getSegundos() {
         return this.segundos;
     }
 
-    public void setSegundos (int segundos){
+    public void setSegundos(int segundos) {
         this.segundos = segundos;
     }
 

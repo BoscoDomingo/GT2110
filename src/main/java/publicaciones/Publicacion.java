@@ -1,6 +1,7 @@
 package publicaciones;
 
 import interfaces.IMenu;
+import interfaces.ISistema;
 import pkg.CuentaUsuario;
 import pkg.Sistema;
 import pkg.Timeline;
@@ -22,6 +23,19 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     private ArrayList<Comentario> comentarios;
     private ArrayList<Timeline> perteneceATimelines;
 
+    public Publicacion(String id, CuentaUsuario usuario, Date fecha, String texto, int numeroLikes,
+                       int numeroDislikes) {
+        this.id = id;
+        this.poster = usuario;
+        this.fecha = fecha;
+        this.texto = texto;
+        this.numeroLikes = numeroLikes;
+        this.numeroDislikes = numeroDislikes;
+        this.valoraciones = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
+        this.perteneceATimelines = new ArrayList<>();
+    }
+
     public Publicacion(String id, CuentaUsuario poster, String texto, ArrayList<Valoracion> valoraciones,
                        ArrayList<Comentario> comentarios, ArrayList<Timeline> perteneceATimelines) {
         this.id = id;
@@ -33,18 +47,6 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         this.valoraciones = valoraciones;
         this.comentarios = comentarios;
         this.perteneceATimelines = perteneceATimelines;
-    }
-
-    public Publicacion(String id, CuentaUsuario usuario, Date fecha, String texto, int numeroLikes, int numeroDislikes) {
-        this.id = id;
-        this.poster = usuario;
-        this.fecha = fecha;
-        this.texto = texto;
-        this.numeroLikes = numeroLikes;
-        this.numeroDislikes = numeroDislikes;
-        this.valoraciones = new ArrayList<>();
-        this.comentarios = new ArrayList<>();
-        this.perteneceATimelines = new ArrayList<>();
     }
 
     public void show() {
@@ -90,39 +92,9 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         }
     }
 
-    public boolean ownerMenu(Sistema sistema) {
-        boolean accionValida = false, goBack = false;
-        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA", "PAA@PAA.com");//TODO: DatabaseController.getCurrentUser();
-        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
-        Scanner scan = new Scanner(System.in);
-        while (!accionValida) {
-            int selector = scan.nextInt();
-            switch (selector) {
-                case 0:
-                    accionValida = true;
-                    this.delete();
-                    break;
-                case 1:
-                    accionValida = true;
-                    //currentUser.comment(this);
-                    break;
-                case 2:
-                    accionValida = true;
-                    //currentUser.valorar(this);
-                    break;
-                case 9:
-                    accionValida = true;
-                    goBack = true;
-                    break;
-                default:
-                    System.out.println("Por favor, introduzca un número válido");
-            }
-        }
-        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
-    }
 
     @Override
-    public boolean menu(Sistema sistema) {
+    public boolean menu(ISistema sistema) {
         boolean accionValida = false, goBack = false;
        /* CuentaUsuario currentUser = DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
@@ -152,6 +124,39 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         }*/
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
+
+    public boolean ownerMenu(ISistema sistema) {
+        boolean accionValida = false, goBack = false;
+        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA",
+                                                      "PAA@PAA.com");//TODO: DatabaseController.getCurrentUser();
+        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
+        Scanner scan = new Scanner(System.in);
+        while (!accionValida) {
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 0:
+                    accionValida = true;
+                    this.delete();
+                    break;
+                case 1:
+                    accionValida = true;
+                    //currentUser.comment(this);
+                    break;
+                case 2:
+                    accionValida = true;
+                    //currentUser.valorar(this);
+                    break;
+                case 9:
+                    accionValida = true;
+                    goBack = true;
+                    break;
+                default:
+                    System.out.println("Por favor, introduzca un número válido");
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
 
     //GETTERS & SETTERS
 

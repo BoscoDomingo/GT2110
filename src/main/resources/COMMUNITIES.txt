@@ -1,2 +1,2 @@
 e0001;Comunidad Excelente;a0002,a0003;a0001;
-e0002;Segunda;;a0001;
+e0002;Segunda;VACIO;a0001;

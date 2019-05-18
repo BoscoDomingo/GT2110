@@ -22,6 +22,19 @@ public class CuentaUsuario implements ICuentaUsuario {
     private ArrayList<Valoracion> valoraciones;
     private ArrayList<Comentario> comentarios;
 
+    public CuentaUsuario(String id, String alias, String correoUPM) {
+        this.id = id;
+        this.alias = alias;
+        this.correoUPM = correoUPM;
+        this.perfil = new Perfil();
+        this.sigueA = new ArrayList<>();
+        this.seguidores = new ArrayList<>();
+        this.comunidades = new ArrayList<>();
+        this.publicaciones = new ArrayList<>();
+        this.valoraciones = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
+    }
+
     public CuentaUsuario(String id, String alias, String correoUPM, ArrayList<CuentaUsuario> sigueA,
                          ArrayList<CuentaUsuario> seguidores, ArrayList<Comunidad> comunidades,
                          ArrayList<Publicacion> publicaciones, ArrayList<Valoracion> valoraciones,
@@ -39,18 +52,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios = comentarios;
     }
 
-    public CuentaUsuario(String id, String alias, String correoUPM) {
-        this.id = id;
-        this.alias = alias;
-        this.correoUPM = correoUPM;
-        this.perfil = new Perfil();
-        this.sigueA = new ArrayList<>();
-        this.seguidores = new ArrayList<>();
-        this.comunidades = new ArrayList<>();
-        this.publicaciones = new ArrayList<>();
-        this.valoraciones = new ArrayList<>();
-        this.comentarios = new ArrayList<>();
-    }
+
 
     /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
     public void follow(String id){
@@ -65,7 +67,7 @@ public class CuentaUsuario implements ICuentaUsuario {
     */
 
     public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
-        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: databaseController.getUltimoIdValoracion*/ + 1,
+        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: sistema.getUltimoIdValoracion*/ + 1,
                                                     likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
