@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginController {
 
@@ -16,11 +18,47 @@ public class LoginController {
         cuentasBloqueadas = new HashMap<>();
     }
 
-    public boolean crearCuenta(String email, String password) {
+    public boolean crearCuenta(String email, String password){
         boolean exito = false;
+        if(comprobarValidezCorreo(email)){
+            //creacion de la cuenta
+        }
         return exito;
-    }
 
+    }
+    public boolean comprobarValidezCorreo(String email) {
+        boolean vale = false;
+        if (!comprobarExistenciaCorreoAlumnado(email) && !comprobarExistenciaCorreoPersonal(email))
+            System.out.println("Error, su correo no pertenece al alumnado de la UPM.");
+        else if (!comprobarYaRegistrado(email)){
+            System.out.println("Error, el correo ya ha sido registrado.");
+        }
+        else {
+            System.out.println("Correcto, el correo pertenece al alumnado o personal de la UPM.");
+            vale = true;
+        }
+        return vale;
+    }
+    public boolean comprobarYaRegistrado(String email){
+        boolean existe= false;
+        String respuesta = database.consultasParaBD(email, 2);
+        if (respuesta.equals("error")) {
+            existe= true;               //se comprueba que el correo ya estaba antes en la base de datos
+        }
+        return existe;
+    }
+    public boolean comprobarExistenciaCorreoAlumnado(String email){
+        String reg = "^[A-Za-z0-9+_.-]+@(alumnos.upm.es)$"; //se comprueba que la extension es alumnos.upm.es
+        Pattern patron = Pattern.compile(reg);
+        Matcher matcher = patron.matcher(email);
+        return matcher.matches();
+    }
+    public boolean comprobarExistenciaCorreoPersonal(String email){
+        String reg = "^[A-Za-z0-9+_.-]+@(upm.es)$"; //se comprueba que la extension es upm.es
+        Pattern patron = Pattern.compile(reg);
+        Matcher matcher = patron.matcher(email);
+        return matcher.matches();
+    }
     public void cerrarSesion() {
     }
 
