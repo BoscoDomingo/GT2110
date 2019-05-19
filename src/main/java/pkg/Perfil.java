@@ -2,7 +2,6 @@ package pkg;
 
 import interfaces.IMenu;
 import interfaces.IPerfil;
-import interfaces.ISistema;
 
 import java.util.Scanner;
 
@@ -10,7 +9,7 @@ public class Perfil implements IPerfil, IMenu {
     private Timeline timeline;
 
     @Override
-    public boolean menu(ISistema sistema) {
+    public boolean menu() {
         boolean accionValida = false, goBack = false;
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {

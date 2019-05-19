@@ -1,7 +1,6 @@
 package pkg;
 
 import interfaces.IMenu;
-import interfaces.ISistema;
 import interfaces.ITimeline;
 import publicaciones.Publicacion;
 
@@ -95,7 +94,7 @@ public class Timeline implements ITimeline, IMenu {
     }
 
     @Override
-    public boolean menu(ISistema sistema) {
+    public boolean menu() {
         boolean accionValida = false, goBack = false;
         System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Seleccionar una " +
                                    "publicacion\n9 - Volver atrás");

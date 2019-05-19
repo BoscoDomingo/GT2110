@@ -1,7 +1,7 @@
 package pkg;
 
 import controllers.LoginController;
-import interfaces.ISistema;
+import interfaces.IMenu;
 
 import java.util.Scanner;
 
@@ -28,7 +28,7 @@ public class App {
                     break;
                 case 2:
                     scan.nextLine();
-                    boolean valido = true; //TODO: CAMBIAR A FALSE PARA PROBAR INICIO DE SESION
+                    boolean valido = false; //TODO: CAMBIAR A FALSE PARA PROBAR INICIO DE SESION
                     boolean abandonar = false;
 
                     while (!valido && !abandonar) {
@@ -42,18 +42,18 @@ public class App {
                         email = scan.nextLine();
                         if (email.equals("exit")) {
                             abandonar = true;
-
                         } else if (email.equals("change")) {
                             System.out.println("Introduce tu email: ");
                             email = scan.nextLine();
                             loginController.olvidadoPass(email);
                         } else {
                             valido = loginController.iniciarSesion(email);
+
+                            if (valido) {//Entrar a la app
+                                Sistema sistema = Sistema.getSistema(email);
+                                menu();
+                            }
                         }
-                    }
-                    if (valido) {//Entrar a la app
-                        Sistema sistema = new Sistema(email);
-                        menu(sistema);
                     }
                     break;
                 default:
@@ -63,7 +63,7 @@ public class App {
         }
     }
 
-    public static void menu(ISistema sistema) {
+    public static void menu() {
         boolean accionValida = false, goBack = false;
         System.out.println("\nOpciones:\n0 - Ver Perfil \n9 - Salir");
         Scanner scan = new Scanner(System.in);
@@ -73,7 +73,7 @@ public class App {
                 //METED CASES SÓLO DEL 0 AL 8
                 case 0:
                     accionValida = true;
-                    sistema.getCurrentUser().getPerfil().menu(sistema);
+                    Sistema.getCurrentUser().getPerfil().menu();
                     break;
 
                 //...
