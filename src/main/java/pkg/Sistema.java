@@ -2,7 +2,6 @@ package pkg;
 
 import community.Comunidad;
 import controllers.DatabaseController;
-import interfaces.ISistema;
 import publicaciones.*;
 
 import java.text.SimpleDateFormat;
@@ -10,30 +9,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Sistema implements ISistema {
+public class Sistema {
 
-    private DatabaseController usersDBController;
-    private DatabaseController publicacionesDBController;
-    private DatabaseController comentariosDBController;
-    private DatabaseController valoracionesDBController;
-    private DatabaseController comunidadesDBController;
+    private static DatabaseController usersDBController;
+    private static DatabaseController publicacionesDBController;
+    private static DatabaseController comentariosDBController;
+    private static DatabaseController valoracionesDBController;
+    private static DatabaseController comunidadesDBController;
 
-    private CuentaUsuario currentUser;
+    private static CuentaUsuario currentUser;
 
-    private HashMap<String, CuentaUsuario> allUsers;
-    private HashMap<String, Publicacion> allPublicaciones;
-    private HashMap<String, Comentario> allComentarios;
-    private HashMap<String, Valoracion> allValoraciones;
-    private HashMap<String, Comunidad> allComunidades;
+    private static HashMap<String, CuentaUsuario> allUsers;
+    private static HashMap<String, Publicacion> allPublicaciones;
+    private static HashMap<String, Comentario> allComentarios;
+    private static HashMap<String, Valoracion> allValoraciones;
+    private static HashMap<String, Comunidad> allComunidades;
 
-    private String lastUserID;
-    private String lastPublicacionID;
-    private String lastComentarioID;
-    private String lastValoracionID;
-    private String lastComunidadID;
+    private static String lastUserID;
+    private static String lastPublicacionID;
+    private static String lastComentarioID;
+    private static String lastValoracionID;
+    private static String lastComunidadID;
+    
+    private static Sistema instanciacion;
 
 
-    public Sistema(String email) {
+    public static Sistema getSistema(String email){
+        if(instanciacion == null){
+            instanciacion = new Sistema(email);
+        }
+        return instanciacion;
+    }
+
+    private Sistema(String email) {
 
         this.usersDBController = new DatabaseController("src/main/resources/USERS.txt");
         this.allUsers = inicializarUsers();
@@ -330,59 +338,59 @@ public class Sistema implements ISistema {
         }
     }
 
-    public DatabaseController getUsersDBController() {
+    public static DatabaseController getUsersDBController() {
         return usersDBController;
     }
 
-    public DatabaseController getPublicacionesDBController() {
+    public static DatabaseController getPublicacionesDBController() {
         return publicacionesDBController;
     }
 
-    public CuentaUsuario getCurrentUser() {
+    public static CuentaUsuario getCurrentUser() {
         return currentUser;
     }
 
-    public CuentaUsuario getUserByID(String id) {
+    public static CuentaUsuario getUserByID(String id) {
         return allUsers.get(id);
     }
 
-    public String getLastUserID() {
+    public static String getLastUserID() {
         return lastUserID;
     }
 
-    public void setLastUserID(String lastUserID) {
-        this.lastUserID = lastUserID;
+    public static void setLastUserID(String lastUserID) {
+        Sistema.lastUserID = lastUserID;
     }
 
-    public String getLastPublicacionID() {
+    public static String getLastPublicacionID() {
         return lastPublicacionID;
     }
 
-    public void setLastPublicacionID(String lastPublicacionID) {
-        this.lastPublicacionID = lastPublicacionID;
+    public static void setLastPublicacionID(String lastPublicacionID) {
+        Sistema.lastPublicacionID = lastPublicacionID;
     }
 
-    public String getLastComentarioID() {
+    public static String getLastComentarioID() {
         return lastComentarioID;
     }
 
-    public void setLastComentarioID(String lastComentarioID) {
-        this.lastComentarioID = lastComentarioID;
+    public static void setLastComentarioID(String lastComentarioID) {
+        Sistema.lastComentarioID = lastComentarioID;
     }
 
-    public String getLastValoracionID() {
+    public static String getLastValoracionID() {
         return lastValoracionID;
     }
 
-    public void setLastValoracionID(String lastValoracionID) {
-        this.lastValoracionID = lastValoracionID;
+    public static void setLastValoracionID(String lastValoracionID) {
+        Sistema.lastValoracionID = lastValoracionID;
     }
 
-    public String getLastComunidadID() {
+    public static String getLastComunidadID() {
         return lastComunidadID;
     }
 
-    public void setLastComunidadID(String lastComunidadID) {
-        this.lastComunidadID = lastComunidadID;
+    public static void setLastComunidadID(String lastComunidadID) {
+        Sistema.lastComunidadID = lastComunidadID;
     }
 }
