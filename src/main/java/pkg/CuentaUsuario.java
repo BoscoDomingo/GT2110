@@ -73,6 +73,12 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.valoraciones.add(nuevaValoracion);
     }
 
+    public void comentarPublicacion(Publicacion publicacion, String textoComentario){
+        Comentario nuevoComentario = new Comentario("h141" /*TODO: sistema.getUltimoIdComentario*/, new Date(),textoComentario,publicacion,this);
+        this.comentarios.add(nuevoComentario);
+        publicacion.addComentario(nuevoComentario);
+    }
+
     public void publicar() {
     }
 

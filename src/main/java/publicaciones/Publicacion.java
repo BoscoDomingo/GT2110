@@ -73,14 +73,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return this.fecha.compareTo(p.getFecha());
     }
 
-    public void addValoracion(Valoracion valoracion) {
-        this.valoraciones.add(valoracion);
-        if (valoracion.getLikeDislike() == 0) {
-            this.numeroDislikes++;
-        } else {
-            this.numeroLikes++;
-        }
-    }
+
 
     public void delete() {
         try {
@@ -178,5 +171,18 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
 
     public void setPerteneceATimelines(ArrayList<Timeline> perteneceATimelines) {
         this.perteneceATimelines = perteneceATimelines;
+    }
+
+    public void addComentario(Comentario comentario){
+        this.comentarios.add(comentario);
+    }
+
+    public void addValoracion(Valoracion valoracion) {
+        this.valoraciones.add(valoracion);
+        if (valoracion.getLikeDislike() == 0) {
+            this.numeroDislikes++;
+        } else {
+            this.numeroLikes++;
+        }
     }
 }
