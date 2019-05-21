@@ -1,8 +1,9 @@
-package pkg;
+package main.java.pkg;
 
 import controllers.LoginController;
 import interfaces.IMenu;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
