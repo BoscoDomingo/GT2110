@@ -39,4 +39,8 @@ public class Perfil implements IPerfil, IMenu {
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
 }

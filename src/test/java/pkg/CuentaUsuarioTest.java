@@ -10,9 +10,10 @@ public class CuentaUsuarioTest {
 
     @Test
     public void pruebas() {
-        CuentaUsuario cuenta = new CuentaUsuario("b0001", "Pepote1", "email3@upm.es");
-        CuentaUsuario cuenta2 = new CuentaUsuario("b0002", "Juan1", "email80@upm.es");
-        Publicacion publicacion = new Publicacion("h0001", cuenta, new Date(), "Buah", 0, 0);
+        Sistema.getSistema();
+        CuentaUsuario cuenta = new CuentaUsuario("a0001", "Pepote1", "email3@upm.es");
+        CuentaUsuario cuenta2 = new CuentaUsuario("a0002", "Juan1", "email80@upm.es");
+        Publicacion publicacion = new Publicacion("b0001", cuenta, new Date(), "Buah", 0, 0);
         cuenta2.valorarPublicacion(publicacion, 1);
         cuenta2.comentarPublicacion(publicacion,"Esto es un comentario de una publicacion");
         cuenta.comentarComentario(publicacion.getComentarios().get(0), "Esto es una respuesta a un comentario");
@@ -25,7 +26,9 @@ public class CuentaUsuarioTest {
             }
         }// Esto es una prueba, no quedará visualmente totalmente así
 
-        //cuenta2.seguir(cuenta.getId()); TODO: no funcina el buscar cuenta por id de Sistema
+        cuenta2.seguir(cuenta.getId());
+
+        // TODO: no funcina el buscar cuenta por id de Sistema
 
     }
 
