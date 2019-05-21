@@ -5,7 +5,6 @@ import interfaces.ICuentaUsuario;
 import publicaciones.Comentario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -52,28 +51,21 @@ public class CuentaUsuario implements ICuentaUsuario{
         this.comentarios = comentarios;
     }
 
-
-    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
-    public void follow(String id){
-        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(id);
-        sigueA.add(nuevoSeguido);
+    public void seguir(String id){
+        CuentaUsuario nuevoSeguido = Sistema.getUserByID(id);
+        this.sigueA.add(nuevoSeguido);
+        nuevoSeguido.addSeguidor(this);
     }
-     TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
-    public void follow(String alias){
-        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(alias);
-        sigueA.add(nuevoSeguido);
-    }
-    */
 
     public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
-        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: sistema.getUltimoIdValoracion*/ + 1,
+        Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
                                                     likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
     }
 
     public void comentarPublicacion(Publicacion publicacion, String textoComentario){
-        Comentario nuevoComentario = new Comentario("h141" /*TODO: sistema.getUltimoIdComentario*/ + 1, new Date(),textoComentario,null, publicacion,this, new ArrayList<>());
+        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(),textoComentario,null, publicacion,this, new ArrayList<>());
         this.comentarios.add(nuevoComentario);
         publicacion.addComentario(nuevoComentario);
     }
@@ -86,13 +78,13 @@ public class CuentaUsuario implements ICuentaUsuario{
     }
 
     private void responderComentario(Comentario comentario, String textoRespuesta){
-        Comentario respuesta = new Comentario("h142" /*TODO: sistema.getUltimoIdComentario*/ + 1 , new Date(),textoRespuesta,comentario, comentario.getPerteneceA(),this,null);
+        Comentario respuesta = new Comentario(Sistema.getLastComentarioID()  + 1 , new Date(),textoRespuesta,comentario, comentario.getPerteneceA(),this,null);
         comentario.addRespuesta(respuesta);
         this.comentarios.add(respuesta);
     }
 
     private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta){
-        Comentario nuevaRespuesta = new Comentario("r121"/*TODO: sistema.getUltimoIdComentario*/ + 1,new Date(),textoRespuesta,respuestaComentario,respuestaComentario.getPerteneceA(),this,null);
+        Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID()  + 1,new Date(),textoRespuesta,respuestaComentario,respuestaComentario.getPerteneceA(),this,null);
 
         if(respuestaComentario.getRespondeA().getRespuestas() != null)
             respuestaComentario.getRespondeA().addRespuesta(nuevaRespuesta);

@@ -25,6 +25,7 @@ public class CuentaUsuarioTest {
             }
         }// Esto es una prueba, no quedará visualmente totalmente así
 
+        //cuenta2.seguir(cuenta.getId()); TODO: no funcina el buscar cuenta por id de Sistema
 
     }
 
