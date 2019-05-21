@@ -64,7 +64,7 @@ public class DatabaseController {
             } else if (listaSinTratar.length() > 0) {
                 responseLista.add(listaSinTratar);
                 listaSinTratar = "";
-            }
+            }else{}
         }
         return responseLista;
     }

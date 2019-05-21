@@ -30,18 +30,18 @@ public class Sistema {
     private static String lastComentarioID;
     private static String lastValoracionID;
     private static String lastComunidadID;
-    
+
     private static Sistema instanciacion;
 
 
-    public static Sistema getSistema(String email){
-        if(instanciacion == null){
-            instanciacion = new Sistema(email);
+    public static Sistema getSistema() {
+        if (instanciacion == null) {
+            instanciacion = new Sistema();
         }
         return instanciacion;
     }
 
-    private Sistema(String email) {
+    private Sistema() {
 
         this.usersDBController = new DatabaseController("src/main/resources/USERS.txt");
         this.allUsers = inicializarUsers();
@@ -58,7 +58,7 @@ public class Sistema {
         this.comunidadesDBController = new DatabaseController("src/main/resources/COMMUNITIES.txt");
         this.allComunidades = inicializarComunidades();
 
-        actualizarUsuarios(email);
+        actualizarUsuarios();
         actualizarPublicaciones();
         actualizarReferencias();
         actualizarComunidades();
@@ -189,11 +189,10 @@ public class Sistema {
         return comunidadesTratadas;
     }
 
-    private void actualizarUsuarios(String email) {
+    private void actualizarUsuarios() {
         for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
             try {
                 CuentaUsuario userToUpdate = this.allUsers.get(userFormatoArrayList.get(0));
-
 
                 //metemos los seguidos
                 ArrayList<String> listaSeguidos = usersDBController.tratarLista(userFormatoArrayList.get(6));
@@ -255,11 +254,8 @@ public class Sistema {
                 }
                 userToUpdate.setComentarios(comentariosAInsertar);
 
-                if (userToUpdate.getCorreoUPM().equals(email)) { //aprovechamos y miramos quién es el currentUser
-                    this.currentUser = userToUpdate;
-                }
             } catch (Exception e) {
-                System.out.println("Error al actualizar usuarios: " + e);
+                System.out.println("Error al actualizar valoraciones: " + e);
             }
         }
     }
@@ -338,12 +334,37 @@ public class Sistema {
         }
     }
 
+    public void setCurrentUser(String email) {
+        try {
+            for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
+                if (userFormatoArrayList.get(1).equals(email)) {
+                    this.currentUser = this.allUsers.get(userFormatoArrayList.get(0));
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar currentUser: " + e);
+        }
+    }
+
     public static DatabaseController getUsersDBController() {
         return usersDBController;
     }
 
     public static DatabaseController getPublicacionesDBController() {
         return publicacionesDBController;
+    }
+
+    public static DatabaseController getComentariosDBController() {
+        return comentariosDBController;
+    }
+
+    public static DatabaseController getValoracionesDBController() {
+        return valoracionesDBController;
+    }
+
+    public static DatabaseController getComunidadesDBController() {
+        return comunidadesDBController;
     }
 
     public static CuentaUsuario getCurrentUser() {
