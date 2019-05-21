@@ -5,11 +5,10 @@ import interfaces.ICuentaUsuario;
 import publicaciones.Comentario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CuentaUsuario implements ICuentaUsuario {
+public class CuentaUsuario implements ICuentaUsuario{
     private final String id;
     private final Perfil perfil;
     private String alias;
@@ -52,26 +51,61 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios = comentarios;
     }
 
-
-
-    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
-    public void follow(String id){
-        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(id);
-        sigueA.add(nuevoSeguido);
+    public void seguir(String id){
+        CuentaUsuario nuevoSeguido = Sistema.getUserByID(id);
+        this.sigueA.add(nuevoSeguido);
+        nuevoSeguido.addSeguidor(this);
     }
-    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
-    public void follow(String alias){
-        CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(alias);
-        sigueA.add(nuevoSeguido);
-    }
-    */
 
     public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
-        Valoracion nuevaValoracion = new Valoracion("a141" /*TODO: sistema.getUltimoIdValoracion*/ + 1,
+        Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
                                                     likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
     }
+
+    public void comentarPublicacion(Publicacion publicacion, String textoComentario){
+        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(),textoComentario,null, publicacion,this, new ArrayList<>());
+        this.comentarios.add(nuevoComentario);
+        publicacion.addComentario(nuevoComentario);
+    }
+
+    public void comentarComentario(Comentario comentario, String texto){
+        if(comentario.getRespondeA()==null)
+            responderComentario(comentario,texto);
+        else
+            responderRespuesta(comentario,texto);
+    }
+
+    private void responderComentario(Comentario comentario, String textoRespuesta){
+        Comentario respuesta = new Comentario(Sistema.getLastComentarioID()  + 1 , new Date(),textoRespuesta,comentario, comentario.getPerteneceA(),this,null);
+        comentario.addRespuesta(respuesta);
+        this.comentarios.add(respuesta);
+    }
+
+    private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta){
+        Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID()  + 1,new Date(),textoRespuesta,respuestaComentario,respuestaComentario.getPerteneceA(),this,null);
+
+        if(respuestaComentario.getRespondeA().getRespuestas() != null)
+            respuestaComentario.getRespondeA().addRespuesta(nuevaRespuesta);
+        else {
+            int i = 0, j = 0;
+            boolean encontrado = false;
+            Comentario coment = null;
+            while (i < respuestaComentario.getPerteneceA().getComentarios().size() && !encontrado) {
+                coment = respuestaComentario.getPerteneceA().getComentarios().get(i);
+                while (j < coment.getRespuestas().size() && !encontrado) {
+                    if (coment.getRespuestas().get(j) == respuestaComentario)
+                        encontrado = true;
+                    j++;
+                }
+                i++;
+            }
+            coment.addRespuesta(nuevaRespuesta);
+        }
+        this.comentarios.add(nuevaRespuesta);
+    }
+
 
     public void publicar() {
     }

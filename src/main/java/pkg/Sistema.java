@@ -127,7 +127,7 @@ public class Sistema {
                                                        dateFormat.parse(comentarioFormatoArrayList.get(1)),
                                                        comentarioFormatoArrayList.get(2),
                                                        this.allPublicaciones.get(comentarioFormatoArrayList.get(3)),
-                                                       this.allUsers.get(comentarioFormatoArrayList.get(4))));
+                                                       this.allUsers.get(comentarioFormatoArrayList.get(4)), new ArrayList<>()));//TODO: inicializar atributos correctamente
                 this.lastComentarioID = comentarioFormatoArrayList.get(0);
             }
         } catch (Exception e) {
