@@ -1,10 +1,9 @@
-package publicaciones;
+package main.java.publicaciones;
 
-import pkg.CuentaUsuario;
-import pkg.Timeline;
+import main.java.pkg.CuentaUsuario;
+import main.java.pkg.Timeline;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Referencia extends Publicacion {
     private Publicacion referenciada;
