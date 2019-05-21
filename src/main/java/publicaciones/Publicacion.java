@@ -125,11 +125,6 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
     }
 
-    public void deletePublicacion() {
-        getPoster().getPublicaciones().remove(this);
-        this.perteneceATimelines.remove(this);
-
-    }
 
     @Override
     public int compareTo(Publicacion p) { //para ordenar cronológicamente

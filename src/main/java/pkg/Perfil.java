@@ -2,6 +2,7 @@ package pkg;
 
 import interfaces.IMenu;
 import interfaces.IPerfil;
+import publicaciones.Publicacion;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -23,8 +24,25 @@ public class Perfil implements IPerfil, IMenu {
             switch (selector) {
                 //Irían todas las llamadas a Sistema.getCurrentUser.borrar(), Sistema.getCurrentUser.publicar(), etc..
                 case 0:
-                    accionValida = true;//!selectPublicacion(); si devuelve true es que volvemos a mostrar
-                    //vuestro código aqui
+                    System.out.println("Siendo la numero 1 la primera publicacion que ves, introduce el número de publicación para seleccionarla" +
+                            "\nIntroduce -1 para salir");
+                    Scanner scanPublicacion = new Scanner(System.in);
+                    int numPublicacion = scanPublicacion.nextInt();
+                    if(numPublicacion != -1){
+                        Scanner scanOpcion = new Scanner(System.in);
+                        Publicacion publicacionSeleccionada = Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1);
+                        System.out.println("Si deseas verla completa, introduce la palabra 'ver'." +
+                                "\nSi deseas eliminarla introduce la palabra 'eliminar'");
+                        String opcion = scanOpcion.nextLine();
+                        if(opcion.equals("eliminar")){
+                            Sistema.getCurrentUser().borrarPublicacion(numPublicacion-1);
+                            System.out.println("Eliminada correctamente");
+                        }
+                        else if(opcion.equals("ver")){
+                            Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1).show();
+                        }
+                    }
+                    accionValida = true;
                     break;
                 case 9:
                     accionValida = true;

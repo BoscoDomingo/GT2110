@@ -358,4 +358,8 @@ public class Sistema {
     public static void setTimeline(Timeline timeline) {
         Sistema.timeline = timeline;
     }
+
+    public static HashMap<String, Publicacion> getAllPublicaciones() {
+        return allPublicaciones;
+    }
 }

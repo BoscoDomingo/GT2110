@@ -120,8 +120,9 @@ public class CuentaUsuario implements ICuentaUsuario {
     public void publicar() {
     }
 
-    public void borrarPublicacion() {
-        //pregunta el ID de la publicacion a delete y llama a publicacion.delete()
+    public void borrarPublicacion(int id) {
+        Sistema.getAllPublicaciones().remove(this.publicaciones.get(id).getId());
+        this.publicaciones.remove(id);
     }
 
     public void follow(ArrayList<CuentaUsuario> newFollowed) {
