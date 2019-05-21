@@ -1,14 +1,14 @@
 package pkg;
 
-import community.Comunidad;
 import interfaces.ICuentaUsuario;
 import publicaciones.Comentario;
 import publicaciones.Publicacion;
 import publicaciones.Valoracion;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CuentaUsuario implements ICuentaUsuario{
+public class CuentaUsuario implements ICuentaUsuario {
     private final String id;
     private final Perfil perfil;
     private String alias;
@@ -16,7 +16,6 @@ public class CuentaUsuario implements ICuentaUsuario{
     private Date ultimaSesion;
     private ArrayList<CuentaUsuario> sigueA;
     private ArrayList<CuentaUsuario> seguidores;
-    private ArrayList<Comunidad> comunidades;
     private ArrayList<Publicacion> publicaciones;
     private ArrayList<Valoracion> valoraciones;
     private ArrayList<Comentario> comentarios;
@@ -28,16 +27,14 @@ public class CuentaUsuario implements ICuentaUsuario{
         this.perfil = new Perfil();
         this.sigueA = new ArrayList<>();
         this.seguidores = new ArrayList<>();
-        this.comunidades = new ArrayList<>();
         this.publicaciones = new ArrayList<>();
         this.valoraciones = new ArrayList<>();
         this.comentarios = new ArrayList<>();
     }
 
     public CuentaUsuario(String id, String alias, String correoUPM, ArrayList<CuentaUsuario> sigueA,
-                         ArrayList<CuentaUsuario> seguidores, ArrayList<Comunidad> comunidades,
-                         ArrayList<Publicacion> publicaciones, ArrayList<Valoracion> valoraciones,
-                         ArrayList<Comentario> comentarios) {
+                         ArrayList<CuentaUsuario> seguidores, ArrayList<Publicacion> publicaciones,
+                         ArrayList<Valoracion> valoraciones, ArrayList<Comentario> comentarios) {
         this.id = id;
         this.perfil = new Perfil();
         this.alias = alias;
@@ -45,13 +42,12 @@ public class CuentaUsuario implements ICuentaUsuario{
         this.ultimaSesion = new Date();
         this.sigueA = sigueA;
         this.seguidores = seguidores;
-        this.comunidades = comunidades;
         this.publicaciones = publicaciones;
         this.valoraciones = valoraciones;
         this.comentarios = comentarios;
     }
 
-    public void seguir(String id){
+    public void seguir(String id) {
         CuentaUsuario nuevoSeguido = Sistema.getUserByID(id);
         this.sigueA.add(nuevoSeguido);
         nuevoSeguido.addSeguidor(this);
@@ -64,39 +60,45 @@ public class CuentaUsuario implements ICuentaUsuario{
         this.valoraciones.add(nuevaValoracion);
     }
 
-    public void comentarPublicacion(Publicacion publicacion, String textoComentario){
-        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(),textoComentario,null, publicacion,this, new ArrayList<>());
+    public void comentarPublicacion(Publicacion publicacion, String textoComentario) {
+        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoComentario,
+                                                    null, publicacion, this, new ArrayList<>());
         this.comentarios.add(nuevoComentario);
         publicacion.addComentario(nuevoComentario);
     }
 
-    public void comentarComentario(Comentario comentario, String texto){
-        if(comentario.getRespondeA()==null)
-            responderComentario(comentario,texto);
-        else
-            responderRespuesta(comentario,texto);
+    public void comentarComentario(Comentario comentario, String texto) {
+        if (comentario.getRespondeA() == null) {
+            responderComentario(comentario, texto);
+        } else {
+            responderRespuesta(comentario, texto);
+        }
     }
 
-    private void responderComentario(Comentario comentario, String textoRespuesta){
-        Comentario respuesta = new Comentario(Sistema.getLastComentarioID()  + 1 , new Date(),textoRespuesta,comentario, comentario.getPerteneceA(),this,null);
+    private void responderComentario(Comentario comentario, String textoRespuesta) {
+        Comentario respuesta = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoRespuesta, comentario,
+                                              comentario.getPerteneceA(), this, null);
         comentario.addRespuesta(respuesta);
         this.comentarios.add(respuesta);
     }
 
-    private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta){
-        Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID()  + 1,new Date(),textoRespuesta,respuestaComentario,respuestaComentario.getPerteneceA(),this,null);
+    private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta) {
+        Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoRespuesta,
+                                                   respuestaComentario, respuestaComentario.getPerteneceA(), this,
+                                                   null);
 
-        if(respuestaComentario.getRespondeA().getRespuestas() != null)
+        if (respuestaComentario.getRespondeA().getRespuestas() != null) {
             respuestaComentario.getRespondeA().addRespuesta(nuevaRespuesta);
-        else {
+        } else {
             int i = 0, j = 0;
             boolean encontrado = false;
             Comentario coment = null;
             while (i < respuestaComentario.getPerteneceA().getComentarios().size() && !encontrado) {
                 coment = respuestaComentario.getPerteneceA().getComentarios().get(i);
                 while (j < coment.getRespuestas().size() && !encontrado) {
-                    if (coment.getRespuestas().get(j) == respuestaComentario)
+                    if (coment.getRespuestas().get(j) == respuestaComentario) {
                         encontrado = true;
+                    }
                     j++;
                 }
                 i++;
@@ -105,7 +107,6 @@ public class CuentaUsuario implements ICuentaUsuario{
         }
         this.comentarios.add(nuevaRespuesta);
     }
-
 
     public void publicar() {
     }
@@ -239,10 +240,6 @@ public class CuentaUsuario implements ICuentaUsuario{
         return ultimaSesion;
     }
 
-    public ArrayList<Comunidad> getComunidades() {
-        return comunidades;
-    }
-
     public ArrayList<Comentario> getComentarios() {
         return comentarios;
     }
@@ -257,10 +254,6 @@ public class CuentaUsuario implements ICuentaUsuario{
 
     public void setSeguidores(ArrayList<CuentaUsuario> seguidores) {
         this.seguidores = seguidores;
-    }
-
-    public void setComunidades(ArrayList<Comunidad> comunidades) {
-        this.comunidades = comunidades;
     }
 
     public void setValoraciones(ArrayList<Valoracion> valoraciones) {

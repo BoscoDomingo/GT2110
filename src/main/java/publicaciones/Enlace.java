@@ -1,17 +1,11 @@
-package main.java.publicaciones;
+package publicaciones;
 
-<<<<<<< HEAD
 import pkg.CuentaUsuario;
-
-import java.util.Date;
-=======
-import main.java.pkg.CuentaUsuario;
-import main.java.pkg.Timeline;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
->>>>>>> Luis
+import java.util.Date;
+
 
 public class Enlace extends Publicacion {
     private String enlaceExterno;
@@ -26,7 +20,7 @@ public class Enlace extends Publicacion {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("_____________________________________");
         //System.out.println("Publicacion de " + this.poster.getAlias() + ":");
-        if(this.enlaceExterno!=null){
+        if (this.enlaceExterno != null) {
             System.out.println(enlaceExterno);
         }
         System.out.println("\n" + this.texto);

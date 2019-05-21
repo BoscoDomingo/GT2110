@@ -1,13 +1,12 @@
-package main.java.publicaciones;
+package publicaciones;
 
+import interfaces.IMenu;
 import pkg.CuentaUsuario;
 import pkg.Timeline;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +61,11 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         System.out.println("_____________________________________");
     }
 
+    public void showAsNew() {
+        System.out.println("\n***NUEVO***");
+        this.show();
+    }
+
     public Publicacion addPublicacion(ArrayList<Publicacion> allPublicaciones) {
         System.out.println("Eliga el tipo de publicacion que desea realizar: ");
         System.out.println("1 - Texto\n2 - Enlace\n3 - Referencia");
@@ -94,7 +98,8 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     }
 
     private Publicacion addPublicacionTexto(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
-        return new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
+        return new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(),
+                               new ArrayList<Timeline>());
     }
 
     private Publicacion addPublicacionEnlace(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
@@ -107,38 +112,38 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             response = new URL(url).openStream();
             Scanner scanner = new Scanner(response);
             String responseBody = scanner.useDelimiter("\\A").next();
-            link = responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>")) + " - ";
+            link = responseBody.substring(responseBody.indexOf("<title>") + 7,
+                                          responseBody.indexOf("</title>")) + " - ";
 
         } catch (IOException ex) {
             System.out.println("Link no valido. La publicacion no ha sido añadida");
         }
-        return new Enlace(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>(), link);
+        return new Enlace(id, null, new Date(), texto, 0, 0, link);
     }
 
     private Publicacion addPublicacionReferencia(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
         return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
     }
 
-    public void deletePublicacion (){
+    public void deletePublicacion() {
         getPoster().getPublicaciones().remove(this);
         this.perteneceATimelines.remove(this);
-        
-    }
 
-    /*public void deleteComentario(String idComentario) {
-        for (Comentario comentario : comentarios) {
-            if (comentario.getID() == idComentario) {
-                comentarios.remove(comentario);
-            }
-        }
-    }*/
+    }
 
     @Override
     public int compareTo(Publicacion p) { //para ordenar cronológicamente
         return this.fecha.compareTo(p.getFecha());
     }
 
-
+    public void addValoracion(Valoracion valoracion) {
+        this.valoraciones.add(valoracion);
+        if (valoracion.getLikeDislike() == 0) {
+            this.numeroDislikes++;
+        } else {
+            this.numeroLikes++;
+        }
+    }
 
     public void delete() {
         try {
@@ -149,7 +154,6 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             System.out.println("Ha habido un error al borrar la publicacion. Por favor, inténtelo de nuevo: " + e);
         }
     }
-
 
     @Override
     public boolean menu() {
@@ -215,16 +219,31 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+    public void addComentario(Comentario comentario) {
+        try {
+            this.comentarios.add(comentario);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+    public void addComentarios(ArrayList<Comentario> comentarios) {
+        try {
+            this.comentarios.addAll(comentarios);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+     /*public void deleteComentario(String idComentario) {
+        for (Comentario comentario : comentarios) {
+            if (comentario.getID() == idComentario) {
+                comentarios.remove(comentario);
+            }
+        }
+    }*/
 
     //GETTERS & SETTERS
-
-    public CuentaUsuario getPoster() {
-        return poster;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
 
     public void setValoraciones(ArrayList<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
@@ -238,17 +257,12 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         this.perteneceATimelines = perteneceATimelines;
     }
 
-    public void addComentario(Comentario comentario){
-        this.comentarios.add(comentario);
+    public CuentaUsuario getPoster() {
+        return poster;
     }
 
-    public void addValoracion(Valoracion valoracion) {
-        this.valoraciones.add(valoracion);
-        if (valoracion.getLikeDislike() == 0) {
-            this.numeroDislikes++;
-        } else {
-            this.numeroLikes++;
-        }
+    public Date getFecha() {
+        return fecha;
     }
 
     public ArrayList<Comentario> getComentarios() {
@@ -258,5 +272,4 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     public String getId() {
         return id;
     }
-
 }

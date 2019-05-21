@@ -1,7 +1,5 @@
 package interfaces;
 
-import pkg.Sistema;
-
 public interface IMenu {
 
     boolean menu();

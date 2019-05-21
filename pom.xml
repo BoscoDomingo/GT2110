@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gt2110</groupId>
-    <artifactId>twitterFIS</artifactId>
+    <groupId>GT2110</groupId>
+    <artifactId>TwitterFIS</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
     <plugins>
@@ -17,6 +17,11 @@
             </configuration>
         </plugin>
     </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java/resources</directory>
+            </resource>
+        </resources>
     </build>
     <dependencies>
         <dependency>
@@ -26,5 +31,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>

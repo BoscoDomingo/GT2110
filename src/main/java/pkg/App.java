@@ -1,9 +1,7 @@
-package main.java.pkg;
+package pkg;
 
 import controllers.LoginController;
-import interfaces.IMenu;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -68,7 +66,7 @@ public class App {
 
     public static void menu() {
         boolean accionValida = false, goBack = false;
-        System.out.println("Opciones:\n0 - Ver Perfil \n9 - Salir");
+        System.out.println("\nOpciones:\n0 - Ver Perfil \n9 - Salir");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();

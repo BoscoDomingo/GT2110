@@ -1,2 +1,0 @@
-a0001;email@upm.es;12345678;Pepito;Garcia;@pepepopo;ID_seguido1,ID_seguido2,ID_seguido3;ID_follower1,ID_follower2;ID_comunidad1,ID_comunidad2;ID_publicacion1,ID_publicacion2;ID_valoracion1,ID_valoracion2;unicornio;
-a0002;email@alumnos.upm.es;12345678;House;Ermehó;@houce1;ID_seguido1,ID_seguido2;ID_follower1,ID_follower2,ID_follower3;ID_comunidad1;ID_publicacion1,ID_publicacion2;ID_valoracion1,ID_valoracion2;botella;

@@ -1,6 +1,5 @@
 package pkg;
 
-import community.Comunidad;
 import controllers.DatabaseController;
 import publicaciones.*;
 
@@ -23,7 +22,7 @@ public class Sistema {
     private static HashMap<String, Publicacion> allPublicaciones;
     private static HashMap<String, Comentario> allComentarios;
     private static HashMap<String, Valoracion> allValoraciones;
-    private static HashMap<String, Comunidad> allComunidades;
+
 
     private static String lastUserID;
     private static String lastPublicacionID;
@@ -55,13 +54,9 @@ public class Sistema {
         this.valoracionesDBController = new DatabaseController("src/main/resources/VALORACIONES.txt");
         this.allValoraciones = inicializarValoraciones();
 
-        this.comunidadesDBController = new DatabaseController("src/main/resources/COMMUNITIES.txt");
-        this.allComunidades = inicializarComunidades();
-
         actualizarUsuarios();
         actualizarPublicaciones();
         actualizarReferencias();
-        actualizarComunidades();
     }
 
     private HashMap<String, CuentaUsuario> inicializarUsers() { //requiere actualizar todas las colecciones
@@ -127,7 +122,8 @@ public class Sistema {
                                                        dateFormat.parse(comentarioFormatoArrayList.get(1)),
                                                        comentarioFormatoArrayList.get(2),
                                                        this.allPublicaciones.get(comentarioFormatoArrayList.get(3)),
-                                                       this.allUsers.get(comentarioFormatoArrayList.get(4)), new ArrayList<>()));//TODO: inicializar atributos correctamente
+                                                       this.allUsers.get(comentarioFormatoArrayList.get(4)),
+                                                       new ArrayList<>()));//TODO: inicializar atributos correctamente
                 this.lastComentarioID = comentarioFormatoArrayList.get(0);
             }
         } catch (Exception e) {
@@ -155,40 +151,6 @@ public class Sistema {
         return valoracionesTratadas;
     }
 
-    private HashMap<String, Comunidad> inicializarComunidades() { //requiere añadir publicaciones a timeline
-        HashMap<String, Comunidad> comunidadesTratadas = new HashMap<>();
-        try {
-            for (ArrayList<String> comunidadFormatoArrayList : comunidadesDBController.getResponseBD()) {
-                //Añadir miembros y admins
-                ArrayList<CuentaUsuario> miembros = new ArrayList<>();
-                ArrayList<CuentaUsuario> admins = new ArrayList<>();
-
-                ArrayList<String> miembrosString = comunidadesDBController.tratarLista(
-                        comunidadFormatoArrayList.get(2));
-                ArrayList<String> adminsString = comunidadesDBController.tratarLista(comunidadFormatoArrayList.get(3));
-
-                for (String idMiembro : miembrosString) {
-                    if (!idMiembro.equals("VACIO")) {
-                        miembros.add(this.allUsers.get(idMiembro));
-                    }
-                }
-
-                for (String idAdmin : adminsString) {
-                    admins.add(this.allUsers.get(idAdmin));
-                }
-                //Crear la comunidad
-                comunidadesTratadas.put(comunidadFormatoArrayList.get(0),
-                                        new Comunidad(comunidadFormatoArrayList.get(0),
-                                                      comunidadFormatoArrayList.get(1),
-                                                      new Timeline(new ArrayList<>()), miembros, admins));
-                this.lastComunidadID = comunidadFormatoArrayList.get(0);
-            }
-        } catch (Exception e) {
-            System.out.println("Error en inicializacion de Comunidades: " + e);
-        }
-        return comunidadesTratadas;
-    }
-
     private void actualizarUsuarios() {
         for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
             try {
@@ -213,16 +175,6 @@ public class Sistema {
                     }
                 }
                 userToUpdate.setSeguidores(seguidoresAInsertar);
-
-                //metemos las comunidades
-                ArrayList<String> listaComunidades = usersDBController.tratarLista(userFormatoArrayList.get(8));
-                ArrayList<Comunidad> comunidadesAInsertar = new ArrayList<>();
-                for (String idComunidad : listaComunidades) {
-                    if (!idComunidad.equals("VACIO")) {
-                        comunidadesAInsertar.add(this.allComunidades.get(idComunidad));
-                    }
-                }
-                userToUpdate.setComunidades(comunidadesAInsertar);
 
                 //metemos las publicaciones
                 ArrayList<String> listaPublicaciones = usersDBController.tratarLista(userFormatoArrayList.get(9));
@@ -303,33 +255,6 @@ public class Sistema {
             }
         } catch (Exception e) {
             System.out.println("Error actualizando referencias");
-            e.printStackTrace();
-        }
-    }
-
-    private void actualizarComunidades() {
-        try {
-            for (Comunidad comunidad : this.allComunidades.values()) {
-                //Añadir publicaciones
-                ArrayList<Publicacion> publicacionesTimeline = new ArrayList<>();
-
-                for (CuentaUsuario usuario : comunidad.getMiembros()) {
-                    if (usuario.getPublicaciones().size() > 0) {
-                        publicacionesTimeline.addAll(usuario.getPublicaciones());
-                    }
-                }
-                for (CuentaUsuario usuario : comunidad.getAdmins()) {
-                    if (usuario.getPublicaciones().size() > 0) {
-                        publicacionesTimeline.addAll(usuario.getPublicaciones());
-                    }
-                }
-
-                Timeline timeline = new Timeline(publicacionesTimeline);
-                timeline.sort();
-                comunidad.setTimeline(timeline);
-            }
-        } catch (Exception e) {
-            System.out.println("Fallo al actualizar comunidades");
             e.printStackTrace();
         }
     }
