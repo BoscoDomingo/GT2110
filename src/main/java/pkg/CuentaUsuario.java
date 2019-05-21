@@ -108,6 +108,15 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(nuevaRespuesta);
     }
 
+    public boolean mostarPropiasPublicaciones(){
+        System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
+        for(Publicacion publicacion: publicaciones){
+            publicacion.show();
+        }
+        System.out.println("\n*************************************\n");
+        return perfil.menu();
+    }
+
     public void publicar() {
     }
 

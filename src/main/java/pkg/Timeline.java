@@ -19,6 +19,7 @@ public class Timeline implements ITimeline, IMenu {
     }
 
     public boolean showPage(int pageNumber) { //las páginas van de 1 en adelante
+        System.out.println("\n********************TIMELINE**********************\n");
         if (pageNumber <= numeroDePaginas) {
             int publicacionesMostradas = 0,
                     currentIndex = (pageNumber - 1) * 50; //pagina 1 va del 0 al 49, p2 del 50 al 99...
@@ -33,6 +34,7 @@ public class Timeline implements ITimeline, IMenu {
         } else {
             System.out.println("Lo siento, este Timeline no dispone de tantas páginas");
         }
+        System.out.println("\n*******************************************\n");
         return menu();
     }
 
@@ -93,8 +95,8 @@ public class Timeline implements ITimeline, IMenu {
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
-        System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Seleccionar una " +
-                                   "publicacion\n9 - Volver atrás");
+        System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Ver mis " +
+                                   "publicaciones\n3-Seleccionar una publicacion\n9 - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
@@ -105,7 +107,13 @@ public class Timeline implements ITimeline, IMenu {
                 case 1:
                     accionValida = showPage(1 - 1);
                     break;
-                case 2:
+                case 2: // Mostrar mis publicaciones
+                    accionValida = Sistema.getCurrentUser().mostarPropiasPublicaciones();
+                    if(!accionValida){
+                        showPage(this.numeroDePaginas);
+                    }
+                    break;
+                case 3:
                     accionValida = true;//TODO selectPublicacion();
                     break;
                 case 9:

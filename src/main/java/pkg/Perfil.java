@@ -16,22 +16,15 @@ public class Perfil implements IPerfil, IMenu {
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
+        System.out.println("\nOpciones:\n0 - Seleccionar una publicacion\n9 - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
             switch (selector) {
-                //METED CASES SÓLO DEL 0 AL 8
+                //Irían todas las llamadas a Sistema.getCurrentUser.borrar(), Sistema.getCurrentUser.publicar(), etc..
                 case 0:
-                    accionValida = true;
+                    accionValida = true;//!selectPublicacion(); si devuelve true es que volvemos a mostrar
                     //vuestro código aqui
-                    break;
-
-                //...
-                case 8:
-                    accionValida = true;
-                    //LLAMADA A CUALQUIER OTRO MENU QUE SE PUEDA MOSTRAR SI LO NECEISTAIS, INCLUIDAS MÁS ACCIONES SI 8 NO
-                    //SON SUFICIENTES
-                    // if(otraCosa.menu() = true) accionValida = false; //Significa que vuelve del otro menu a este
                     break;
                 case 9:
                     accionValida = true;
