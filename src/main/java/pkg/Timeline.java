@@ -95,8 +95,9 @@ public class Timeline implements ITimeline, IMenu {
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
-        System.out.println("\nOpciones:\n0-Ver siguiente página\n1-Ver página anterior\n2-Ver mis " +
-                                   "publicaciones\n3-Seleccionar una publicacion\n9 - Volver atrás");
+        System.out.println("\n***************MENU***************");
+        System.out.println("\nOpciones:\n0 - Ver siguiente página\n1 - Ver página anterior\n2 - Ver mis " +
+                                   "publicaciones\n3 - Seleccionar una publicacion\n9 - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();

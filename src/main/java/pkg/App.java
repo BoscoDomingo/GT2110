@@ -52,8 +52,7 @@ public class App {
 
                             if (valido) {//Entrar a la app
                                 while(!abandonar){
-                                    Timeline timeline = Sistema.getCurrentUser().getPerfil().getTimeline();
-                                    abandonar = timeline.showPage(timeline.getNumeroDePaginas());
+                                    abandonar = Sistema.getTimeline().showPage(Sistema.getTimeline().getNumeroDePaginas());
                                 }
                             }
                         }
