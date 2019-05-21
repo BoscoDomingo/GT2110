@@ -1,7 +1,6 @@
 package publicaciones;
 
 import interfaces.IMenu;
-import interfaces.ISistema;
 import pkg.CuentaUsuario;
 import pkg.Sistema;
 import pkg.Timeline;
@@ -87,7 +86,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
 
 
     @Override
-    public boolean menu(ISistema sistema) {
+    public boolean menu() {
         boolean accionValida = false, goBack = false;
        /* CuentaUsuario currentUser = DatabaseController.getCurrentUser();
         System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
