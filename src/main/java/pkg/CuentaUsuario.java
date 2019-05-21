@@ -9,7 +9,7 @@ import publicaciones.Valoracion;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CuentaUsuario implements ICuentaUsuario {
+public class CuentaUsuario implements ICuentaUsuario{
     private final String id;
     private final Perfil perfil;
     private String alias;
@@ -53,13 +53,12 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
 
 
-
     /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por id
     public void follow(String id){
         CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(id);
         sigueA.add(nuevoSeguido);
     }
-    /* TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
+     TODO: hace falta el método de la base de datos: devolver CuentaUsuario por alias
     public void follow(String alias){
         CuentaUsuario nuevoSeguido = databaseController.buscarUsuario(alias);
         sigueA.add(nuevoSeguido);
@@ -74,10 +73,47 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
 
     public void comentarPublicacion(Publicacion publicacion, String textoComentario){
-        Comentario nuevoComentario = new Comentario("h141" /*TODO: sistema.getUltimoIdComentario*/, new Date(),textoComentario,publicacion,this);
+        Comentario nuevoComentario = new Comentario("h141" /*TODO: sistema.getUltimoIdComentario*/ + 1, new Date(),textoComentario,null, publicacion,this, new ArrayList<>());
         this.comentarios.add(nuevoComentario);
         publicacion.addComentario(nuevoComentario);
     }
+
+    public void comentarComentario(Comentario comentario, String texto){
+        if(comentario.getRespondeA()==null)
+            responderComentario(comentario,texto);
+        else
+            responderRespuesta(comentario,texto);
+    }
+
+    private void responderComentario(Comentario comentario, String textoRespuesta){
+        Comentario respuesta = new Comentario("h142" /*TODO: sistema.getUltimoIdComentario*/ + 1 , new Date(),textoRespuesta,comentario, comentario.getPerteneceA(),this,null);
+        comentario.addRespuesta(respuesta);
+        this.comentarios.add(respuesta);
+    }
+
+    private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta){
+        Comentario nuevaRespuesta = new Comentario("r121"/*TODO: sistema.getUltimoIdComentario*/ + 1,new Date(),textoRespuesta,respuestaComentario,respuestaComentario.getPerteneceA(),this,null);
+
+        if(respuestaComentario.getRespondeA().getRespuestas() != null)
+            respuestaComentario.getRespondeA().addRespuesta(nuevaRespuesta);
+        else {
+            int i = 0, j = 0;
+            boolean encontrado = false;
+            Comentario coment = null;
+            while (i < respuestaComentario.getPerteneceA().getComentarios().size() && !encontrado) {
+                coment = respuestaComentario.getPerteneceA().getComentarios().get(i);
+                while (j < coment.getRespuestas().size() && !encontrado) {
+                    if (coment.getRespuestas().get(j) == respuestaComentario)
+                        encontrado = true;
+                    j++;
+                }
+                i++;
+            }
+            coment.addRespuesta(nuevaRespuesta);
+        }
+        this.comentarios.add(nuevaRespuesta);
+    }
+
 
     public void publicar() {
     }

@@ -117,7 +117,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-    public boolean ownerMenu(ISistema sistema) {
+    public boolean ownerMenu(Sistema sistema) {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA",
                                                       "PAA@PAA.com");//TODO: DatabaseController.getCurrentUser();
@@ -183,5 +183,9 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         } else {
             this.numeroLikes++;
         }
+    }
+
+    public ArrayList<Comentario> getComentarios() {
+        return comentarios;
     }
 }

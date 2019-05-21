@@ -14,12 +14,50 @@ public class Comentario {
     private Publicacion perteneceA;
     private CuentaUsuario escritoPor;
     private ArrayList<Comentario> respuestas; //Si es un comentario sin mas
-    public Comentario(String id, Date fecha, String texto, Publicacion perteneceA, CuentaUsuario escritoPor) {
+
+
+    public Comentario(String id, Date fecha, String texto, Publicacion perteneceA, CuentaUsuario escritoPor, ArrayList<Comentario> respuestas) {
         this.id = id;
         this.fecha = fecha;
         this.texto = texto;
+        this.respondeA = null;
         this.perteneceA = perteneceA;
         this.escritoPor = escritoPor;
+        this.respuestas = respuestas;
+    }
+
+    public Comentario(String id, Date fecha, String texto, Comentario respondeA, Publicacion perteneceA, CuentaUsuario escritoPor, ArrayList<Comentario> respuestas) {
+        this.id = id;
+        this.fecha = fecha;
+        this.texto = texto;
+        this.respondeA = respondeA;
+        this.perteneceA = perteneceA;
+        this.escritoPor = escritoPor;
+        this.respuestas = respuestas;
+    }
+
+    public Publicacion getPerteneceA() {
+        return perteneceA;
+    }
+
+    public void addRespuesta(Comentario respuesta){
+        this.respuestas.add(respuesta);
+    }
+
+    public Comentario getRespondeA() {
+        return respondeA;
+    }
+
+    public ArrayList<Comentario> getRespuestas() {
+        return respuestas;
+    }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public CuentaUsuario getEscritoPor() {
+        return escritoPor;
     }
 }
 
