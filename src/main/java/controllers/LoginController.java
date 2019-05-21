@@ -1,5 +1,7 @@
 package controllers;
 
+import pkg.Sistema;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -9,9 +11,11 @@ public class LoginController {
     private HashMap<String, TimeController> cuentasBloqueadas;
     private HashMap<String, Integer> intentosDeInicioSesion;
     private TimeController tiempo;
+    private Sistema sistema;
 
     public LoginController() {
-        database = new DatabaseController("src/main/resources/USERS.txt");
+        sistema = Sistema.getSistema();
+        database = Sistema.getUsersDBController();
         intentosDeInicioSesion = new HashMap<>();
         cuentasBloqueadas = new HashMap<>();
     }

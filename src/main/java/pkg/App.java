@@ -50,7 +50,7 @@ public class App {
                             valido = loginController.iniciarSesion(email);
 
                             if (valido) {//Entrar a la app
-                                Sistema sistema = Sistema.getSistema(email);
+                                Sistema.getSistema().setCurrentUser(email);
                                 menu();
                             }
                         }
