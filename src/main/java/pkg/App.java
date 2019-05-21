@@ -29,7 +29,7 @@ public class App {
                     break;
                 case 2:
                     scan.nextLine();
-                    boolean valido = false; //TODO: CAMBIAR A FALSE PARA PROBAR INICIO DE SESION
+                    boolean valido = false;
                     boolean abandonar = false;
 
                     while (!valido && !abandonar) {

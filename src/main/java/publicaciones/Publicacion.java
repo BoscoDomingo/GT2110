@@ -133,7 +133,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
 
     @Override
     public int compareTo(Publicacion p) { //para ordenar cronológicamente
-        return this.fecha.compareTo(p.getFecha());
+        return this.fecha.compareTo(p.getFecha())*-1;
     }
 
     public void addValoracion(Valoracion valoracion) {

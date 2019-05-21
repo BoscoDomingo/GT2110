@@ -3,10 +3,15 @@ package pkg;
 import interfaces.IMenu;
 import interfaces.IPerfil;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Perfil implements IPerfil, IMenu {
     private Timeline timeline;
+
+    public Perfil() {
+        this.timeline = new Timeline(new ArrayList<>());
+    }
 
     @Override
     public boolean menu() {
