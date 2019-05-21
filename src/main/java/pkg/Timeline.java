@@ -121,4 +121,12 @@ public class Timeline implements ITimeline, IMenu {
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
+
+    public ArrayList<Publicacion> getPublicaciones() {
+        return publicaciones;
+    }
+
+    public int getNumeroDePaginas() {
+        return numeroDePaginas;
+    }
 }
