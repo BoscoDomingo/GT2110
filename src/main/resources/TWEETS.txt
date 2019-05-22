@@ -1,3 +1,4 @@
 b0001;T;a0001;11/05/2019 17:30:00;Publicacion de a0001 de ejemplo;2;1;d0001,d0002,d0003;c0001,c0002;VACIO;
 b0002;T;a0002;13/05/2019 21:15:00;Publicacion de a0002 de ejemplo;0;1;d0004;VACIO;VACIO;
 b0003;R;a0002;17/05/2019 10:34:47;Publicacion referencia de a0002;0;0;VACIO;VACIO;b0001;
+b0004;T;a0003;17/05/2019 10:34:49;Publicacion de a;0;0;VACIO;VACIO;VACIO;
