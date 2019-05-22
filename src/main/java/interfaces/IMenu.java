@@ -9,7 +9,8 @@ public interface IMenu {
     //EJEMPLO DE UN MENÚ
    /*
     boolean accionValida = false, goBack = false;
-    System.out.println("Opciones:\n0- ... \n9-Volver atrás");
+    System.out.println("\n***************MENU***************");
+    System.out.println("\nOpciones:\n0 - ...\n8 - ...\n9 - Volver atrás");
     Scanner scan = new Scanner(System.in);
     while (!accionValida) {
         int selector = scan.nextInt();
