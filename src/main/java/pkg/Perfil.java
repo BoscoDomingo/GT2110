@@ -34,12 +34,15 @@ public class Perfil implements IPerfil, IMenu {
                         System.out.println("Si deseas verla completa, introduce la palabra 'ver'." +
                                 "\nSi deseas eliminarla introduce la palabra 'eliminar'");
                         String opcion = scanOpcion.nextLine();
-                        if(opcion.equals("eliminar")){
-                            Sistema.getCurrentUser().borrarPublicacion(numPublicacion-1);
-                            System.out.println("Eliminada correctamente");
-                        }
-                        else if(opcion.equals("ver")){
-                            Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1).show();
+                        switch(opcion){
+                            case "eliminar":
+                                Sistema.getCurrentUser().borrarPublicacion(numPublicacion-1);
+                                System.out.println("Eliminada correctamente");
+                                break;
+                            case "ver":
+                                Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1).show();//TODO ver
+                                // comentarios
+                                break;
                         }
                     }
                     accionValida = true;
@@ -49,8 +52,7 @@ public class Perfil implements IPerfil, IMenu {
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un número válido (del 0 al ");//VUESTRO NUMERO.SI HAY 3
-                    //OPCIONES, PONÉIS EL 2
+                    System.out.println("Por favor, introduzca un número válido");
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este

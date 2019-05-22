@@ -111,7 +111,7 @@ public class Timeline implements ITimeline, IMenu {
                 case 2: // Mostrar mis publicaciones
                     accionValida = Sistema.getCurrentUser().mostarPropiasPublicaciones();
                     if(!accionValida){
-                        showPage(this.numeroDePaginas);
+                        accionValida = showPage(this.numeroDePaginas);
                     }
                     break;
                 case 3:
