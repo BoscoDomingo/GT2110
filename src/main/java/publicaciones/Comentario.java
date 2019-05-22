@@ -84,20 +84,18 @@ public class Comentario implements IMenu {
         return goBack;
     }
 
-    private boolean ownerMenu() {
+    private boolean normalMenu() {
         boolean valido = false;
         while (!valido) {
-            System.out.println("\n1 - Responder comentario\n2 - Borrar comentario\n9 - Volver atrás\n");
+            System.out.println("\n1 - Responder comentario\n\n9 - Volver atrás\n");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 case 1:
                     valido = true;
+                    System.out.print("Texto: ");
+                    String texto = scan.nextLine();
                     Sistema.getCurrentUser().comentarComentario(this);
-                    break;
-                case 2:
-                    valido = true;
-                    //this.borrar()
                     break;
                 case 9:
                     valido = true;
@@ -109,18 +107,20 @@ public class Comentario implements IMenu {
         return true;
     }
 
-    private boolean normalMenu() {
+    private boolean ownerMenu() {
         boolean valido = false;
         while (!valido) {
-            System.out.println("\n1 - Responder comentario\n9 - Volver atrás\n");
+            System.out.println("\n1 - Responder comentario\n2 - Borrar comentario\n\n9 - Volver atrás\n");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 case 1:
                     valido = true;
-                    System.out.printf("Texto: ");
-                    String texto = scan.nextLine();
                     Sistema.getCurrentUser().comentarComentario(this);
+                    break;
+                case 2:
+                    valido = true;
+                    Sistema.getCurrentUser().borrarComentario(this);
                     break;
                 case 9:
                     valido = true;
@@ -160,6 +160,20 @@ public class Comentario implements IMenu {
 
     public Date getFecha() {
         return fecha;
+    }
+
+    public String getID(){ return id; }
+
+    public void setRespondeA(Comentario respondeA) {
+        this.respondeA = respondeA;
+    }
+
+    public void setPerteneceA(Publicacion perteneceA) {
+        this.perteneceA = perteneceA;
+    }
+
+    public void setEscritoPor(CuentaUsuario escritoPor) {
+        this.escritoPor = escritoPor;
     }
 }
 
