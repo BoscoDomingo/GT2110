@@ -81,6 +81,13 @@ public class CuentaUsuario implements ICuentaUsuario {
         comentario.addRespuesta(respuesta);
         this.comentarios.add(respuesta);
     }
+    private void borrarComentario(Comentario comentario){
+        String idComentario= comentario.getID();
+        for (Comentario coment : comentarios) {
+            if (coment.getID().equals(idComentario))
+                comentarios.remove(comentario);
+        }
+    }
 
     private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta) {
         Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoRespuesta,

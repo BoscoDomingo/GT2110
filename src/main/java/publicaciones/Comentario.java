@@ -59,6 +59,8 @@ public class Comentario {
     public CuentaUsuario getEscritoPor() {
         return escritoPor;
     }
+
+    public String getID(){ return id; }
 }
 
 //EJEMPLO
