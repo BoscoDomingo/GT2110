@@ -245,6 +245,10 @@ public class Sistema {
         }
     }
 
+    public static void putPublicacionAllPublicaciones(Publicacion nuevaPublicacion){
+        allPublicaciones.put(nuevaPublicacion.getId(), nuevaPublicacion);
+    }
+
     private void actualizarReferencias() {
         try {
             for (ArrayList<String> referenciaFormatoArrayList : this.publicacionesDBController.getResponseBD()) {
@@ -338,5 +342,9 @@ public class Sistema {
 
     public static void setLastComunidadID(String lastComunidadID) {
         Sistema.lastComunidadID = lastComunidadID;
+    }
+
+    public static HashMap<String, Publicacion> getAllPublicaciones() {
+        return allPublicaciones;
     }
 }
