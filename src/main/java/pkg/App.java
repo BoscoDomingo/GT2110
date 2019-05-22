@@ -10,12 +10,12 @@ public class App {
         boolean exit = false;
         while (!exit) {
             System.out.println("\nBienvenido a TwitterFIS, por favor seleccione una opción:");
-            System.out.println("0 - Salir de la aplicación\n1 - Crear nuevo usuario\n2 - Iniciar sesión");
+            System.out.println("\n1 - Crear nuevo usuario\n2 - Iniciar sesión\n\n9 - Salir de la aplicación");
             String email = "";
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
-                case 0:
+                case 9:
                     System.out.println("Gracias por usar TwitterFIS!");
                     exit = true;
                     break;
@@ -29,7 +29,7 @@ public class App {
                     break;
                 case 2:
                     scan.nextLine();
-                    boolean valido = false; //TODO: CAMBIAR A FALSE PARA PROBAR INICIO DE SESION
+                    boolean valido = false;
                     boolean abandonar = false;
 
                     while (!valido && !abandonar) {
@@ -51,8 +51,9 @@ public class App {
                             valido = loginController.iniciarSesion(email);
 
                             if (valido) {//Entrar a la app
-                                Sistema.getSistema().setCurrentUser(email);
-                                menu();
+                                while(!abandonar){
+                                    abandonar = Sistema.getTimeline().showPage(Sistema.getTimeline().getNumeroDePaginas());
+                                }
                             }
                         }
                     }
@@ -60,35 +61,6 @@ public class App {
                 default:
                     System.out.println("Por favor, introduzca un número válido");
                     break;
-            }
-        }
-    }
-
-    public static void menu() {
-        boolean accionValida = false, goBack = false;
-        System.out.println("\nOpciones:\n0 - Ver Perfil \n9 - Salir");
-        Scanner scan = new Scanner(System.in);
-        while (!accionValida) {
-            int selector = scan.nextInt();
-            switch (selector) {
-                //METED CASES SÓLO DEL 0 AL 8
-                case 0:
-                    accionValida = true;
-                    Sistema.getCurrentUser().getPerfil().menu();
-                    break;
-
-                //...
-                case 8:
-                    //LLAMADA A CUALQUIER OTRO MENU QUE SE PUEDA MOSTRAR SI LO NECEISTAIS, INCLUIDAS MÁS ACCIONES SI 8 NO
-                    //SON SUFICIENTES
-                    accionValida = true;//!otraCosa.menu(); //Significa que vuelve del otro menu a este. ESTA BIEN ASI
-                    break;
-                case 9:
-                    accionValida = true;
-                    goBack = true;
-                    break;
-                default:
-                    System.out.println("Por favor, introduzca un número válido");
             }
         }
     }

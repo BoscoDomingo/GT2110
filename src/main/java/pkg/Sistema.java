@@ -17,6 +17,7 @@ public class Sistema {
     private static DatabaseController comunidadesDBController;
 
     private static CuentaUsuario currentUser;
+    private static Timeline timeline = new Timeline(new ArrayList<>());
 
     private static HashMap<String, CuentaUsuario> allUsers;
     private static HashMap<String, Publicacion> allPublicaciones;
@@ -207,7 +208,8 @@ public class Sistema {
                 userToUpdate.setComentarios(comentariosAInsertar);
 
             } catch (Exception e) {
-                System.out.println("Error al actualizar valoraciones: " + e);
+                System.out.println("Error al actualizar usuarios: ");
+                e.printStackTrace();
             }
         }
     }
@@ -259,14 +261,23 @@ public class Sistema {
         }
     }
 
-    public void setCurrentUser(String email) {
+    private static void actualizarTimeline(){
+        //metemos en el timeline del currentUser las publicaciones de los que sigue
+        for (CuentaUsuario seguido : currentUser.getSigueA()) {
+            timeline.addPublicaciones(seguido.getPublicaciones());
+        }
+       timeline.sort(); //ordenadas cronológicamente
+    }
+
+    public static void setCurrentUser(String email) {
         try {
             for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
                 if (userFormatoArrayList.get(1).equals(email)) {
-                    this.currentUser = this.allUsers.get(userFormatoArrayList.get(0));
+                    currentUser = allUsers.get(userFormatoArrayList.get(0));
                     break;
                 }
             }
+            actualizarTimeline();
         } catch (Exception e) {
             System.out.println("Error al actualizar currentUser: " + e);
         }
@@ -338,5 +349,17 @@ public class Sistema {
 
     public static void setLastComunidadID(String lastComunidadID) {
         Sistema.lastComunidadID = lastComunidadID;
+    }
+
+    public static Timeline getTimeline() {
+        return timeline;
+    }
+
+    public static void setTimeline(Timeline timeline) {
+        Sistema.timeline = timeline;
+    }
+
+    public static HashMap<String, Publicacion> getAllPublicaciones() {
+        return allPublicaciones;
     }
 }

@@ -108,11 +108,21 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(nuevaRespuesta);
     }
 
+    public boolean mostrarPropiasPublicaciones(){
+        System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
+        for(Publicacion publicacion: publicaciones){
+            publicacion.show();
+        }
+        System.out.println("\n*************************************\n");
+        return perfil.menu();
+    }
+
     public void publicar() {
     }
 
-    public void borrarPublicacion() {
-        //pregunta el ID de la publicacion a delete y llama a publicacion.delete()
+    public void borrarPublicacion(int id) {
+        Sistema.getAllPublicaciones().remove(this.publicaciones.get(id).getId());
+        this.publicaciones.remove(id);
     }
 
     public void follow(ArrayList<CuentaUsuario> newFollowed) {
