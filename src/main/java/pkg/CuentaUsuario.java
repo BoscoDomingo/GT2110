@@ -93,6 +93,21 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(respuesta);
     }
 
+    public void borrarComentario(Comentario comentario) {
+        if (comentario.getRespuestas().size() != 0) {
+            for (Comentario respuesta : comentario.getRespuestas()) {
+                respuesta.setRespondeA(null);
+                respuesta.setPerteneceA(null);
+                respuesta.setEscritoPor(null);
+            }
+        }
+        comentario.setRespondeA(null);
+        comentario.setEscritoPor(null);
+        comentario.getPerteneceA().removeComentario(comentario);
+        comentario.setPerteneceA(null);
+        this.comentarios.remove(comentario);
+    }
+
     private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta) {
         Comentario nuevaRespuesta = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoRespuesta,
                                                    respuestaComentario, respuestaComentario.getPerteneceA(), this,
@@ -119,9 +134,9 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(nuevaRespuesta);
     }
 
-    public boolean mostrarPropiasPublicaciones(){
+    public boolean mostrarPropiasPublicaciones() {
         System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
-        for(Publicacion publicacion: publicaciones){
+        for (Publicacion publicacion : publicaciones) {
             publicacion.show();
         }
         System.out.println("\n*************************************\n");
