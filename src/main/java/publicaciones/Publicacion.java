@@ -148,7 +148,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     if (comentarios.size() == 0) {
                         System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
                     } else {
-                        mostrarComentarios(); //TODO: cambiar esto como se deba
+                        mostrarComentarios();
                         accionValida = !seleccionarComentario();
                     }
                     break;
