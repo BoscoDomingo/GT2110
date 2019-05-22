@@ -52,7 +52,7 @@ public class App {
 
                             if (valido) {//Entrar a la app
                                 while(!abandonar){
-                                    abandonar = Sistema.getTimeline().showPage(Sistema.getTimeline().getNumeroDePaginas());
+                                    abandonar = Sistema.getTimeline().menu();
                                 }
                             }
                         }

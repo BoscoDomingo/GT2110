@@ -20,9 +20,26 @@ public class Timeline implements ITimeline, IMenu {
         this.currentPage = numeroDePaginas;
     }
 
-    public boolean showPage(int pageNumber) { //las páginas van de 1 en adelante
+    public void showLastPage() {
         System.out.println("\n********************TIMELINE**********************\n");
-        if (pageNumber <= numeroDePaginas) {
+        this.currentPage = numeroDePaginas;
+        int publicacionesMostradas = 0,
+                currentIndex = (currentPage - 1) * 50; //pagina 1 va del 0 al 49, p2 del 50 al 99...
+        while (currentIndex < publicaciones.size() && publicacionesMostradas < 50) {
+            publicaciones.get(currentIndex).show();
+            publicacionesMostradas++;
+            currentIndex++;
+        }
+        if (currentIndex == 0) { //creo que nunca se da este caso
+            System.out.println("No hay publicaciones disponibles en esta página");
+        }
+        System.out.println("\n**************************************************\n");
+
+    }
+
+    public void showPage(int pageNumber) { //las páginas van de 1 en adelante
+        System.out.println("\n********************TIMELINE**********************\n");
+        if (pageNumber <= numeroDePaginas && pageNumber >= 1) {
             this.currentPage = pageNumber;
             int publicacionesMostradas = 0,
                     currentIndex = (pageNumber - 1) * 50; //pagina 1 va del 0 al 49, p2 del 50 al 99...
@@ -32,13 +49,12 @@ public class Timeline implements ITimeline, IMenu {
                 currentIndex++;
             }
             if (currentIndex == 0) { //creo que nunca se da este caso
-                System.out.println("No hay más publicaciones disponibles");
+                System.out.println("No hay publicaciones disponibles en esta página");
             }
         } else {
-            System.out.println("Lo siento, este Timeline no dispone de tantas páginas");
+            System.out.println("Lo siento, este Timeline no dispone de tantas páginas.\nVOLVIENDO AL MENU PREVIO");
         }
-        System.out.println("\n*******************************************\n");
-        return menu();
+        System.out.println("\n**************************************************\n");
     }
 
     public void sort() {
@@ -97,9 +113,10 @@ public class Timeline implements ITimeline, IMenu {
 
     private boolean selectPublicacion() {
         boolean accionValida = false, goBack = false;
-        System.out.println("\nIntroduce el número de publicación (1 para la primera, 50 para la 50ª) que desea ver. " +
-                                   ".\nSi desea salir, introduzca cualquier caracter no numérico");
         while (!accionValida) {
+            System.out.println(
+                    "\nIntroduzca el número de publicación (1 para la primera, 50 para la 50ª) que desea ver. " +
+                            ".\nSi desea salir, introduzca cualquier caracter no numérico");
             Scanner scan = new Scanner(System.in);
             if (scan.hasNextInt()) {
                 int index = scan.nextInt();
@@ -107,14 +124,12 @@ public class Timeline implements ITimeline, IMenu {
                     if ((currentPage < numeroDePaginas && index <= 50) || (currentPage == numeroDePaginas && 50 * (numeroDePaginas - 1) + (index - 1) < publicaciones.size())) {
                         //si no es la última página                     Si es última pag, hay hay que tener cuidado de no irse del tamaño
                         System.out.println("\nElegida la publicacion #" + index);
+                        this.publicaciones.get((currentPage - 1) * 50 + (index - 1)).show();
                         accionValida = !this.publicaciones.get((currentPage - 1) * 50 + (index - 1)).menu();
                         //si currentPage=2, index = 10, iríamos a la 1*50 + 10-1= 59, que sería la 10ª publicacion
                         // que ve el usuario.
                         //si curentPage = 3 = numeroDePaginas, y hay 9 publicaciones (109 en total, 108 el mayor
                         // índice posible), 2*50 + 10-1 = 109, se saldría
-                        if (!accionValida) { //ha decidido volver atrás en el menú de la publicacion elegida
-                            System.out.println("\nElija otra publicacion");
-                        }
                     } else {
                         System.out.println("\nNo hay suficientes publicaciones, por favor escoja un número más bajo, " +
                                                    "o un caracter para salir");
@@ -134,6 +149,7 @@ public class Timeline implements ITimeline, IMenu {
     public boolean menu() {
         boolean accionValida = false, goBack = false;
         while (!accionValida) {
+            showLastPage();
             System.out.println("\n***************MENU***************");
             System.out.println("\nOpciones:\n0 - Ver siguiente página\n1 - Ver página anterior\n2 - Ver mis " +
                                        "publicaciones\n3 - Seleccionar una publicacion\n9 - Volver atrás");
@@ -141,16 +157,13 @@ public class Timeline implements ITimeline, IMenu {
             int selector = scan.nextInt();
             switch (selector) {
                 case 0:
-                    accionValida = showPage(currentPage + 1);
+                    showPage(currentPage + 1);
                     break;
                 case 1:
-                    accionValida = showPage(currentPage - 1);
+                    showPage(currentPage - 1);
                     break;
                 case 2: // Mostrar mis publicaciones
                     accionValida = Sistema.getCurrentUser().mostrarPropiasPublicaciones();
-                    if (!accionValida) {
-                        accionValida = showPage(this.numeroDePaginas);
-                    }
                     break;
                 case 3:
                     accionValida = !selectPublicacion();

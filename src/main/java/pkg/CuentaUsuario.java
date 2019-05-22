@@ -7,6 +7,7 @@ import publicaciones.Valoracion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class CuentaUsuario implements ICuentaUsuario {
     private final String id;
@@ -53,21 +54,31 @@ public class CuentaUsuario implements ICuentaUsuario {
         nuevoSeguido.addSeguidor(this);
     }
 
-    public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
+    public void valorarPublicacion(Publicacion publicacion) {
+        System.out.println("\n Desea dar like o dislike? \n\t1 - Like \n\t0 - Dislike");
+        Scanner scan = new Scanner(System.in);
+        int likeDislike = scan.nextInt();
+        //TODO TIENES QUE COMPROBAR SI YA SE HA METIDO UNA VALORACION
         Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
                                                     likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
     }
 
-    public void comentarPublicacion(Publicacion publicacion, String textoComentario) {
-        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoComentario,
+    public void comentarPublicacion(Publicacion publicacion) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Introduzca su comentario: \n");
+        String texto = scan.nextLine();
+        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), texto,
                                                     null, publicacion, this, new ArrayList<>());
         this.comentarios.add(nuevoComentario);
         publicacion.addComentario(nuevoComentario);
     }
 
-    public void comentarComentario(Comentario comentario, String texto) {
+    public void comentarComentario(Comentario comentario) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Introduzca su comentario: \n");
+        String texto = scan.nextLine();
         if (comentario.getRespondeA() == null) {
             responderComentario(comentario, texto);
         } else {
