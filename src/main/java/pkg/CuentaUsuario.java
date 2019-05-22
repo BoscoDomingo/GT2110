@@ -7,6 +7,7 @@ import publicaciones.Valoracion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class CuentaUsuario implements ICuentaUsuario {
     private final String id;
@@ -53,21 +54,31 @@ public class CuentaUsuario implements ICuentaUsuario {
         nuevoSeguido.addSeguidor(this);
     }
 
-    public void valorarPublicacion(Publicacion publicacion, int likeDislike) {
+    public void valorarPublicacion(Publicacion publicacion) {
+        System.out.println("\n Desea dar like o dislike? \n\t1 - Like \n\t0 - Dislike");
+        Scanner scan = new Scanner(System.in);
+        int likeDislike = scan.nextInt();
+        //TODO TIENES QUE COMPROBAR SI YA SE HA METIDO UNA VALORACION
         Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
                                                     likeDislike, this, publicacion);
         publicacion.addValoracion(nuevaValoracion);
         this.valoraciones.add(nuevaValoracion);
     }
 
-    public void comentarPublicacion(Publicacion publicacion, String textoComentario) {
-        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), textoComentario,
+    public void comentarPublicacion(Publicacion publicacion) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Introduzca su comentario: \n");
+        String texto = scan.nextLine();
+        Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), texto,
                                                     null, publicacion, this, new ArrayList<>());
         this.comentarios.add(nuevoComentario);
         publicacion.addComentario(nuevoComentario);
     }
 
-    public void comentarComentario(Comentario comentario, String texto) {
+    public void comentarComentario(Comentario comentario) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Introduzca su comentario: \n");
+        String texto = scan.nextLine();
         if (comentario.getRespondeA() == null) {
             responderComentario(comentario, texto);
         } else {
@@ -80,6 +91,21 @@ public class CuentaUsuario implements ICuentaUsuario {
                                               comentario.getPerteneceA(), this, null);
         comentario.addRespuesta(respuesta);
         this.comentarios.add(respuesta);
+    }
+
+    public void borrarComentario(Comentario comentario) {
+        if (comentario.getRespuestas().size() != 0) {
+            for (Comentario respuesta : comentario.getRespuestas()) {
+                respuesta.setRespondeA(null);
+                respuesta.setPerteneceA(null);
+                respuesta.setEscritoPor(null);
+            }
+        }
+        comentario.setRespondeA(null);
+        comentario.setEscritoPor(null);
+        comentario.getPerteneceA().removeComentario(comentario);
+        comentario.setPerteneceA(null);
+        this.comentarios.remove(comentario);
     }
 
     private void responderRespuesta(Comentario respuestaComentario, String textoRespuesta) {
@@ -108,9 +134,9 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(nuevaRespuesta);
     }
 
-    public boolean mostrarPropiasPublicaciones(){
+    public boolean mostrarPropiasPublicaciones() {
         System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
-        for(Publicacion publicacion: publicaciones){
+        for (Publicacion publicacion : publicaciones) {
             publicacion.show();
         }
         System.out.println("\n*************************************\n");

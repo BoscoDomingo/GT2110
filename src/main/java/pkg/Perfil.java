@@ -17,35 +17,38 @@ public class Perfil implements IPerfil, IMenu {
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
-        System.out.println("\nOpciones:\n0 - Seleccionar una publicacion\n9 - Volver atrás");
-        Scanner scan = new Scanner(System.in);
         while (!accionValida) {
+            System.out.println("\nOpciones de Perfil:\n0 - Seleccionar una publicacion\n9 - Volver atrás");
+            Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 //Irían todas las llamadas a Sistema.getCurrentUser.borrar(), Sistema.getCurrentUser.publicar(), etc..
                 case 0:
-                    System.out.println("Siendo la numero 1 la primera publicacion que ves, introduce el número de publicación para seleccionarla" +
-                            "\nIntroduce -1 para salir");
+                    System.out.println(
+                            "Siendo la numero 1 la primera publicacion que ves, introduce el número de publicación para seleccionarla" +
+                                    "\nIntroduce -1 para salir");
                     Scanner scanPublicacion = new Scanner(System.in);
                     int numPublicacion = scanPublicacion.nextInt();
-                    if(numPublicacion != -1){
+                    if (numPublicacion != -1 && numPublicacion <= Sistema.getCurrentUser().getPublicaciones().size()) {
                         Scanner scanOpcion = new Scanner(System.in);
-                        Publicacion publicacionSeleccionada = Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1);
+                        Publicacion publicacionSeleccionada = Sistema.getCurrentUser().getPublicaciones().get(
+                                numPublicacion - 1);
                         System.out.println("Si deseas verla completa, introduce la palabra 'ver'." +
-                                "\nSi deseas eliminarla introduce la palabra 'eliminar'");
+                                                   "\nSi deseas eliminarla introduce la palabra 'eliminar'");
                         String opcion = scanOpcion.nextLine();
-                        switch(opcion){
+                        switch (opcion) {
                             case "eliminar":
-                                Sistema.getCurrentUser().borrarPublicacion(numPublicacion-1);
+                                Sistema.getCurrentUser().borrarPublicacion(numPublicacion - 1);
                                 System.out.println("Eliminada correctamente");
+                                accionValida = true;
                                 break;
                             case "ver":
-                                Sistema.getCurrentUser().getPublicaciones().get(numPublicacion-1).show();//TODO ver
-                                // comentarios
+                                Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).show();//TODO ver
+                                accionValida =
+                                        !Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).menu();
                                 break;
                         }
                     }
-                    accionValida = true;
                     break;
                 case 9:
                     accionValida = true;

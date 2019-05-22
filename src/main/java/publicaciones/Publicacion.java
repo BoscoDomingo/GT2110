@@ -126,6 +126,41 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
     }
 
+    private void mostrarComentarios() {
+        System.out.println("\nComentarios:\n");
+        for (Comentario comentario : comentarios) {
+            comentario.mostrarComentario();
+            System.out.println("++++++++++");
+        }
+        System.out.println("\n-------------------------------------------------------------");
+    }
+
+    private boolean seleccionarComentario() {
+        boolean accionValida = false, goBack = false;
+        while (!accionValida) {
+            System.out.println(
+                    "\nIntroduzca el número de comentario (1 para el primero) que desea ver.\nSi desea salir, introduzca cualquier caracter no numérico");
+            Scanner scan = new Scanner(System.in);
+            if (scan.hasNextInt()) {
+                int index = scan.nextInt();
+                if (index >= 1) {
+                    if (index <= this.comentarios.size()) {
+                        System.out.println("\nElegido el comentario #" + index);
+                        accionValida = !comentarios.get(index - 1).menu();
+                    } else {
+                        System.out.println("\nNo hay suficientes comentarios, por favor escoja un número más bajo, " +
+                                                   "o un caracter para salir");
+                    }
+                } else {
+                    System.out.println("\nPor favor, introduzca un número válido, o un caracter para salir");
+                }
+            } else {
+                accionValida = true;
+                goBack = true;
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
 
     @Override
     public int compareTo(Publicacion p) { //para ordenar cronológicamente
@@ -165,18 +200,24 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     public boolean normalMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
-        System.out.println("\nOpciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
-        Scanner scan = new Scanner(System.in);
         while (!accionValida) {
+            System.out.println("\nOpciones de Publicacion:\n0 - Ver comentarios\n1 - Comentar\n2 - Referenciar\n9 - " +
+                                       "Volver atrás");
+            Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 case 0:
-                    accionValida = true;
-                    //currentUser.valorar(this); //TODO: cambiar esto como se deba
+                    if (comentarios.size() == 0) {
+                        System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
+                    } else {
+                        mostrarComentarios(); //TODO: cambiar esto como se deba
+                        accionValida = !seleccionarComentario();
+                    }
                     break;
                 case 1:
                     accionValida = true;
-                    //currentUser.comment(this); //TODO: cambiar esto como se deba
+
+                    Sistema.getCurrentUser().comentarPublicacion(this);
                     break;
                 case 2:
                     accionValida = true;
@@ -193,10 +234,12 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+
     public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
-        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
+        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n3 - Ver comentarios\n9 " +
+                                   "- Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
@@ -207,18 +250,21 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     break;
                 case 1:
                     accionValida = true;
-                    //currentUser.comment(this);
+                    Sistema.getCurrentUser().comentarPublicacion(this);
                     break;
                 case 2:
                     accionValida = true;
-                    //currentUser.valorar(this);
+                    Sistema.getCurrentUser().valorarPublicacion(this);
                     break;
+                case 3:
+                    mostrarComentarios();
+                    accionValida = !seleccionarComentario();
                 case 9:
                     accionValida = true;
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un número válido");
+                    System.out.println("\nPor favor, introduzca un número válido");
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
@@ -238,6 +284,10 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         } catch (Exception e) {
             System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
         }
+    }
+
+    public void removeComentario(Comentario comentario) {
+        this.comentarios.remove(comentario);
     }
 
      /*public void deleteComentario(String idComentario) {
