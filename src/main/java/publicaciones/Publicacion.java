@@ -2,6 +2,7 @@ package publicaciones;
 
 import interfaces.IMenu;
 import pkg.CuentaUsuario;
+import pkg.Sistema;
 import pkg.Timeline;
 
 import java.io.IOException;
@@ -125,15 +126,46 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
     }
 
-    public void deletePublicacion() {
-        getPoster().getPublicaciones().remove(this);
-        this.perteneceATimelines.remove(this);
+    private void mostrarComentarios() {
+        System.out.println("\nComentarios:\n");
+        for (Comentario comentario : comentarios) {
+            comentario.mostrarComentario();
+            System.out.println("++++++");
+        }
+        System.out.println("\n-------------------------------------------------------------");
+    }
 
+    private boolean seleccionarComentario() {
+        boolean accionValida = false, goBack = false;
+
+        while (!accionValida) {
+            System.out.println(
+                    "\nIntroduzca el número de comentario (1 para el primero) que desea ver.\nSi desea salir, introduzca cualquier caracter no numérico");
+            Scanner scan = new Scanner(System.in);
+            if (scan.hasNextInt()) {
+                int index = scan.nextInt();
+                if (index >= 1) {
+                    if (index <= this.comentarios.size()) {
+                        System.out.println("\nElegido el comentario #" + index);
+                        accionValida = !comentarios.get(index - 1).menu();
+                    } else {
+                        System.out.println("\nNo hay suficientes comentarios, por favor escoja un número más bajo, " +
+                                                   "o un caracter para salir");
+                    }
+                } else {
+                    System.out.println("\nPor favor, introduzca un número válido, o un caracter para salir");
+                }
+            } else {
+                accionValida = true;
+                goBack = true;
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
     @Override
     public int compareTo(Publicacion p) { //para ordenar cronológicamente
-        return this.fecha.compareTo(p.getFecha());
+        return this.fecha.compareTo(p.getFecha()) * -1;
     }
 
     public void addValoracion(Valoracion valoracion) {
@@ -157,41 +189,57 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
 
     @Override
     public boolean menu() {
+        boolean goBack = false;
+        if (this.poster == Sistema.getCurrentUser()) {
+            goBack = ownerMenu();
+        } else {
+            goBack = normalMenu();
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
+    public boolean normalMenu() {
         boolean accionValida = false, goBack = false;
-       /* CuentaUsuario currentUser = DatabaseController.getCurrentUser();
-        System.out.println("Opciones:\n0-Valorar\n1-Comentar\n2-Referenciar\n9-Volver atrás");
-        Scanner scan = new Scanner(System.in);
+        CuentaUsuario currentUser = Sistema.getCurrentUser();
         while (!accionValida) {
+            System.out.println("\nOpciones de Publicacion:\n0 - Ver comentarios\n1 - Comentar\n2 - Referenciar\n9 - " +
+                                       "Volver atrás");
+            Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 case 0:
-                    accionValida = true;
-                    currentUser.valorar(this);
+                    if (comentarios.size() == 0) {
+                        System.out.println("\nEsta publicacion no posee comentarios");
+                    } else {
+                        mostrarComentarios(); //TODO: cambiar esto como se deba
+                        accionValida = !seleccionarComentario();
+                    }
                     break;
                 case 1:
                     accionValida = true;
-                    currentUser.comment(this);
+
+                    Sistema.getCurrentUser().comentarPublicacion(this);
                     break;
                 case 2:
                     accionValida = true;
-                    currentUser.publicar("referencia", this); //TODO: cambiar esto en su momento
+                    //currentUser.publicar("referencia", this); //TODO: cambiar esto como se deba
                     break;
                 case 9:
                     accionValida = true;
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un número válido");
+                    System.out.println("\nPor favor, introduzca un número válido");
             }
-        }*/
+        }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+
     public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
-        CuentaUsuario currentUser = new CuentaUsuario("a9999", "PAAAAAA",
-                                                      "PAA@PAA.com");//TODO: DatabaseController.getCurrentUser();
-        System.out.println("Opciones:\n0-Borrar\n1-Comentar\n2-Valorar\n9-Volver atrás");
+        CuentaUsuario currentUser = Sistema.getCurrentUser();
+        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n9 - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
@@ -202,18 +250,18 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     break;
                 case 1:
                     accionValida = true;
-                    //currentUser.comment(this);
+                    Sistema.getCurrentUser().comentarPublicacion(this);
                     break;
                 case 2:
                     accionValida = true;
-                    //currentUser.valorar(this);
+                    Sistema.getCurrentUser().valorarPublicacion(this);
                     break;
                 case 9:
                     accionValida = true;
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un número válido");
+                    System.out.println("\nPor favor, introduzca un número válido");
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este

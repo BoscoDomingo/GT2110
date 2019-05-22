@@ -7,20 +7,20 @@ public interface IMenu {
 
 
     //EJEMPLO DE UN MENÚ
-   /*
-    boolean accionValida = false, goBack = false;
-    System.out.println("Opciones:\n0- ... \n9-Volver atrás");
-    Scanner scan = new Scanner(System.in);
-    while (!accionValida) {
+    /*boolean accionValida = false, goBack = false;
+    while(!accionValida){
+        System.out.println("\n***************MENU***************");
+        System.out.println("\nOpciones:\n0 - ...\n8 - ...\n9 - Volver atrás");
+        Scanner scan = new Scanner(System.in);
         int selector = scan.nextInt();
         switch (selector) {
-        //METED CASES SÓLO DEL 0 AL 8
+            //METED CASES SÓLO DEL 0 AL 8
             case 0:
                 accionValida = true;
                 //vuestro código aqui
                 break;
 
-                //...
+            //...
             case 8:
                 //LLAMADA A CUALQUIER OTRO MENU QUE SE PUEDA MOSTRAR SI LO NECEISTAIS, INCLUIDAS MÁS ACCIONES SI 8 NO
                 //SON SUFICIENTES
