@@ -5,9 +5,6 @@ import pkg.CuentaUsuario;
 import pkg.Sistema;
 import pkg.Timeline;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +51,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     public void show() {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("_____________________________________");
-        //System.out.println("Publicacion de " + this.poster.getAlias() + ":");
+        System.out.println(this.poster.getAlias());
         System.out.println("\n" + this.texto);
         System.out.println("\n" + formatoFecha.format(fecha));
         System.out.println("Likes: " + this.numeroLikes + " Dislikes: " + this.numeroDislikes);
@@ -65,6 +62,15 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     public void showAsNew() {
         System.out.println("\n***NUEVO***");
         this.show();
+    }
+
+    private void mostrarComentarios() {
+        System.out.println("\nComentarios:\n");
+        for (Comentario comentario : comentarios) {
+            comentario.mostrarComentario();
+            System.out.println("++++++++++");
+        }
+        System.out.println("\n-------------------------------------------------------------");
     }
 
     public void deletePublicacion() {
@@ -138,8 +144,8 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
         while (!accionValida) {
-            System.out.println("\nOpciones de Publicacion:\n0 - Ver comentarios\n1 - Comentar\n2 - Referenciar\n9 - " +
-                                       "Volver atrás");
+            System.out.println("\nOpciones de Publicacion:\n0 - Referenciar\n1 - Comentar\n2 - Valorar\n3 - Ver " +
+                                       "comentarios\n\n9 - Volver atrás");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
@@ -147,7 +153,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     if (comentarios.size() == 0) {
                         System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
                     } else {
-                        mostrarComentarios(); //TODO: cambiar esto como se deba
+                        mostrarComentarios();
                         accionValida = !seleccionarComentario();
                     }
                     break;
@@ -171,12 +177,11 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-
     public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
-        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n3 - Ver comentarios\n9 " +
-                                   "- Volver atrás");
+        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n3 - Ver comentarios\n\n9" +
+                                   " - Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();

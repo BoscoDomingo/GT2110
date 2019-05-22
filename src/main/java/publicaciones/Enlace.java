@@ -16,14 +16,13 @@ public class Enlace extends Publicacion {
         this.enlaceExterno = enlaceExterno;
     }
 
+    @Override
     public void show() {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("_____________________________________");
-        //System.out.println("Publicacion de " + this.poster.getAlias() + ":");
-        if (this.enlaceExterno != null) {
-            System.out.println(enlaceExterno);
-        }
+        System.out.println(super.getPoster().getAlias());
         System.out.println("\n" + this.texto);
+        System.out.println(enlaceExterno);
         System.out.println("\n" + formatoFecha.format(fecha));
         System.out.println("Likes: " + this.numeroLikes + " Dislikes: " + this.numeroDislikes);
         System.out.println("Comentarios: " + this.comentarios.size());

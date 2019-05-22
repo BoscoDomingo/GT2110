@@ -181,7 +181,134 @@ public class CuentaUsuario implements ICuentaUsuario {
         return perfil.menu();
     }
 
-    public void publicar() {
+    public boolean publicar() {
+        boolean accionValida = false, goBack = false;
+        CuentaUsuario currentUser = Sistema.getCurrentUser();
+        while (!accionValida) {
+            System.out.println("\nElija tipo de publicacion:\n1 - Texto\n2 - Enlace\n3 - Referencia\n\n9 - Volver " +
+                                       "atrás");
+            Scanner scan = new Scanner(System.in);
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 1:
+                    accionValida = true;
+                    addPublicacion(1);
+                    break;
+                case 2:
+                    accionValida = true;
+                    addPublicacion(2);
+                    break;
+                case 3:
+                    accionValida = true;
+                    addPublicacion(3);
+                    break;
+                case 9:
+                    accionValida = true;
+                    goBack = true;
+                    break;
+                default:
+                    System.out.println("\nPor favor, introduzca un número válido");
+            }
+        }
+        return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
+    public void addPublicacion(int selector) {
+        Scanner scanTexto = new Scanner(System.in);
+        String texto = "";
+        do {
+            System.out.println("Escriba el contenido a continuacion: "); //EVITAR TEXTO VACIO
+            texto = scanTexto.nextLine();
+            if(texto.length()>140){
+                System.out.println("No puede contener más de 140 caracteres.");
+                texto = "";
+            }else if(texto.length()==0){
+                System.out.println("El cuerpo no puede estar vacío\n");
+            }
+        } while (texto.length() == 0);
+
+        String id = "b0001";
+
+        if (Sistema.getAllPublicaciones().size() != 0) {
+            id = Sistema.getLastPublicacionID();
+            id = id.substring(1, 5);
+            id = "b" + String.format("%04d", Integer.parseInt(id) + 1);   //El pinche numero del id junto a la b
+        }
+
+        switch (selector) {
+            case 1:
+                addPublicacionTexto(id, texto);
+                break;
+            case 2:
+                addPublicacionEnlace(id, texto);
+                break;
+            case 3:
+                //   addPublicacionReferencia(id, texto);
+                break;
+        }
+    }
+
+    private void addPublicacionTexto(String id, String texto) {
+        ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        String strDate = dateFormat.format(new Date());
+        Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        this.publicaciones.add(nuevaPublicacion);
+        Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
+        nuevaPublicacionTexto.add(id);
+        nuevaPublicacionTexto.add("T");
+        nuevaPublicacionTexto.add(this.getId());
+        nuevaPublicacionTexto.add(strDate);
+        nuevaPublicacionTexto.add(texto);
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
+    }
+
+    private void addPublicacionEnlace(String id, String texto) {
+        ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        String strDate = dateFormat.format(new Date());
+        Scanner scanTexto = new Scanner(System.in);
+        System.out.println("Introduce el link del enlace (desde http://): ");
+        String link = scanTexto.nextLine();
+        while(link.length()==0 || !link.matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$")){
+            System.out.println("Por favor, introduzca el link de nuevo\n");
+            link = scanTexto.nextLine();
+        }
+        link = "https://"+link;
+        InputStream response = null;
+        try {
+            String url = link;
+            response = new URL(url).openStream();
+        } catch (IOException ex) {
+            System.out.println("Link no válido. La publicación se guardará como tipo texto");
+            Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(),
+                                                           new ArrayList<Timeline>());
+            Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
+            this.publicaciones.add(nuevaPublicacion);
+        }
+        Enlace nuevoEnlace = new Enlace(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, link);
+        this.publicaciones.add(nuevoEnlace);
+        Sistema.putPublicacionAllPublicaciones(nuevoEnlace);
+        nuevaPublicacionTexto.add(id);
+        nuevaPublicacionTexto.add("E");
+        nuevaPublicacionTexto.add(this.getId());
+        nuevaPublicacionTexto.add(strDate);
+        nuevaPublicacionTexto.add(texto);
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
+    }
+
+    private Publicacion addPublicacionReferencia(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
+        return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
     }
 
     private void addPublicacionTexto(String id, String texto) {
