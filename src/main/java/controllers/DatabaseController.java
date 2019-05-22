@@ -110,6 +110,9 @@ public class DatabaseController {
         return existe;
     }
 
+    public void addContenido(ArrayList<String> nuevoContenido){
+        responseBD.add(nuevoContenido);
+    }
 
     public ArrayList<ArrayList<String>> getResponseBD() {
         return responseBD;

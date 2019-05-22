@@ -151,24 +151,29 @@ public class Timeline implements ITimeline, IMenu {
         while (!accionValida) {
             showLastPage();
             System.out.println("\n***************MENU***************");
-            System.out.println("\nOpciones:\n0 - Ver siguiente página\n1 - Ver página anterior\n2 - Ver mis " +
-                                       "publicaciones\n3 - Seleccionar una publicacion\n9 - Volver atrás");
+            System.out.println("\nOpciones de Timeline:\n0 - Ver página anterior\n1 - Ver siguiente página\n2 - Ver " +
+                                       "mis " +
+                                       "publicaciones\n3 - Seleccionar una publicacion\n4 - Publicar\n\n9 - Volver " +
+                                       "atrás");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
-                case 0:
-                    showPage(currentPage + 1);
-                    break;
-                case 1:
+                case 0://ver p. anterior
                     showPage(currentPage - 1);
+                    break;
+                case 1: //ver p. siguiente
+                    showPage(currentPage + 1);
                     break;
                 case 2: // Mostrar mis publicaciones
                     accionValida = Sistema.getCurrentUser().mostrarPropiasPublicaciones();
                     break;
-                case 3:
+                case 3: //seleccionar publicacion
                     accionValida = !selectPublicacion();
                     break;
-                case 9:
+                case 4:
+                    accionValida = !Sistema.getCurrentUser().publicar();
+                    break;
+                case 9: //Volver atrás
                     accionValida = true;
                     goBack = true;
                     break;

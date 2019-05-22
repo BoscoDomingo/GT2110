@@ -269,6 +269,10 @@ public class Sistema {
        timeline.sort(); //ordenadas cronológicamente
     }
 
+    public static void putPublicacionAllPublicaciones(Publicacion nuevaPublicacion){
+        allPublicaciones.put(nuevaPublicacion.getId(), nuevaPublicacion);
+    }
+
     public static void setCurrentUser(String email) {
         try {
             for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
