@@ -130,14 +130,13 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         System.out.println("\nComentarios:\n");
         for (Comentario comentario : comentarios) {
             comentario.mostrarComentario();
-            System.out.println("++++++");
+            System.out.println("++++++++++");
         }
         System.out.println("\n-------------------------------------------------------------");
     }
 
     private boolean seleccionarComentario() {
         boolean accionValida = false, goBack = false;
-
         while (!accionValida) {
             System.out.println(
                     "\nIntroduzca el número de comentario (1 para el primero) que desea ver.\nSi desea salir, introduzca cualquier caracter no numérico");
@@ -209,7 +208,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             switch (selector) {
                 case 0:
                     if (comentarios.size() == 0) {
-                        System.out.println("\nEsta publicacion no posee comentarios");
+                        System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
                     } else {
                         mostrarComentarios(); //TODO: cambiar esto como se deba
                         accionValida = !seleccionarComentario();
@@ -239,7 +238,8 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     public boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
-        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n9 - Volver atrás");
+        System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n3 - Ver comentarios\n9 " +
+                                   "- Volver atrás");
         Scanner scan = new Scanner(System.in);
         while (!accionValida) {
             int selector = scan.nextInt();
@@ -256,6 +256,9 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     accionValida = true;
                     Sistema.getCurrentUser().valorarPublicacion(this);
                     break;
+                case 3:
+                    mostrarComentarios();
+                    accionValida = !seleccionarComentario();
                 case 9:
                     accionValida = true;
                     goBack = true;
@@ -281,6 +284,10 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         } catch (Exception e) {
             System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
         }
+    }
+
+    public void removeComentario(Comentario comentario) {
+        this.comentarios.remove(comentario);
     }
 
      /*public void deleteComentario(String idComentario) {
