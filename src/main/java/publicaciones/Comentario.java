@@ -1,11 +1,14 @@
 package publicaciones;
 
+import interfaces.IMenu;
 import pkg.CuentaUsuario;
+import pkg.Sistema;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
-public class Comentario {
+public class Comentario implements IMenu {
     private final String id;
     private Date fecha;
     private String texto;
@@ -16,7 +19,8 @@ public class Comentario {
     private ArrayList<Comentario> respuestas; //Si es un comentario sin mas
 
 
-    public Comentario(String id, Date fecha, String texto, Publicacion perteneceA, CuentaUsuario escritoPor, ArrayList<Comentario> respuestas) {
+    public Comentario(String id, Date fecha, String texto, Publicacion perteneceA, CuentaUsuario escritoPor,
+                      ArrayList<Comentario> respuestas) {
         this.id = id;
         this.fecha = fecha;
         this.texto = texto;
@@ -26,7 +30,8 @@ public class Comentario {
         this.respuestas = respuestas;
     }
 
-    public Comentario(String id, Date fecha, String texto, Comentario respondeA, Publicacion perteneceA, CuentaUsuario escritoPor, ArrayList<Comentario> respuestas) {
+    public Comentario(String id, Date fecha, String texto, Comentario respondeA, Publicacion perteneceA,
+                      CuentaUsuario escritoPor, ArrayList<Comentario> respuestas) {
         this.id = id;
         this.fecha = fecha;
         this.texto = texto;
@@ -36,11 +41,104 @@ public class Comentario {
         this.respuestas = respuestas;
     }
 
+    public void mostrarComentario() {
+        System.out.println(this.escritoPor.getAlias() + "\t" + this.fecha);
+        System.out.println(this.texto + "\n");
+    }
+
+    public void mostrarComentarioYRespuestas() {
+        System.out.println("-------Comentario seleccionado--------");
+        mostrarComentario();
+        for (Comentario respuesta : this.respuestas) {
+            System.out.println("\t" + respuesta.escritoPor.getAlias() + "\t" + respuesta.getFecha());
+            System.out.println(
+                    "\t Responde a: " + respuesta.getRespondeA().getEscritoPor().getAlias() + ". " + respuesta.texto);
+        }
+        System.out.println("-------------------");
+    }
+
+    public Comentario elegirComentario() {
+        System.out.println("Elegir el comentario a responder introduciendo su posición: ");
+        System.out.println("(0 para responder el comentario principal y 1 para la primera respuesta, etc.)");
+        Scanner scan = new Scanner(System.in);
+        int eleccion = scan.nextInt();
+        if (eleccion == 0) {
+            return this;
+        } else if (eleccion <= this.respuestas.size()) {
+            return this.respuestas.get(eleccion - 1);
+        } else {
+            System.out.println("Número introducido no válido");
+            return this.elegirComentario();
+        }
+    }
+
+    @Override
+    public boolean menu() {
+        boolean goBack = false;
+        this.mostrarComentarioYRespuestas();
+        if (escritoPor == Sistema.getCurrentUser()) {
+            goBack = ownerMenu();
+        } else {
+            goBack = normalMenu();
+        }
+        return goBack;
+    }
+
+    private boolean ownerMenu() {
+        boolean valido = false;
+        while (!valido) {
+            System.out.println("\n1 - Responder comentario\n2 - Borrar comentario\n9 - Volver atrás\n");
+            Scanner scan = new Scanner(System.in);
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 1:
+                    valido = true;
+                    Sistema.getCurrentUser().comentarComentario(this);
+                    break;
+                case 2:
+                    valido = true;
+                    //this.borrar()
+                    break;
+                case 9:
+                    valido = true;
+                    break;
+                default:
+                    System.out.println("Numero no válido, por favor introduzca un número permitido");
+            }
+        }
+        return true;
+    }
+
+    private boolean normalMenu() {
+        boolean valido = false;
+        while (!valido) {
+            System.out.println("\n1 - Responder comentario\n9 - Volver atrás\n");
+            Scanner scan = new Scanner(System.in);
+            int selector = scan.nextInt();
+            switch (selector) {
+                case 1:
+                    valido = true;
+                    System.out.printf("Texto: ");
+                    String texto = scan.nextLine();
+                    Sistema.getCurrentUser().comentarComentario(this);
+                    break;
+                case 9:
+                    valido = true;
+                    break;
+                default:
+                    System.out.println("Numero no válido, por favor introduzca un número permitido");
+            }
+        }
+        return true;
+    }
+
+    //GETTERS & SETTERS
+
     public Publicacion getPerteneceA() {
         return perteneceA;
     }
 
-    public void addRespuesta(Comentario respuesta){
+    public void addRespuesta(Comentario respuesta) {
         this.respuestas.add(respuesta);
     }
 
@@ -58,6 +156,10 @@ public class Comentario {
 
     public CuentaUsuario getEscritoPor() {
         return escritoPor;
+    }
+
+    public Date getFecha() {
+        return fecha;
     }
 }
 
