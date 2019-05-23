@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -163,6 +164,7 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
 
     public boolean mostrarPropiasPublicaciones() {
+        Collections.sort(this.publicaciones);
         System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
         for (Publicacion publicacion : publicaciones) {
             publicacion.show();
