@@ -73,6 +73,11 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         System.out.println("\n-------------------------------------------------------------");
     }
 
+    public void deletePublicacion() {
+        getPoster().getPublicaciones().remove(this);
+        this.perteneceATimelines.remove(this);
+    }
+
     private boolean seleccionarComentario() {
         boolean accionValida = false, goBack = false;
         while (!accionValida) {
@@ -146,23 +151,23 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             int selector = scan.nextInt();
             switch (selector) {
                 case 0:
+                    Sistema.getCurrentUser().referenciar(this);
+                    accionValida = true;
+                    break;
+                case 1:
+                    Sistema.getCurrentUser().comentarPublicacion(this);
+                    break;
+                case 2:
+                    Sistema.getCurrentUser().valorarPublicacion(this);
+                    break;
+                case 3:
                     if (comentarios.size() == 0) {
                         System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
                     } else {
                         mostrarComentarios();
                         accionValida = !seleccionarComentario();
                     }
-                    break;
-                case 1:
-                    accionValida = false;
-                    Sistema.getCurrentUser().comentarPublicacion(this);
-                    break;
-                case 2:
-                    accionValida = false; //para volver a esta publicacion
-                    Sistema.getCurrentUser().valorarPublicacion(this);
-                    break;
-                case 3:
-                    accionValida = !seleccionarComentario();
+                    //accionValida = !seleccionarComentario();
                     break;
                 case 9:
                     accionValida = true;
@@ -281,5 +286,8 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             numeroLikes--;
             numeroDislikes++;
         }
+    }
+    public String getTexto(){
+        return texto;
     }
 }

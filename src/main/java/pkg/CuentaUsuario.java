@@ -1,10 +1,7 @@
 package pkg;
 
 import interfaces.ICuentaUsuario;
-import publicaciones.Comentario;
-import publicaciones.Enlace;
-import publicaciones.Publicacion;
-import publicaciones.Valoracion;
+import publicaciones.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -178,22 +175,18 @@ public class CuentaUsuario implements ICuentaUsuario {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
         while (!accionValida) {
-            System.out.println("\nElija tipo de publicacion:\n1 - Texto\n2 - Enlace\n3 - Referencia\n\n9 - Volver " +
+            System.out.println("\nElija tipo de publicacion:\n1 - Texto\n2 - Enlace\n\n9 - Volver " +
                                        "atrás");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
                 case 1:
                     accionValida = true;
-                    addPublicacion(1);
+                    addPublicacion(1, null);
                     break;
                 case 2:
                     accionValida = true;
-                    addPublicacion(2);
-                    break;
-                case 3:
-                    accionValida = true;
-                    addPublicacion(3);
+                    addPublicacion(2,null);
                     break;
                 case 9:
                     accionValida = true;
@@ -204,6 +197,45 @@ public class CuentaUsuario implements ICuentaUsuario {
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
+    }
+
+    public void referenciar(Publicacion referencia){
+        addPublicacion(3,referencia);
+    }
+
+    public void addPublicacion(int selector, Publicacion referencia) {
+        Scanner scanTexto = new Scanner(System.in);
+        String texto = "";
+        do {
+            System.out.println("Escriba el contenido a continuacion: "); //EVITAR TEXTO VACIO
+            texto = scanTexto.nextLine();
+            if (texto.length() > 140) {
+                System.out.println("No puede contener más de 140 caracteres.");
+                texto = "";
+            }else if(texto.length()==0){
+                System.out.println("El cuerpo no puede estar vacío\n");
+            }
+        } while (texto.length() == 0);
+
+        String id = "b0001";
+
+        if (Sistema.getAllPublicaciones().size() != 0) {
+            id = Sistema.getLastPublicacionID();
+            id = id.substring(1, 5);
+            id = "b" + String.format("%04d", Integer.parseInt(id) + 1);   //El pinche numero del id junto a la b
+        }
+
+        switch (selector) {
+            case 1:
+                addPublicacionTexto(id, texto);
+                break;
+            case 2:
+                addPublicacionEnlace(id, texto);
+                break;
+            case 3:
+                addPublicacionReferencia(id, texto, referencia);
+                break;
+        }
     }
 
     public void addPublicacion(int selector) {
@@ -262,6 +294,7 @@ public class CuentaUsuario implements ICuentaUsuario {
     }
 
     private void addPublicacionEnlace(String id, String texto) {
+        Boolean linkValido = true;
         ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
         String strDate = dateFormat.format(new Date());
@@ -283,10 +316,13 @@ public class CuentaUsuario implements ICuentaUsuario {
                                                            new ArrayList<Timeline>());
             Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
             this.publicaciones.add(nuevaPublicacion);
+            linkValido = false;
         }
-        Enlace nuevoEnlace = new Enlace(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, link);
-        this.publicaciones.add(nuevoEnlace);
-        Sistema.putPublicacionAllPublicaciones(nuevoEnlace);
+        if(linkValido) {
+            Enlace nuevoEnlace = new Enlace(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, link);
+            this.publicaciones.add(nuevoEnlace);
+            Sistema.putPublicacionAllPublicaciones(nuevoEnlace);
+        }
         nuevaPublicacionTexto.add(id);
         nuevaPublicacionTexto.add("E");
         nuevaPublicacionTexto.add(this.getId());
@@ -300,8 +336,24 @@ public class CuentaUsuario implements ICuentaUsuario {
         Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
     }
 
-    private Publicacion addPublicacionReferencia(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
-        return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
+    private void addPublicacionReferencia(String id, String texto, Publicacion referencia) {
+        ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        String strDate = dateFormat.format(new Date());
+        Referencia nuevaReferencia = new Referencia(id, Sistema.getCurrentUser(),new Date(), texto, 0, 0 , referencia);
+        this.publicaciones.add(nuevaReferencia);
+        Sistema.putPublicacionAllPublicaciones(nuevaReferencia);
+        nuevaPublicacionTexto.add(id);
+        nuevaPublicacionTexto.add("T");
+        nuevaPublicacionTexto.add(this.getId());
+        nuevaPublicacionTexto.add(strDate);
+        nuevaPublicacionTexto.add(texto);
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("0");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        nuevaPublicacionTexto.add("VACIO");
+        Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
     }
 
     public void borrarPublicacion(int id) {
