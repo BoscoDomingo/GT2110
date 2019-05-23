@@ -4,6 +4,8 @@ import interfaces.IMenu;
 import pkg.CuentaUsuario;
 import pkg.Sistema;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -42,42 +44,56 @@ public class Comentario implements IMenu {
     }
 
     public void mostrarComentario() {
-        System.out.println(this.escritoPor.getAlias() + "\t" + this.fecha);
-        System.out.println(this.texto + "\n");
+        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        System.out.println(escritoPor.getAlias() + "\t" + formatoFecha.format(fecha) + "\n");
+        System.out.println("\t" + texto + "\n");
+        if (respuestas != null) {
+            System.out.println("Respuestas: " + respuestas.size());
+        } else {
+            System.out.println("Respuestas: 0");
+        }
     }
 
     public void mostrarComentarioYRespuestas() {
+        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("-------Comentario seleccionado--------");
         mostrarComentario();
         for (Comentario respuesta : this.respuestas) {
-            System.out.println("\t" + respuesta.escritoPor.getAlias() + "\t" + respuesta.getFecha());
             System.out.println(
-                    "\t Responde a: " + respuesta.getRespondeA().getEscritoPor().getAlias() + ". " + respuesta.texto);
+                    "\n\t" + respuesta.escritoPor.getAlias() + "\t" + formatoFecha.format(respuesta.getFecha())+ "\t " +
+                            "|");
+            System.out.println(
+                    "\t  Responde a " + respuesta.getRespondeA().getEscritoPor().getAlias() + ": " + respuesta.texto);
         }
-        System.out.println("-------------------");
+        System.out.println("-------------------------------------");
     }
 
     public Comentario elegirComentario() {
         boolean valido = false;
         Comentario comentario = null;
-        while ((!valido)) {
-            System.out.println("\nIntroduzca el número de comentario(0 para responder el comentario de la publicación y 1 para la primera respuesta) que desea responder:");
-            System.out.println("Si desea salir, introduzca -1");
-            Scanner scan = new Scanner(System.in);
-            int eleccion = scan.nextInt();
-            if (eleccion == -1) {
-                valido = true;
-            } else if (eleccion == 0) {
-                valido = true;
-                comentario = this;
-            } else if (eleccion <= this.respuestas.size()) {
-                valido = true;
-                comentario = this.respuestas.get(eleccion - 1);
-            } else {
-                System.out.println("Número introducido no válido\n");
+        if (respuestas == null || respuestas.size() == 0) {
+            comentario = this;
+        } else {
+            while (!valido) {
+                System.out.println(
+                        "\nIntroduzca el número de comentario(0 para responder el comentario de la publicación y 1 para la primera respuesta) que desea responder:");
+                System.out.println("Si desea salir, introduzca -1");
+                Scanner scan = new Scanner(System.in);
+                int eleccion = scan.nextInt();
+                if (eleccion == -1) {
+                    valido = true;
+                } else if (eleccion == 0 || this.respuestas.size() == 0) {
+                    valido = true;
+                    comentario = this;
+                } else if (eleccion <= this.respuestas.size()) {
+                    valido = true;
+                    comentario = this.respuestas.get(eleccion - 1);
+                } else {
+                    System.out.println("Número introducido no válido\n");
+                }
             }
         }
-        return  comentario;
+        return comentario;
     }
 
 
@@ -102,9 +118,9 @@ public class Comentario implements IMenu {
             switch (selector) {
                 case 1:
                     Comentario comentario = elegirComentario();
-                    if(comentario!=null) {
-                        valido = true;
+                    if (comentario != null) {
                         Sistema.getCurrentUser().comentarComentario(comentario);
+                        this.mostrarComentarioYRespuestas();
                     }
                     break;
                 case 9:
@@ -126,9 +142,9 @@ public class Comentario implements IMenu {
             switch (selector) {
                 case 1:
                     Comentario comentario = elegirComentario();
-                    if(comentario!=null) {
-                        valido = true;
+                    if (comentario != null) {
                         Sistema.getCurrentUser().comentarComentario(comentario);
+                        this.mostrarComentarioYRespuestas();
                     }
                     break;
                 case 2:
@@ -175,7 +191,9 @@ public class Comentario implements IMenu {
         return fecha;
     }
 
-    public String getID(){ return id; }
+    public String getID() {
+        return id;
+    }
 
     public void setRespondeA(Comentario respondeA) {
         this.respondeA = respondeA;

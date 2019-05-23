@@ -98,7 +98,7 @@ public class CuentaUsuario implements ICuentaUsuario {
 
     public void comentarPublicacion(Publicacion publicacion) {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Introduzca su comentario: \n");
+        System.out.println("\nIntroduzca su comentario: ");
         String texto = scan.nextLine();
         Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), texto,
                                                     null, publicacion, this, new ArrayList<>());
@@ -108,7 +108,7 @@ public class CuentaUsuario implements ICuentaUsuario {
 
     public void comentarComentario(Comentario comentario) {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Introduzca su comentario: \n");
+        System.out.println("\nIntroduzca su respuesta:");
         String texto = scan.nextLine();
         if (comentario.getRespondeA() == null) {
             responderComentario(comentario, texto);
