@@ -66,8 +66,6 @@ public class LoginController {
     public void cerrarSesion() {
     }
 
-    ;
-
     public boolean iniciarSesion(String email) {
         Scanner scan = new Scanner(System.in);
         boolean success = false;
@@ -79,6 +77,7 @@ public class LoginController {
             String password = scan.nextLine();
             if (password.equals(respuesta)) {//las contraseñas son de mínimo 8 caracteres
                 success = true;
+                Sistema.setCurrentUser(email);
             } else {
                 System.out.println("Contraseña erronea, vuelve a intentarlo.");
                 intentoFallido(email);
@@ -93,8 +92,6 @@ public class LoginController {
         }
         return success;
     }
-
-    ;
 
     private void intentoFallido(String email) {
         if (intentosDeInicioSesion.containsKey(email)) {
@@ -158,12 +155,8 @@ public class LoginController {
 
     }
 
-    ;
-
     public void introducirNuevaContraseña(String newPassword) {
     }
-
-    ;
 
     public void olvidadoPass(String email) {
         Scanner in = new Scanner(System.in);
