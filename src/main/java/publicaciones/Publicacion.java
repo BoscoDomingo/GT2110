@@ -159,7 +159,11 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     break;
                 case 2:
                     accionValida = true;
-                    //currentUser.publicar("referencia", this); //TODO: cambiar esto como se deba
+                    Sistema.getCurrentUser().valorarPublicacion(this);
+                    break;
+                case 3:
+                    mostrarComentarios();
+                    accionValida = !seleccionarComentario();
                     break;
                 case 9:
                     accionValida = true;
@@ -263,5 +267,20 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
 
     public String getId() {
         return id;
+    }
+
+    public ArrayList<Valoracion> getValoraciones() {
+        return valoraciones;
+    }
+
+    public  void cambiarValoracion(int nuevaValoracion){
+        if(nuevaValoracion == 1){
+            numeroLikes++;
+            numeroDislikes--;
+        }
+        else{
+            numeroLikes--;
+            numeroDislikes++;
+        }
     }
 }

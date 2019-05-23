@@ -58,19 +58,28 @@ public class Comentario implements IMenu {
     }
 
     public Comentario elegirComentario() {
-        System.out.println("Elegir el comentario a responder introduciendo su posición: ");
-        System.out.println("(0 para responder el comentario principal y 1 para la primera respuesta, etc.)");
-        Scanner scan = new Scanner(System.in);
-        int eleccion = scan.nextInt();
-        if (eleccion == 0) {
-            return this;
-        } else if (eleccion <= this.respuestas.size()) {
-            return this.respuestas.get(eleccion - 1);
-        } else {
-            System.out.println("Número introducido no válido");
-            return this.elegirComentario();
+        boolean valido = false;
+        Comentario comentario = null;
+        while ((!valido)) {
+            System.out.println("\nIntroduzca el número de comentario(0 para responder el comentario de la publicación y 1 para la primera respuesta) que desea responder:");
+            System.out.println("Si desea salir, introduzca -1");
+            Scanner scan = new Scanner(System.in);
+            int eleccion = scan.nextInt();
+            if (eleccion == -1) {
+                valido = true;
+            } else if (eleccion == 0) {
+                valido = true;
+                comentario = this;
+            } else if (eleccion <= this.respuestas.size()) {
+                valido = true;
+                comentario = this.respuestas.get(eleccion - 1);
+            } else {
+                System.out.println("Número introducido no válido\n");
+            }
         }
+        return  comentario;
     }
+
 
     @Override
     public boolean menu() {
@@ -92,10 +101,11 @@ public class Comentario implements IMenu {
             int selector = scan.nextInt();
             switch (selector) {
                 case 1:
-                    valido = true;
-                    System.out.print("Texto: ");
-                    String texto = scan.nextLine();
-                    Sistema.getCurrentUser().comentarComentario(this);
+                    Comentario comentario = elegirComentario();
+                    if(comentario!=null) {
+                        valido = true;
+                        Sistema.getCurrentUser().comentarComentario(comentario);
+                    }
                     break;
                 case 9:
                     valido = true;
@@ -115,8 +125,11 @@ public class Comentario implements IMenu {
             int selector = scan.nextInt();
             switch (selector) {
                 case 1:
-                    valido = true;
-                    Sistema.getCurrentUser().comentarComentario(this);
+                    Comentario comentario = elegirComentario();
+                    if(comentario!=null) {
+                        valido = true;
+                        Sistema.getCurrentUser().comentarComentario(comentario);
+                    }
                     break;
                 case 2:
                     valido = true;
