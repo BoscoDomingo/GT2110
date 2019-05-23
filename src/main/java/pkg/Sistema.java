@@ -273,7 +273,6 @@ public class Sistema {
        timeline.sort(); //ordenadas cronológicamente
     }
 
-
     public static void setCurrentUser(String email) {
         try {
             for (ArrayList<String> userFormatoArrayList : usersDBController.getResponseBD()) { //Vamos usuario a usuario
