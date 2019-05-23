@@ -59,20 +59,46 @@ public class CuentaUsuario implements ICuentaUsuario {
         nuevoSeguido.addSeguidor(this);
     }
 
+    private Valoracion yaValorada(Publicacion publicacion){
+        Valoracion resul = null;
+        for(Valoracion valoracion: publicacion.getValoraciones()){
+            if(valoracion.getValorador() == this)
+                resul = valoracion;
+        }
+        return  resul;
+    }
+
     public void valorarPublicacion(Publicacion publicacion) {
         System.out.println("\n Desea dar like o dislike? \n\t1 - Like \n\t0 - Dislike");
         Scanner scan = new Scanner(System.in);
         int likeDislike = scan.nextInt();
-        //TODO TIENES QUE COMPROBAR SI YA SE HA METIDO UNA VALORACION
-        Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
-                                                    likeDislike, this, publicacion);
-        publicacion.addValoracion(nuevaValoracion);
-        this.valoraciones.add(nuevaValoracion);
+        Valoracion valoracionAnterior = yaValorada(publicacion);
+        if(valoracionAnterior == null) {
+            Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
+                    likeDislike, this, publicacion);
+            publicacion.addValoracion(nuevaValoracion);
+            this.valoraciones.add(nuevaValoracion);
+        }
+        else if(likeDislike != valoracionAnterior.getLikeDislike()){
+            publicacion.getValoraciones().remove(valoracionAnterior);
+            this.valoraciones.remove(valoracionAnterior);
+            Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
+                    likeDislike, this, publicacion);
+            publicacion.getValoraciones().add(nuevaValoracion);
+            publicacion.cambiarValoracion(likeDislike);
+            this.valoraciones.add(nuevaValoracion);
+            System.out.println("Has cambiado la valoración a esta publicación");
+        }
+        else{
+            System.out.println("Error: Ya has valorado esta publicación");
+
+        }
+
     }
 
     public void comentarPublicacion(Publicacion publicacion) {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Introduzca su comentario: \n");
+        System.out.println("\nIntroduzca su comentario: ");
         String texto = scan.nextLine();
         Comentario nuevoComentario = new Comentario(Sistema.getLastComentarioID() + 1, new Date(), texto,
                                                     null, publicacion, this, new ArrayList<>());
@@ -82,7 +108,7 @@ public class CuentaUsuario implements ICuentaUsuario {
 
     public void comentarComentario(Comentario comentario) {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Introduzca su comentario: \n");
+        System.out.println("\nIntroduzca su respuesta:");
         String texto = scan.nextLine();
         if (comentario.getRespondeA() == null) {
             responderComentario(comentario, texto);
