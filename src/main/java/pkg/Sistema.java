@@ -273,9 +273,6 @@ public class Sistema {
        timeline.sort(); //ordenadas cronológicamente
     }
 
-    public static void putPublicacionAllPublicaciones(Publicacion nuevaPublicacion){
-        allPublicaciones.put(nuevaPublicacion.getId(), nuevaPublicacion);
-    }
 
     public static void setCurrentUser(String email) {
         try {
@@ -371,7 +368,4 @@ public class Sistema {
         Sistema.timeline = timeline;
     }
 
-    public static HashMap<String, Publicacion> getAllPublicaciones() {
-        return allPublicaciones;
-    }
 }

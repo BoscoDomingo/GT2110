@@ -175,7 +175,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         do {
             System.out.println("Escriba el contenido a continuacion: "); //EVITAR TEXTO VACIO
             texto = scanTexto.nextLine();
-            if(texto.length()>140){
+            if (texto.length() > 140) {
                 System.out.println("No puede contener más de 140 caracteres.");
                 texto = "";
             }
@@ -196,8 +196,10 @@ public class CuentaUsuario implements ICuentaUsuario {
                 addPublicacionEnlace(id, texto);
                 break;
             case 3:
-             //   addPublicacionReferencia(id, texto);
+                //   addPublicacionReferencia(id, texto);
         }
+    }
+
     public boolean mostrarPropiasPublicaciones() {
         System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
         for (Publicacion publicacion : publicaciones) {
@@ -330,65 +332,6 @@ public class CuentaUsuario implements ICuentaUsuario {
         nuevaPublicacionTexto.add("VACIO");
         nuevaPublicacionTexto.add("VACIO");
         nuevaPublicacionTexto.add("VACIO");
-        Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
-    }
-
-    private Publicacion addPublicacionReferencia(ArrayList<Publicacion> allPublicaciones, String id, String texto) {
-        return null; //new Publicacion(id, null, texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(), new ArrayList<Timeline>());
-    }
-
-    private void addPublicacionTexto(String id, String texto) {
-        ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
-        String strDate = dateFormat.format(new Date());
-        Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        this.publicaciones.add(nuevaPublicacion);
-        Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
-        nuevaPublicacionTexto.add(id);
-        nuevaPublicacionTexto.add("T");
-        nuevaPublicacionTexto.add(this.getId());
-        nuevaPublicacionTexto.add(strDate);
-        nuevaPublicacionTexto.add(texto);
-        nuevaPublicacionTexto.add("0");
-        nuevaPublicacionTexto.add("0");
-        nuevaPublicacionTexto.add(" ");
-        nuevaPublicacionTexto.add(" ");
-        nuevaPublicacionTexto.add(" ");
-        Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
-    }
-
-    private void addPublicacionEnlace(String id, String texto) {
-        ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
-        String strDate = dateFormat.format(new Date());
-        Scanner scanTexto = new Scanner(System.in);
-        System.out.println("Introduce el link del enlace (desde http://): ");
-        String link = scanTexto.nextLine();
-        link = "http://"+link;
-        InputStream response = null;
-        try {
-            String url = link;
-            response = new URL(url).openStream();
-        } catch (IOException ex) {
-            System.out.println("Link no valido. La publicacion se guardara como tipo texto");
-            Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(),
-                    new ArrayList<Timeline>());
-            Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
-            this.publicaciones.add(nuevaPublicacion);
-        }
-        Enlace nuevoEnlace = new Enlace(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, link);
-        this.publicaciones.add(nuevoEnlace);
-        Sistema.putPublicacionAllPublicaciones(nuevoEnlace);
-        nuevaPublicacionTexto.add(id);
-        nuevaPublicacionTexto.add("E");
-        nuevaPublicacionTexto.add(this.getId());
-        nuevaPublicacionTexto.add(strDate);
-        nuevaPublicacionTexto.add(texto);
-        nuevaPublicacionTexto.add("0");
-        nuevaPublicacionTexto.add("0");
-        nuevaPublicacionTexto.add(" ");
-        nuevaPublicacionTexto.add(" ");
-        nuevaPublicacionTexto.add(" ");
         Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
     }
 
