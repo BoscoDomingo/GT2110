@@ -33,19 +33,16 @@ public class Perfil implements IPerfil, IMenu {
                         Scanner scanOpcion = new Scanner(System.in);
                         Publicacion publicacionSeleccionada = Sistema.getCurrentUser().getPublicaciones().get(
                                 numPublicacion - 1);
-                        System.out.println("Si deseas verla completa, introduce la palabra 'ver'." +
-                                                   "\nSi deseas eliminarla introduce la palabra 'eliminar'");
-                        String opcion = scanOpcion.nextLine();
+                        System.out.println("\n1 - Ver publicación en detalle\n2 - Eliminar publicación");
+                        int opcion = scanOpcion.nextInt();
                         switch (opcion) {
-                            case "eliminar":
+                            case 1:
+                                Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).show();
+                                accionValida = !Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).menu();
+                                break;
+                            case 2:
                                 Sistema.getCurrentUser().borrarPublicacion(numPublicacion - 1);
                                 System.out.println("Eliminada correctamente");
-                                accionValida = true;
-                                break;
-                            case "ver":
-                                Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).show();//TODO ver
-                                accionValida =
-                                        !Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).menu();
                                 break;
                         }
                     }

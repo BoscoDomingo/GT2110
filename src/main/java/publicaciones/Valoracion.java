@@ -35,4 +35,8 @@ public class Valoracion {
     public Publicacion getPublicacionValorada() {
         return publicacionValorada;
     }
+
+    public void setLikeDislike(int likeDislike) {
+        this.likeDislike = likeDislike;
+    }
 }
