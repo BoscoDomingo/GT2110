@@ -38,7 +38,8 @@ public class Perfil implements IPerfil, IMenu {
                         switch (opcion) {
                             case 1:
                                 Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).show();
-                                accionValida = !Sistema.getCurrentUser().getPublicaciones().get(numPublicacion - 1).menu();
+                                accionValida = !Sistema.getCurrentUser().getPublicaciones().get(
+                                        numPublicacion - 1).menu();
                                 break;
                             case 2:
                                 Sistema.getCurrentUser().borrarPublicacion(numPublicacion - 1);
@@ -58,6 +59,7 @@ public class Perfil implements IPerfil, IMenu {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+    @Override
     public Timeline getTimeline() {
         return timeline;
     }

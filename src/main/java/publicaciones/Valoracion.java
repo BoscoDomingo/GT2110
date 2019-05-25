@@ -23,11 +23,6 @@ public class Valoracion {
         return likeDislike;
     }
 
-    /*public void setLikeDislike(int likeDislike) {
-        this.likeDislike = likeDislike;
-        publicacionValorada.
-    }*/
-
     public CuentaUsuario getValorador() {
         return valorador;
     }

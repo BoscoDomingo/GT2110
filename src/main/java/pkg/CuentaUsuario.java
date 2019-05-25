@@ -51,49 +51,51 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios = comentarios;
     }
 
+    @Override
     public void seguir(String id) {
         CuentaUsuario nuevoSeguido = Sistema.getUserByID(id);
         this.sigueA.add(nuevoSeguido);
         nuevoSeguido.addSeguidor(this);
     }
 
-    private Valoracion yaValorada(Publicacion publicacion){
+    private Valoracion yaValorada(Publicacion publicacion) {
         Valoracion resul = null;
-        for(Valoracion valoracion: publicacion.getValoraciones()){
-            if(valoracion.getValorador() == this)
+        for (Valoracion valoracion : publicacion.getValoraciones()) {
+            if (valoracion.getValorador() == this) {
                 resul = valoracion;
+            }
         }
-        return  resul;
+        return resul;
     }
 
+    @Override
     public void valorarPublicacion(Publicacion publicacion) {
         System.out.println("\n Desea dar like o dislike? \n\t1 - Like \n\t0 - Dislike");
         Scanner scan = new Scanner(System.in);
         int likeDislike = scan.nextInt();
         Valoracion valoracionAnterior = yaValorada(publicacion);
-        if(valoracionAnterior == null) {
+        if (valoracionAnterior == null) {
             Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
-                    likeDislike, this, publicacion);
+                                                        likeDislike, this, publicacion);
             publicacion.addValoracion(nuevaValoracion);
             this.valoraciones.add(nuevaValoracion);
-        }
-        else if(likeDislike != valoracionAnterior.getLikeDislike()){
+        } else if (likeDislike != valoracionAnterior.getLikeDislike()) {
             publicacion.getValoraciones().remove(valoracionAnterior);
             this.valoraciones.remove(valoracionAnterior);
             Valoracion nuevaValoracion = new Valoracion(Sistema.getLastValoracionID() + 1,
-                    likeDislike, this, publicacion);
+                                                        likeDislike, this, publicacion);
             publicacion.getValoraciones().add(nuevaValoracion);
             publicacion.cambiarValoracion(likeDislike);
             this.valoraciones.add(nuevaValoracion);
             System.out.println("Has cambiado la valoración a esta publicación");
-        }
-        else{
+        } else {
             System.out.println("Error: Ya has valorado esta publicación");
 
         }
 
     }
 
+    @Override
     public void comentarPublicacion(Publicacion publicacion) {
         Scanner scan = new Scanner(System.in);
         System.out.println("\nIntroduzca su comentario: ");
@@ -104,6 +106,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         publicacion.addComentario(nuevoComentario);
     }
 
+    @Override
     public void comentarComentario(Comentario comentario) {
         Scanner scan = new Scanner(System.in);
         System.out.println("\nIntroduzca su respuesta:");
@@ -122,6 +125,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(respuesta);
     }
 
+    @Override
     public void borrarComentario(Comentario comentario) {
         if (comentario.getRespuestas().size() != 0) {
             for (Comentario respuesta : comentario.getRespuestas()) {
@@ -163,6 +167,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         this.comentarios.add(nuevaRespuesta);
     }
 
+    @Override
     public boolean mostrarPropiasPublicaciones() {
         Collections.sort(this.publicaciones);
         System.out.println("\n*****************ESTAS SON TUS PUBLICACIONES********************\n");
@@ -173,6 +178,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         return perfil.menu();
     }
 
+    @Override
     public boolean publicar() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
@@ -188,7 +194,7 @@ public class CuentaUsuario implements ICuentaUsuario {
                     break;
                 case 2:
                     accionValida = true;
-                    addPublicacion(2,null);
+                    addPublicacion(2, null);
                     break;
                 case 9:
                     accionValida = true;
@@ -201,10 +207,12 @@ public class CuentaUsuario implements ICuentaUsuario {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-    public void referenciar(Publicacion referencia){
-        addPublicacion(3,referencia);
+    @Override
+    public void referenciar(Publicacion referencia) {
+        addPublicacion(3, referencia);
     }
 
+    @Override
     public void addPublicacion(int selector, Publicacion referencia) {
         Scanner scanTexto = new Scanner(System.in);
         String texto = "";
@@ -214,7 +222,7 @@ public class CuentaUsuario implements ICuentaUsuario {
             if (texto.length() > 140) {
                 System.out.println("No puede contener más de 140 caracteres.");
                 texto = "";
-            }else if(texto.length()==0){
+            } else if (texto.length() == 0) {
                 System.out.println("El cuerpo no puede estar vacío\n");
             }
         } while (texto.length() == 0);
@@ -240,16 +248,17 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
+    @Override
     public void addPublicacion(int selector) {
         Scanner scanTexto = new Scanner(System.in);
         String texto = "";
         do {
             System.out.println("Escriba el contenido a continuacion: "); //EVITAR TEXTO VACIO
             texto = scanTexto.nextLine();
-            if(texto.length()>140){
+            if (texto.length() > 140) {
                 System.out.println("No puede contener más de 140 caracteres.");
                 texto = "";
-            }else if(texto.length()==0){
+            } else if (texto.length() == 0) {
                 System.out.println("El cuerpo no puede estar vacío\n");
             }
         } while (texto.length() == 0);
@@ -279,7 +288,8 @@ public class CuentaUsuario implements ICuentaUsuario {
         ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
         String strDate = dateFormat.format(new Date());
-        Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<>(),
+                                                       new ArrayList<>(), new ArrayList<>());
         this.publicaciones.add(nuevaPublicacion);
         Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
         nuevaPublicacionTexto.add(id);
@@ -303,24 +313,26 @@ public class CuentaUsuario implements ICuentaUsuario {
         Scanner scanTexto = new Scanner(System.in);
         System.out.println("Introduce el link del enlace (desde http://): ");
         String link = scanTexto.nextLine();
-        while(link.length()==0 || !link.matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$")){
+        while (link.length() == 0 || !link.matches(
+                "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$")) {
             System.out.println("Por favor, introduzca el link de nuevo\n");
             link = scanTexto.nextLine();
         }
-        link = "https://"+link;
+        link = "https://" + link;
         InputStream response = null;
         try {
             String url = link;
             response = new URL(url).openStream();
         } catch (IOException ex) {
             System.out.println("Link no válido. La publicación se guardará como tipo texto");
-            Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto, new ArrayList<Valoracion>(), new ArrayList<Comentario>(),
+            Publicacion nuevaPublicacion = new Publicacion(id, Sistema.getCurrentUser(), texto,
+                                                           new ArrayList<Valoracion>(), new ArrayList<Comentario>(),
                                                            new ArrayList<Timeline>());
             Sistema.putPublicacionAllPublicaciones(nuevaPublicacion);
             this.publicaciones.add(nuevaPublicacion);
             linkValido = false;
         }
-        if(linkValido) {
+        if (linkValido) {
             Enlace nuevoEnlace = new Enlace(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, link);
             this.publicaciones.add(nuevoEnlace);
             Sistema.putPublicacionAllPublicaciones(nuevoEnlace);
@@ -342,7 +354,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         ArrayList<String> nuevaPublicacionTexto = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
         String strDate = dateFormat.format(new Date());
-        Referencia nuevaReferencia = new Referencia(id, Sistema.getCurrentUser(),new Date(), texto, 0, 0 , referencia);
+        Referencia nuevaReferencia = new Referencia(id, Sistema.getCurrentUser(), new Date(), texto, 0, 0, referencia);
         this.publicaciones.add(nuevaReferencia);
         Sistema.putPublicacionAllPublicaciones(nuevaReferencia);
         nuevaPublicacionTexto.add(id);
@@ -358,11 +370,13 @@ public class CuentaUsuario implements ICuentaUsuario {
         Sistema.getPublicacionesDBController().addContenido(nuevaPublicacionTexto);
     }
 
+    @Override
     public void borrarPublicacion(int id) {
         Sistema.getAllPublicaciones().remove(this.publicaciones.get(id).getId());
         this.publicaciones.remove(id);
     }
 
+    @Override
     public void follow(ArrayList<CuentaUsuario> newFollowed) {
         try {
             this.sigueA.addAll(newFollowed);
@@ -374,6 +388,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
+    @Override
     public void follow(CuentaUsuario newFollowed) {
         try {
             this.sigueA.add(newFollowed);
@@ -383,6 +398,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
+    @Override
     public void addSeguidores(ArrayList<CuentaUsuario> seguidores) {
         try {
             this.seguidores.addAll(seguidores);
@@ -391,6 +407,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     } //si a esta cuenta le siguen
 
+    @Override
     public void addSeguidor(CuentaUsuario seguidor) {
         try {
             this.seguidores.add(seguidor);
@@ -399,6 +416,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     } //si a esta cuenta le siguen
 
+    @Override
     public void removeSeguidores(ArrayList<CuentaUsuario> seguidores) {
         try {
             this.seguidores.removeAll(seguidores);
@@ -407,6 +425,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }//si a esta cuenta le dejan de seguir
 
+    @Override
     public void addValoracion(Valoracion valoracion) {
         try {
             this.valoraciones.add(valoracion);
@@ -415,6 +434,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
+    @Override
     public void removeValoracion(Valoracion valoracion) {
         try {
             this.valoraciones.remove(valoracion);
@@ -423,6 +443,7 @@ public class CuentaUsuario implements ICuentaUsuario {
         }
     }
 
+    @Override
     public void cerrarSesion() {
         //cosas variadas
         try {
@@ -443,6 +464,7 @@ public class CuentaUsuario implements ICuentaUsuario {
     }*/
 
     //GETTERS & SETTERS
+    @Override
     public String getId() {
         return id;
     }
@@ -452,66 +474,82 @@ public class CuentaUsuario implements ICuentaUsuario {
         return alias;
     }
 
+    @Override
     public void setAlias(String alias) {
         this.alias = alias;
     }
 
+    @Override
     public String getCorreoUPM() {
         return correoUPM;
     }
 
+    @Override
     public void setCorreoUPM(String correoUPM) {
         this.correoUPM = correoUPM;
     }
 
+    @Override
     public Perfil getPerfil() {
         return perfil;
     }
 
+    @Override
     public ArrayList<Valoracion> getValoraciones() {
         return valoraciones;
     }
 
+    @Override
     public ArrayList<CuentaUsuario> getSeguidores() {
         return seguidores;
     }
 
+    @Override
     public ArrayList<CuentaUsuario> getSigueA() {
         return sigueA;
     }
 
+    @Override
     public ArrayList<Publicacion> getPublicaciones() {
         return publicaciones;
     }
 
+    @Override
     public Date getUltimaSesion() {
         return ultimaSesion;
     }
 
+    @Override
     public ArrayList<Comentario> getComentarios() {
         return comentarios;
     }
 
+    @Override
     public void setPublicaciones(ArrayList<Publicacion> publicaciones) {
         this.publicaciones = publicaciones;
     }
 
+    @Override
     public void setSigueA(ArrayList<CuentaUsuario> sigueA) {
         this.sigueA = sigueA;
     }
 
+    @Override
     public void setSeguidores(ArrayList<CuentaUsuario> seguidores) {
         this.seguidores = seguidores;
     }
 
+    @Override
     public void setValoraciones(ArrayList<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
     }
 
+    @Override
     public void setUltimaSesion(Date ultimaSesion) {
         this.ultimaSesion = ultimaSesion;
     }
 
+    @Override
     public void setComentarios(ArrayList<Comentario> comentarios) {
         this.comentarios = comentarios;
     }

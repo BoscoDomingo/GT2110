@@ -1,6 +1,7 @@
 package publicaciones;
 
 import interfaces.IMenu;
+import interfaces.IPublicacion;
 import pkg.CuentaUsuario;
 import pkg.Sistema;
 import pkg.Timeline;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Publicacion implements IMenu, Comparable<Publicacion> {
+public class Publicacion implements IPublicacion, IMenu, Comparable<Publicacion> {
     private final String id;
     private final CuentaUsuario poster;
     protected final Date fecha;
@@ -48,6 +49,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         this.perteneceATimelines = perteneceATimelines;
     }
 
+    @Override
     public void show() {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("_____________________________________");
@@ -59,6 +61,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         System.out.println("_____________________________________");
     }
 
+    @Override
     public void showAsNew() {
         System.out.println("\n***NUEVO***");
         this.show();
@@ -71,11 +74,6 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
             System.out.println("  ////////////////////////////////////////////");
         }
         System.out.println("\n-------------------------------------------------------------");
-    }
-
-    public void deletePublicacion() {
-        getPoster().getPublicaciones().remove(this);
-        this.perteneceATimelines.remove(this);
     }
 
     private boolean seleccionarComentario() {
@@ -107,10 +105,29 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
     }
 
     @Override
-    public int compareTo(Publicacion p) { //para ordenar cronológicamente
-        return this.fecha.compareTo(p.getFecha()) * -1;
+    public void addComentario(Comentario comentario) {
+        try {
+            this.comentarios.add(comentario);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
     }
 
+    @Override
+    public void addComentarios(ArrayList<Comentario> comentarios) {
+        try {
+            this.comentarios.addAll(comentarios);
+        } catch (Exception e) {
+            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
+        }
+    }
+
+    @Override
+    public void removeComentario(Comentario comentario) {
+        this.comentarios.remove(comentario);
+    }
+
+    @Override
     public void addValoracion(Valoracion valoracion) {
         this.valoraciones.add(valoracion);
         if (valoracion.getLikeDislike() == 0) {
@@ -120,6 +137,18 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         }
     }
 
+    @Override
+    public void cambiarValoracion(int nuevaValoracion) {
+        if (nuevaValoracion == 1) {
+            numeroLikes++;
+            numeroDislikes--;
+        } else {
+            numeroLikes--;
+            numeroDislikes++;
+        }
+    }
+
+    @Override
     public void delete() {
         try {
             for (Timeline timeline : this.perteneceATimelines) {
@@ -128,6 +157,11 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         } catch (Exception e) {
             System.out.println("Ha habido un error al borrar la publicacion. Por favor, inténtelo de nuevo: " + e);
         }
+    }
+
+    @Override
+    public int compareTo(Publicacion p) { //para ordenar cronológicamente
+        return this.fecha.compareTo(p.getFecha()) * -1;
     }
 
     @Override
@@ -141,7 +175,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-    public boolean normalMenu() {
+    private boolean normalMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
         while (!accionValida) {
@@ -164,10 +198,8 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
                     if (comentarios.size() == 0) {
                         System.out.println("\n+*ERROR: Esta publicacion no posee comentarios*+");
                     } else {
-                        mostrarComentarios();
                         accionValida = !seleccionarComentario();
                     }
-                    //accionValida = !seleccionarComentario();
                     break;
                 case 9:
                     accionValida = true;
@@ -180,7 +212,7 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-    public boolean ownerMenu() {
+    private boolean ownerMenu() {
         boolean accionValida = false, goBack = false;
         CuentaUsuario currentUser = Sistema.getCurrentUser();
         System.out.println("Opciones de Publicación:\n0 - Borrar\n1 - Comentar\n2 - Valorar\n3 - Ver comentarios\n\n9" +
@@ -215,79 +247,51 @@ public class Publicacion implements IMenu, Comparable<Publicacion> {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
-    public void addComentario(Comentario comentario) {
-        try {
-            this.comentarios.add(comentario);
-        } catch (Exception e) {
-            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
-        }
-    }
-
-    public void addComentarios(ArrayList<Comentario> comentarios) {
-        try {
-            this.comentarios.addAll(comentarios);
-        } catch (Exception e) {
-            System.out.println("Ha habido un error. Por favor, pruebe de nuevo " + e);
-        }
-    }
-
-    public void removeComentario(Comentario comentario) {
-        this.comentarios.remove(comentario);
-    }
-
-     /*public void deleteComentario(String idComentario) {
-        for (Comentario comentario : comentarios) {
-            if (comentario.getID() == idComentario) {
-                comentarios.remove(comentario);
-            }
-        }
-    }*/
 
     //GETTERS & SETTERS
 
+    @Override
     public void setValoraciones(ArrayList<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
     }
 
+    @Override
     public void setComentarios(ArrayList<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
 
+    @Override
     public void setPerteneceATimelines(ArrayList<Timeline> perteneceATimelines) {
         this.perteneceATimelines = perteneceATimelines;
     }
 
+    @Override
     public CuentaUsuario getPoster() {
         return poster;
     }
 
+    @Override
     public Date getFecha() {
         return fecha;
     }
 
+    @Override
     public ArrayList<Comentario> getComentarios() {
         return comentarios;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public ArrayList<Valoracion> getValoraciones() {
         return valoraciones;
     }
 
-    public  void cambiarValoracion(int nuevaValoracion){
-        if(nuevaValoracion == 1){
-            numeroLikes++;
-            numeroDislikes--;
-        }
-        else{
-            numeroLikes--;
-            numeroDislikes++;
-        }
-    }
-    public String getTexto(){
+    @Override
+    public String getTexto() {
         return texto;
     }
 }

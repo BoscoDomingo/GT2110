@@ -22,7 +22,7 @@ public class Referencia extends Publicacion {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         System.out.println("_____________________________________");
         System.out.println(super.getPoster().getAlias());
-        System.out.println("\nReferencia: \n" + referenciada.getPoster().getAlias()+ ": " +referenciada.getTexto());
+        System.out.println("\nReferencia: \n" + referenciada.getPoster().getAlias() + ": " + referenciada.getTexto());
         System.out.println("\n" + this.texto);
         System.out.println("\n" + formatoFecha.format(fecha));
         System.out.println("Likes: " + this.numeroLikes + " Dislikes: " + this.numeroDislikes);

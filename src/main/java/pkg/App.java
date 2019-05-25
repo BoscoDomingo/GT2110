@@ -10,7 +10,9 @@ public class App {
         boolean exit = false;
         while (!exit) {
             System.out.println("\nBienvenido a TwitterFIS, por favor seleccione una opción:");
-            System.out.println("\n1 - Crear nuevo usuario\n2 - Iniciar sesión\n\n9 - Salir de la aplicación");
+            System.out.println("\n1 - Crear nuevo usuario (NO SE ESCRIBE EN BD DADO QUE NO HABÍA QUE IMPLEMENTARLO)" +
+                                       "\n2 - Iniciar sesión (use email: a, password: a ó email: email@upm.es, " +
+                                       "password: 12345678)\n\n9 - Salir de la aplicación");
             String email = "";
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
@@ -51,7 +53,7 @@ public class App {
                             valido = loginController.iniciarSesion(email);
 
                             if (valido) {//Entrar a la app
-                                while(!abandonar){
+                                while (!abandonar) {
                                     abandonar = Sistema.getTimeline().menu();
                                 }
                             }

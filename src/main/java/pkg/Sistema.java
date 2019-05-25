@@ -247,7 +247,7 @@ public class Sistema {
         }
     }
 
-    public static void putPublicacionAllPublicaciones(Publicacion nuevaPublicacion){
+    public static void putPublicacionAllPublicaciones(Publicacion nuevaPublicacion) {
         allPublicaciones.put(nuevaPublicacion.getId(), nuevaPublicacion);
     }
 
@@ -265,12 +265,12 @@ public class Sistema {
         }
     }
 
-    private static void actualizarTimeline(){
+    private static void actualizarTimeline() {
         //metemos en el timeline del currentUser las publicaciones de los que sigue
         for (CuentaUsuario seguido : currentUser.getSigueA()) {
             timeline.addPublicaciones(seguido.getPublicaciones());
         }
-       timeline.sort(); //ordenadas cronológicamente
+        timeline.sort(); //ordenadas cronológicamente
     }
 
     public static void setCurrentUser(String email) {
