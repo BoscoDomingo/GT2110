@@ -68,8 +68,8 @@ public class Timeline implements ITimeline, IMenu {
         boolean accionValida = false, goBack = false;
         while (!accionValida) {
             System.out.println(
-                    "\nIntroduzca el nÃºmero de publicaciÃ³n (1 para la primera, 50 para la 50Âª) que desea ver. " +
-                            ".\nSi desea salir, introduzca cualquier caracter no numÃ©rico");
+                    "\nIntroduzca el nÃºmero de publicación (1 para la 1ª, 50 para la 50ª) que desea ver. " +
+                            ".\nSi desea salir, introduzca cualquier caracter no numérico");
             Scanner scan = new Scanner(System.in);
             if (scan.hasNextInt()) {
                 int index = scan.nextInt();
@@ -84,11 +84,11 @@ public class Timeline implements ITimeline, IMenu {
                         //si curentPage = 3 = numeroDePaginas, y hay 9 publicaciones (109 en total, 108 el mayor
                         // Ã­ndice posible), 2*50 + 10-1 = 109, se saldrÃ­a
                     } else {
-                        System.out.println("\nNo hay suficientes publicaciones, por favor escoja un nÃºmero mÃ¡s bajo, " +
+                        System.out.println("\nNo hay suficientes publicaciones, por favor escoja un número más bajo, " +
                                                    "o un caracter para salir");
                     }
                 } else {
-                    System.out.println("\nPor favor, introduzca un nÃºmero vÃ¡lido, o un caracter para salir");
+                    System.out.println("\nPor favor, introduzca un número válido, o un caracter para salir");
                 }
             } else {
                 accionValida = true;
@@ -102,7 +102,7 @@ public class Timeline implements ITimeline, IMenu {
         try {
             this.numeroDePaginas = (int) (this.publicaciones.size() / 50.01 + 1);
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor intÃ©ntelo de nuevo " + e);
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
     }
 
@@ -113,7 +113,7 @@ public class Timeline implements ITimeline, IMenu {
             calculateNumeroDePaginas();
             sort();
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor intÃ©ntelo de nuevo " + e);
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
 
     }
@@ -125,7 +125,7 @@ public class Timeline implements ITimeline, IMenu {
             calculateNumeroDePaginas();
             sort();
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor intÃ©ntelo de nuevo " + e);
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
 
     }
@@ -137,7 +137,7 @@ public class Timeline implements ITimeline, IMenu {
             calculateNumeroDePaginas();
             sort();
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor intÃ©ntelo de nuevo " + e);
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
     }
 
@@ -148,7 +148,7 @@ public class Timeline implements ITimeline, IMenu {
             calculateNumeroDePaginas();
             sort();
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor intÃ©ntelo de nuevo " + e);
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
         }
     }
 
@@ -159,10 +159,9 @@ public class Timeline implements ITimeline, IMenu {
         while (!accionValida) {
             showLastPage();
             System.out.println("\n***************MENU***************");
-            System.out.println("\nOpciones de Timeline:\n0 - Ver pÃ¡gina anterior\n1 - Ver siguiente pÃ¡gina\n2 - Ver " +
-                                       "mis publicaciones\n3 - Seleccionar una publicacion\n4 - Publicar\n\n9 - " +
-                                       "Volver " +
-                                       "atrÃ¡s");
+            System.out.println("\nOpciones de Timeline:\n0 - Ver página anterior\n1 - Ver siguiente página\n2 - Ver " +
+                                       "mis publicaciones\n3 - Seleccionar una publicación\n4 - Publicar\n\n9 - " +
+                                       "Volver atrás");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
             switch (selector) {
@@ -186,7 +185,7 @@ public class Timeline implements ITimeline, IMenu {
                     goBack = true;
                     break;
                 default:
-                    System.out.println("Por favor, introduzca un nÃºmero vÃ¡lido");
+                    System.out.println("Por favor, introduzca un número válido");
             }
         }
         return goBack; //Si es true, se vuelve a mostrar el menÃº que haya llamado a este

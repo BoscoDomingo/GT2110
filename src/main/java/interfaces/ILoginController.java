@@ -17,7 +17,5 @@ public interface ILoginController {
 
     void restaurarPass(String email);
 
-    void introducirNuevaContraseña(String newPassword);
-
     void olvidadoPass(String email);
 }

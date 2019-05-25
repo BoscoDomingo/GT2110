@@ -83,21 +83,21 @@ public class LoginController implements ILoginController {
         boolean success = false;
         String respuesta = database.consultasParaBD(email, 2);
         if (respuesta.equals("error")) {
-            System.out.println("Email no encontrado en la BD. Â¿EstÃ¡s seguro de que ese es tu correo?");
+            System.out.println("Email no encontrado en la BD. ¿Está seguro de que ese es su correo?");
         } else if (!isAccountBlocked(email)) {
-            System.out.println("Introduce tu contraseÃ±a");
+            System.out.println("Introduzca su contraseña");
             String password = scan.nextLine();
             if (password.equals(respuesta)) {//las contraseÃ±as son de mÃ­nimo 8 caracteres
                 success = true;
                 Sistema.setCurrentUser(email);
             } else {
-                System.out.println("ContraseÃ±a erronea, vuelve a intentarlo.");
+                System.out.println("Contraseña errónea, vuelva a intentarlo.");
                 intentoFallido(email);
             }
         } else if (isAccountBlocked(email)) {
             System.out.println(
-                    "La cuenta estÃ¡ bloqueada porque has pasado el numero de intentos de inicio de sesiÃ³n. " +
-                            "\nVuelve a intentarlo pasados 60 minutos desde el ultimo intento");
+                    "La cuenta está bloqueada porque ha sobrepasado el número de intentos de inicio de sesión. " +
+                            "\nVuelva a intentarlo pasados 60 minutos desde el último intento");
             System.out.println("Te quedan " + (3600 - cuentasBloqueadas.get(
                     email).getSegundos()) / 60 + " minutos" + " y " + (60 - cuentasBloqueadas.get(
                     email).getSegundos()) + " segundos");
@@ -111,7 +111,7 @@ public class LoginController implements ILoginController {
             intentosDeInicioSesion.replace(email, intentosDeInicioSesion.get(email), incremento);
             if (incremento == 3) {
                 System.out.println(
-                        "Te has excedido en el numero de intentos para acceder a la cuenta. \nCuenta bloqueada durante 60 minutos.");
+                        "Se ha excedido en el número de intentos para acceder a la cuenta. \nCuenta bloqueada durante 60 minutos.");
                 TimeController timerBloqueo = new TimeController(email);
                 timerBloqueo.contar();
                 cuentasBloqueadas.put(email, timerBloqueo);
@@ -145,44 +145,40 @@ public class LoginController implements ILoginController {
         Scanner in = new Scanner(System.in);
         String primeraPass;
         String segundaPass;
-        System.out.println("\n-- Has accedido al menu de restauracion de contraseÃ±a. --");
+        System.out.println("\n-- Ha accedido al menu de restauración de contraseña. --");
         System.out.println(
-                "-- Recuerda que para que se cambie la contraseÃ±a con exito, tendrÃ¡s que elegir una con un tamaÃ±o mayor que 8. -- ");
-        System.out.println("-- AdemÃ¡s ambos campos deben coincidir -- ");
-        System.out.println("-- Si una de las dos condiciones de arriba no se cumple deberÃ¡s volver a intentarlo --");
+                "-- Recuerde que para que se cambie la contraseña con éxito, tendrá que elegir una con un tamaño mayor que 8. -- ");
+        System.out.println("-- Además ambos campos deben coincidir -- ");
+        System.out.println("-- Si una de las dos condiciones de arriba no se cumple deberá volver a intentarlo --");
         do {
-            System.out.println("Introduce tu nueva contraseÃ±a: ");
+            System.out.println("Introduzca su nueva contraseña: ");
             primeraPass = in.nextLine();
-            System.out.println("Introduce la contraseÃ±a de nuevo: ");
+            System.out.println("Introduzca la contraseña de nuevo: ");
             segundaPass = in.nextLine();
             if (!primeraPass.equals(segundaPass)) {
-                System.out.println("Las contraseÃ±as no coinciden.");
+                System.out.println("Las contraseñas no coinciden.");
             }
             if (primeraPass.length() < 8) {
-                System.out.println("La longitud de contraseÃ±a es errÃ³nea.");
+                System.out.println("La longitud de contraseña es errónea.");
             }
         } while (!primeraPass.equals(segundaPass) || primeraPass.length() < 8);
 
         database.cambiosEnBD(email, 2, primeraPass);
-        System.out.println("Cambio realizado con Ã©xito.");
+        System.out.println("Cambio realizado con éxito.");
 
     }
-
-    @Override
-    public void introducirNuevaContraseÃ±a(String newPassword) {
-    }
-
+    
     @Override
     public void olvidadoPass(String email) {
         Scanner in = new Scanner(System.in);
         if (!database.consultasParaBD(email, 11).equals("error")) {
             System.out.println(
-                    "Ahora vamos a intentar restaurar tu contraseÃ±a, pero antes tendrÃ¡s que introducir la palabra de seguridad asociada a tu email para continuar.");
+                    "Ahora vamos a intentar restaurar su contraseña, pero antes tendrá que introducir la palabra de seguridad asociada a su email para continuar.");
             String palabraSeguridad = in.nextLine();
             if (database.consultasParaBD(email, 11).equals(palabraSeguridad)) {
                 restaurarPass(email);
             } else {
-                System.out.println("La palabra de seguridad no coincide con la introducida. Vuelve a intentarlo");
+                System.out.println("La palabra de seguridad no coincide con la introducida. Vuelva a intentarlo");
             }
         } else {
             System.out.println("No encontramos ese mail en nuestra BD");
