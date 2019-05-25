@@ -60,7 +60,8 @@ public class Comentario implements IMenu {
         mostrarComentario();
         for (Comentario respuesta : this.respuestas) {
             System.out.println(
-                    "\n\t" + respuesta.escritoPor.getAlias() + "\t" + formatoFecha.format(respuesta.getFecha())+ "\t " +
+                    "\n\t" + respuesta.escritoPor.getAlias() + "\t" + formatoFecha.format(
+                            respuesta.getFecha()) + "\t " +
                             "|");
             System.out.println(
                     "\t  Responde a " + respuesta.getRespondeA().getEscritoPor().getAlias() + ": " + respuesta.texto);

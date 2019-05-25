@@ -20,6 +20,7 @@ public class Timeline implements ITimeline, IMenu {
         this.currentPage = numeroDePaginas;
     }
 
+    @Override
     public void showLastPage() {
         System.out.println("\n********************TIMELINE**********************\n");
         this.currentPage = numeroDePaginas;
@@ -37,6 +38,7 @@ public class Timeline implements ITimeline, IMenu {
 
     }
 
+    @Override
     public void showPage(int pageNumber) { //las páginas van de 1 en adelante
         System.out.println("\n********************TIMELINE**********************\n");
         if (pageNumber <= numeroDePaginas && pageNumber >= 1) {
@@ -57,58 +59,9 @@ public class Timeline implements ITimeline, IMenu {
         System.out.println("\n**************************************************\n");
     }
 
+    @Override
     public void sort() {
         Collections.sort(this.publicaciones);
-    }
-
-    private void calculateNumeroDePaginas() {
-        try {
-            this.numeroDePaginas = (int) (this.publicaciones.size() / 50.01 + 1);
-        } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
-        }
-    }
-
-    public void addPublicacion(Publicacion publicacion) {
-        try {
-            this.publicaciones.add(publicacion);
-            calculateNumeroDePaginas();
-            sort();
-        } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
-        }
-
-    }
-
-    public void addPublicaciones(ArrayList<Publicacion> publicacionesAdd) {
-        try {
-            this.publicaciones.addAll(publicacionesAdd);
-            calculateNumeroDePaginas();
-            sort();
-        } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
-        }
-
-    }
-
-    public void removePublicacion(Publicacion publicacion) {
-        try {
-            this.publicaciones.remove(publicacion);
-            calculateNumeroDePaginas();
-            sort();
-        } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
-        }
-    }
-
-    public void removePublicaciones(ArrayList<Publicacion> publicaciones) {
-        try {
-            this.publicaciones.removeAll(publicaciones);
-            calculateNumeroDePaginas();
-            sort();
-        } catch (Exception e) {
-            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
-        }
     }
 
     private boolean selectPublicacion() {
@@ -145,6 +98,61 @@ public class Timeline implements ITimeline, IMenu {
         return goBack; //Si es true, se vuelve a mostrar el menú que haya llamado a este
     }
 
+    private void calculateNumeroDePaginas() {
+        try {
+            this.numeroDePaginas = (int) (this.publicaciones.size() / 50.01 + 1);
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
+        }
+    }
+
+    @Override
+    public void addPublicacion(Publicacion publicacion) {
+        try {
+            this.publicaciones.add(publicacion);
+            calculateNumeroDePaginas();
+            sort();
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
+        }
+
+    }
+
+    @Override
+    public void addPublicaciones(ArrayList<Publicacion> publicacionesAdd) {
+        try {
+            this.publicaciones.addAll(publicacionesAdd);
+            calculateNumeroDePaginas();
+            sort();
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
+        }
+
+    }
+
+    @Override
+    public void removePublicacion(Publicacion publicacion) {
+        try {
+            this.publicaciones.remove(publicacion);
+            calculateNumeroDePaginas();
+            sort();
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
+        }
+    }
+
+    @Override
+    public void removePublicaciones(ArrayList<Publicacion> publicaciones) {
+        try {
+            this.publicaciones.removeAll(publicaciones);
+            calculateNumeroDePaginas();
+            sort();
+        } catch (Exception e) {
+            System.out.println("Ha ocurrido un error. Por favor inténtelo de nuevo " + e);
+        }
+    }
+
+
     @Override
     public boolean menu() {
         boolean accionValida = false, goBack = false;
@@ -152,8 +160,8 @@ public class Timeline implements ITimeline, IMenu {
             showLastPage();
             System.out.println("\n***************MENU***************");
             System.out.println("\nOpciones de Timeline:\n0 - Ver página anterior\n1 - Ver siguiente página\n2 - Ver " +
-                                       "mis " +
-                                       "publicaciones\n3 - Seleccionar una publicacion\n4 - Publicar\n\n9 - Volver " +
+                                       "mis publicaciones\n3 - Seleccionar una publicacion\n4 - Publicar\n\n9 - " +
+                                       "Volver " +
                                        "atrás");
             Scanner scan = new Scanner(System.in);
             int selector = scan.nextInt();
@@ -186,10 +194,12 @@ public class Timeline implements ITimeline, IMenu {
 
     //GETTERS & SETTERS
 
+    @Override
     public ArrayList<Publicacion> getPublicaciones() {
         return publicaciones;
     }
 
+    @Override
     public int getNumeroDePaginas() {
         return numeroDePaginas;
     }

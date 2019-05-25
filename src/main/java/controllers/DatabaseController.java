@@ -64,7 +64,8 @@ public class DatabaseController {
             } else if (listaSinTratar.length() > 0) {
                 responseLista.add(listaSinTratar);
                 listaSinTratar = "";
-            }else{}
+            } else {
+            }
         }
         return responseLista;
     }
@@ -110,7 +111,7 @@ public class DatabaseController {
         return existe;
     }
 
-    public void addContenido(ArrayList<String> nuevoContenido){
+    public void addContenido(ArrayList<String> nuevoContenido) {
         responseBD.add(nuevoContenido);
     }
 
